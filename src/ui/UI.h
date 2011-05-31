@@ -16,15 +16,16 @@ namespace UI{
   class Dialog{
     YDialog * dialog;
   public:
-    void Dialog();
+    Dialog();
     Dialog * createDialog();
     YDialog * getElement();
+    void Event();
   };
 
   class VLayout{
     YLayoutBox * vbox;
   public:
-    void VLayout();
+    //VLayout();
     void createVLayout(Dialog *);
     YLayoutBox * getElement();
 

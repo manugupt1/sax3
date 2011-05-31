@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall -pedantic   CMakeFiles/main.dir/main.cxx.o  -o main -rdynamic -L/home/hawk/workspace/sax3/build/src ui/libui.a -lyui -Wl,-rpath,/home/hawk/workspace/sax3/build/src 

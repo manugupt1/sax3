@@ -31,7 +31,10 @@ namespace UI{
   {
     return dialog;
   }
- 
+  void Dialog::Event(){
+    dialog->waitForEvent();
+  }
+
   YLayoutBox * VLayout::getElement()
   {
     return vbox;
