@@ -11,7 +11,11 @@
 #include "YPushButton.h"
 #include "YLabel.h"
 #include "YWidget.h"
+
+
 namespace UI{
+
+  class HLayout;
 
   class Dialog{
     YDialog * dialog;
@@ -25,8 +29,11 @@ namespace UI{
   class VLayout{
     YLayoutBox * vbox;
   public:
-    //VLayout();
+
     void createVLayout(Dialog *);
+    void createVLayout(VLayout *);
+    void createVLayout(HLayout *);
+
     YLayoutBox * getElement();
 
   };
@@ -35,10 +42,12 @@ namespace UI{
     YLayoutBox * hbox;
   public:
     void createHLayout(Dialog *);
-    YLayoutBox * getElement();
-    
-    
+    void createHLayout(VLayout *);
+    void createHLayout(HLayout *);
 
+
+
+    YLayoutBox * getElement();
   };
 
   class Label{
@@ -46,11 +55,13 @@ namespace UI{
   public:
     void createLabel(VLayout * parent,string text);
     void createLabel(HLayout * parent,string text);
-    
   };
 
   class PushButton{
-
+    YPushButton * button;
+  public:
+    void createButton(VLayout * parent,string text);
+    void createButton(HLayout * parent,string text);
   };
 
 }

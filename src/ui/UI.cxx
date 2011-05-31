@@ -12,44 +12,73 @@
 namespace UI{
 
 
+  //A Constructor Good for nothing dont know why I am using it 
+  Dialog::Dialog(){
+  }
+
+  //Create A New Dialog Box - Class Dialog
   Dialog * Dialog::createDialog(){
     dialog = YUI::widgetFactory()->createPopupDialog();
     return this;
-    
   }
 
-
-  Dialog::Dialog(){
-    /* createDialog();
-    VLayout * vbox = new VLayout()->createVLayout(dialog);
-    //  YUI::widgetFactory()->createLabel(vbox,"Hello World!!");
-    dialog->waitForEvent();
-    dialog->destroy();*/
-  }
-  
+  //Returns the main Dialog Box responsible for the wrapper - Class Dialog
   YDialog * Dialog::getElement()
   {
     return dialog;
   }
+
+  //Event handling for Dialog Box - Class Dialog
   void Dialog::Event(){
     dialog->waitForEvent();
   }
 
+  //Get Vertical Layout Box responsible for the wrapper - Class VLayout
   YLayoutBox * VLayout::getElement()
   {
     return vbox;
   }
   
+  //Get Horizontal Layout Box responsible for the wrapper - Class HLayout
   YLayoutBox * HLayout::getElement()
   {
     return hbox;
   }
   
+   //Creates a vertical Layout for a parent which can be either Dialog, VLayout or HLayout - Class VLayout
   void VLayout::createVLayout(Dialog * parent)
   {
     vbox = YUI::widgetFactory()->createVBox(parent->getElement());
   }
 
+  void VLayout::createVLayout(VLayout * parent)
+  {
+    vbox = YUI::widgetFactory()->createVBox(parent->getElement());
+  }
+
+  void VLayout::createVLayout(HLayout * parent)
+  {
+    vbox = YUI::widgetFactory()->createVBox(parent->getElement());
+  }
+
+
+   //Creates a horizontal Layout for a parent which can be either Dialog, VLayout or HLayout - Class HLayout
+  void HLayout::createHLayout(Dialog * parent)
+  {
+    hbox = YUI::widgetFactory()->createHBox(parent->getElement());
+  }
+
+  void HLayout::createHLayout(VLayout * parent)
+  {
+    hbox = YUI::widgetFactory()->createHBox(parent->getElement());
+  }
+
+  void HLayout::createHLayout(HLayout * parent)
+  {
+    hbox = YUI::widgetFactory()->createHBox(parent->getElement());
+  }
+
+ //Creates a Label for a parent which can be either a Dialog, VLayout or HLayout - Class Label
   void Label::createLabel(VLayout * parent,string text)
   {
     label = YUI::widgetFactory()->createLabel(parent->getElement(),text);
@@ -59,7 +88,14 @@ namespace UI{
   {
     label = YUI::widgetFactory()->createLabel(parent->getElement(),text);
   }
-  
-  
 
+  //Create a PushButton - Class Button
+
+  void PushButton::createButton(VLayout * parent,string text){
+    button = YUI::widgetFactory()->createPushButton(parent->getElement(),text);
+  }
+  void PushButton::createButton(HLayout * parent,string text){
+    button = YUI::widgetFactory()->createPushButton(parent->getElement(),text);
+  }
+  
 }
