@@ -1,0 +1,13 @@
+#include <iostream>
+
+#include "ui/UI.h"
+
+int main(){
+	std::cout<<"Hello World";
+
+	UI::Dialog * dialog = new UI::Dialog();
+
+	return 0;
+}
+
+

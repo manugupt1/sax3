@@ -1,0 +1,10 @@
+include_directories(${SaX3_SOURCE_DIR}/src)
+link_directories(${SaX3_BINARY_DIR}/src)
+
+include_directories(${LIBYUI_INCLUDE_DIR})
+
+add_subdirectory(ui)
+
+add_executable(main main.cxx)
+
+target_link_libraries(main ui ${LIBYUI_LIBRARY})
