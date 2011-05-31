@@ -33,7 +33,6 @@ namespace UI{
     void createVLayout(Dialog *);
     void createVLayout(VLayout *);
     void createVLayout(HLayout *);
-
     YLayoutBox * getElement();
 
   };
