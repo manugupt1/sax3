@@ -20,7 +20,7 @@ namespace UI{
 
   //Create A New Dialog Box - Class Dialog
   Dialog * Dialog::createDialog(){
-    dialog = YUI::widgetFactory()->createMainDialog();
+    dialog = YUI::widgetFactory()->createPopupDialog();
     return this;
   }
 

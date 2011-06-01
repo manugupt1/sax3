@@ -17,7 +17,7 @@ int main(){
   hboxMonitor->createHLayout(vbox);
   
   UI::Image * imageMonitor = new UI::Image();
-  imageMonitor->createImage(hboxMonitor,"/home/hawk/workspace/sax3/src/res/monitor.png");
+  imageMonitor->createImage(hboxMonitor,"/usr/share/sax3/res/monitor.png");
 
   UI::PushButton * buttonMonitor = new UI::PushButton();
   buttonMonitor->createButton(hboxMonitor,"Monitor");
@@ -27,7 +27,7 @@ int main(){
   hboxKeyboard->createHLayout(vbox);
 
   UI::Image * imageKeyboard = new UI::Image();
-  imageKeyboard->createImage(hboxKeyboard,"/home/hawk/workspace/sax3/src/res/keyboard.png");
+  imageKeyboard->createImage(hboxKeyboard,"/usr/share/sax3/res/keyboard.png");
 
   UI::PushButton * buttonKeyboard = new UI::PushButton();
   buttonKeyboard->createButton(hboxKeyboard,"Keyboard");
@@ -37,7 +37,7 @@ int main(){
   hboxMouse->createHLayout(vbox);
 
   UI::Image * imageMouse = new UI::Image();
-  imageMouse->createImage(hboxMouse,"/home/hawk/workspace/sax3/src/res/mouse.png");
+  imageMouse->createImage(hboxMouse,"/usr/share/sax3/res/mouse.png");
 
   UI::PushButton * buttonMouse = new UI::PushButton();
   buttonMouse->createButton(hboxMouse,"Mouse");
@@ -47,7 +47,7 @@ int main(){
   hboxTouchPad->createHLayout(vbox);
   
   UI::Image * imageTouchPad = new UI::Image();
-  imageTouchPad->createImage(hboxTouchPad,"/home/hawk/workspace/sax3/src/res/touchpad.png");
+  imageTouchPad->createImage(hboxTouchPad,"/usr/share/sax3/res/touchpad.png");
 
   UI::PushButton * buttonTouchPad = new UI::PushButton();
   buttonTouchPad->createButton(hboxTouchPad,"Touch Pad");
