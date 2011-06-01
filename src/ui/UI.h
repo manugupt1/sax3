@@ -16,6 +16,10 @@
 namespace UI{
 
   class HLayout;
+  class VLayout;
+  class Dialog;
+  class PushButton;
+  class Label;
 
   class Dialog{
     YDialog * dialog;
@@ -63,6 +67,14 @@ namespace UI{
     void createButton(HLayout * parent,string text);
   };
 
+  class Image{
+    YImage * image;
+  public:
+    void createImage(VLayout * parent,string path);
+    void createImage(HLayout * parent,string path);
+    void size(int width,int height);
+    
+  };
 }
 
 #endif

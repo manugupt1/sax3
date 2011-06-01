@@ -1,3 +1,4 @@
+/*
 #define YUILogComponent "SaX3-UI-Lib-Log"
 #include "YUILog.h"
 #include "YUI.h"
@@ -8,6 +9,7 @@
 #include "YPushButton.h"
 #include "YLabel.h"
 #include "YWidget.h"
+*/
 #include "UI.h"
 namespace UI{
 
@@ -18,7 +20,7 @@ namespace UI{
 
   //Create A New Dialog Box - Class Dialog
   Dialog * Dialog::createDialog(){
-    dialog = YUI::widgetFactory()->createPopupDialog();
+    dialog = YUI::widgetFactory()->createMainDialog();
     return this;
   }
 
@@ -78,7 +80,7 @@ namespace UI{
     hbox = YUI::widgetFactory()->createHBox(parent->getElement());
   }
 
- //Creates a Label for a parent which can be either a Dialog, VLayout or HLayout - Class Label
+ //Creates a Label for a parent which can be either a VLayout or HLayout - Class Label
   void Label::createLabel(VLayout * parent,string text)
   {
     label = YUI::widgetFactory()->createLabel(parent->getElement(),text);
@@ -98,4 +100,12 @@ namespace UI{
     button = YUI::widgetFactory()->createPushButton(parent->getElement(),text);
   }
   
+  //Create an Image for a parent which can be either a VLayour or  a HLayout - Class Image
+  void Image::createImage(VLayout * parent,string path){
+    image = YUI::widgetFactory()->createImage(parent->getElement(),path);
+  }
+
+  void Image::createImage(HLayout * parent,string path){
+    image = YUI::widgetFactory()->createImage(parent->getElement(),path);
+  }
 }
