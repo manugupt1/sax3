@@ -1,2 +1,0 @@
-/home/hawk/workspace/sax3/build/src/CMakeFiles/main.dir
-/home/hawk/workspace/sax3/build/src/ui/CMakeFiles/ui.dir

@@ -1,2 +1,0 @@
-/usr/bin/ar cr libui.a  CMakeFiles/ui.dir/UI.cxx.o
-/usr/bin/ranlib libui.a
