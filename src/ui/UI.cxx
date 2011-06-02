@@ -1,15 +1,3 @@
-/*
-#define YUILogComponent "SaX3-UI-Lib-Log"
-#include "YUILog.h"
-#include "YUI.h"
-#include "YWidgetFactory.h"
-#include "YLayoutBox.h"
-#include "YDialog.h"
-#include "YEvent.h"
-#include "YPushButton.h"
-#include "YLabel.h"
-#include "YWidget.h"
-*/
 #include "UI.h"
 namespace UI{
 
@@ -19,93 +7,129 @@ namespace UI{
   }
 
   //Create A New Dialog Box - Class Dialog
-  Dialog * Dialog::createDialog(){
+
+  YUIDialog::YUIDialog(){
+  }
+
+  YUIDialog * YUIDialog::createDialog(int x,int y){
     dialog = YUI::widgetFactory()->createPopupDialog();
+    alignment = YUI::widgetFactory()->createMinSize(dialog,x,y);
     return this;
   }
 
+  
+
   //Returns the main Dialog Box responsible for the wrapper - Class Dialog
-  YDialog * Dialog::getElement()
+  YAlignment * YUIDialog::getElement()
   {
-    return dialog;
+    return alignment;
   }
 
   //Event handling for Dialog Box - Class Dialog
-  void Dialog::Event(){
+  void YUIDialog::Event(){
     dialog->waitForEvent();
   }
 
   //Get Vertical Layout Box responsible for the wrapper - Class VLayout
-  YLayoutBox * VLayout::getElement()
+  YLayoutBox * YUIVLayout::getElement()
   {
     return vbox;
   }
   
   //Get Horizontal Layout Box responsible for the wrapper - Class HLayout
-  YLayoutBox * HLayout::getElement()
+  YLayoutBox * YUIHLayout::getElement()
   {
     return hbox;
   }
   
    //Creates a vertical Layout for a parent which can be either Dialog, VLayout or HLayout - Class VLayout
-  void VLayout::createVLayout(Dialog * parent)
+  void YUIVLayout::createVLayout(YUIDialog * parent)
   {
     vbox = YUI::widgetFactory()->createVBox(parent->getElement());
   }
 
-  void VLayout::createVLayout(VLayout * parent)
+  void YUIVLayout::createVLayout(YUIVLayout * parent)
   {
     vbox = YUI::widgetFactory()->createVBox(parent->getElement());
   }
 
-  void VLayout::createVLayout(HLayout * parent)
+  void YUIVLayout::createVLayout(YUIHLayout * parent)
   {
     vbox = YUI::widgetFactory()->createVBox(parent->getElement());
   }
 
 
    //Creates a horizontal Layout for a parent which can be either Dialog, VLayout or HLayout - Class HLayout
-  void HLayout::createHLayout(Dialog * parent)
+  void YUIHLayout::createHLayout(YUIDialog * parent)
   {
     hbox = YUI::widgetFactory()->createHBox(parent->getElement());
   }
 
-  void HLayout::createHLayout(VLayout * parent)
+  void YUIHLayout::createHLayout(YUIVLayout * parent)
   {
     hbox = YUI::widgetFactory()->createHBox(parent->getElement());
   }
 
-  void HLayout::createHLayout(HLayout * parent)
+  void YUIHLayout::createHLayout(YUIHLayout * parent)
   {
     hbox = YUI::widgetFactory()->createHBox(parent->getElement());
   }
 
  //Creates a Label for a parent which can be either a VLayout or HLayout - Class Label
-  void Label::createLabel(VLayout * parent,string text)
+  void YUILabel::createLabel(YUIVLayout * parent,string text)
   {
     label = YUI::widgetFactory()->createLabel(parent->getElement(),text);
   }
 
-  void Label::createLabel(HLayout* parent,string text)
+  void YUILabel::createLabel(YUIHLayout* parent,string text)
   {
     label = YUI::widgetFactory()->createLabel(parent->getElement(),text);
   }
 
   //Create a PushButton - Class Button
 
-  void PushButton::createButton(VLayout * parent,string text){
+  void YUIPushButton::createButton(YUIVLayout * parent,string text){
     button = YUI::widgetFactory()->createPushButton(parent->getElement(),text);
   }
-  void PushButton::createButton(HLayout * parent,string text){
+  void YUIPushButton::createButton(YUIHLayout * parent,string text){
     button = YUI::widgetFactory()->createPushButton(parent->getElement(),text);
   }
   
   //Create an Image for a parent which can be either a VLayour or  a HLayout - Class Image
-  void Image::createImage(VLayout * parent,string path){
+  void YUIImage::createImage(YUIVLayout * parent,string path){
     image = YUI::widgetFactory()->createImage(parent->getElement(),path);
   }
 
-  void Image::createImage(HLayout * parent,string path){
+  void YUIImage::createImage(YUIHLayout * parent,string path){
     image = YUI::widgetFactory()->createImage(parent->getElement(),path);
   }
+
+  //Create Vertical Spacing --- Class VSpacing
+  void YUIVSpacing::createVSpacing(YUIVLayout * parent,int dim){
+    VSpace = YUI::widgetFactory()->createVSpacing(parent->getElement(),dim);
+  }
+
+  void YUIVSpacing::createVSpacing(YUIHLayout * parent, int dim){
+    VSpace = YUI::widgetFactory()->createVSpacing(parent->getElement(),dim);
+  }
+
+  void YUIVSpacing::createVSpacing(YUIDialog * parent,int dim){
+    VSpace = YUI::widgetFactory()->createVSpacing(parent->getElement(),dim);
+  }
+
+  
+  //Create Horizontal Spacing --- Class HSpacing
+  void YUIHSpacing::createHSpacing(YUIVLayout * parent,int dim){
+    HSpace = YUI::widgetFactory()->createHSpacing(parent->getElement(),dim);
+  }
+
+  void YUIHSpacing::createHSpacing(YUIHLayout * parent, int dim){
+    HSpace = YUI::widgetFactory()->createHSpacing(parent->getElement(),dim);
+  }
+
+  void YUIHSpacing::createHSpacing(YUIDialog * parent,int dim){
+    HSpace = YUI::widgetFactory()->createHSpacing(parent->getElement(),dim);
+  }
+
+  
 }
