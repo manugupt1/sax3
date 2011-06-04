@@ -11,6 +11,18 @@ namespace UI{
 		
 	};
 
+	class Layout{
+
+	};
+
+	class HLayout : Layout{
+
+	};
+
+	class VLayout : Layout{
+
+	};
+
 
 }
 

@@ -20,7 +20,32 @@
 namespace UI{
 
 	class yDialog;
-	
+	class yLayout;
+	class yHLayout;
+	class yVLayout;
+	class yHLayout;
+
+	class yLayout : public Layout{
+		protected :
+		YLayoutBox * layout;
+		public:
+		YLayoutBox * getElement();
+
+	};
+
+	class yHLayout : public HLayout, public yLayout{
+		public :
+			yHLayout(yLayout *);
+			yHLayout(yDialog *);
+	};
+
+	class yVLayout : public VLayout, public yLayout{
+		public:
+			yVLayout(yLayout *);
+			yVLayout(yDialog *);
+	};
+
+
 	class yDialog : public Dialog{
 		YDialog * dialog;
 		YAlignment * alignment;

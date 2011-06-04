@@ -10,6 +10,10 @@ namespace UI{
 	class YUIFactory : public UIFactory {
 		public:
 			virtual yDialog * createDialog(int width,int height);
+
+	//		virtual yHLayout * createHLayout(yLayout * parent);
+			virtual yHLayout * createHLayout(Dialog * parent);
+
 	};	
 }
 

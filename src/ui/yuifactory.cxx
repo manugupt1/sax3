@@ -8,5 +8,14 @@ namespace UI{
 		return new yDialog(width,height);
 	}
 
+/*	yHLayout * YUIFactory::createHLayout(yLayout * parent){
+		return new yHLayout(parent);
+	}
+*/
+	yHLayout * YUIFactory::createHLayout(Dialog * parent){
+		return new yHLayout((yDialog*)parent);
+	}
+
+
 }
 
