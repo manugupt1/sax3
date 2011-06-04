@@ -6,7 +6,6 @@
 namespace UI{
 
 	class Dialog;
-	class Layout;
 	class HLayout;
 	class VLayout;
 	class Label;
@@ -20,11 +19,9 @@ namespace UI{
 	};
 	class Dialog {
 	};
-	class Layout{
+	class HLayout{
 	};
-	class HLayout : Layout{
-	};
-	class VLayout : Layout{
+	class VLayout{
 	};
 	class Label{
 	};

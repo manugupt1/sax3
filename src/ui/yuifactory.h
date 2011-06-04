@@ -11,14 +11,26 @@ namespace UI{
 		public:
 			virtual yDialog * createDialog(int width,int height);
 
-			virtual yHLayout * createHLayout(Layout * parent);
-			virtual yHLayout * createHLayout(Dialog * parent);
+			virtual yHLayout * createHLayout(HLayout *parent);
+			virtual yHLayout * createHLayout(VLayout *parent);
+			virtual yHLayout * createHLayout(Dialog *parent);
 
-			virtual yLabel * createLabel(Dialog * parent,std::string text);
-			virtual yLabel * createLabel(Layout * parent,std::string text);
+			virtual yVLayout * createVLayout(HLayout *);
+			virtual yVLayout * createVLayout(VLayout *);
+			virtual yVLayout * createVLayout(Dialog *);
 
-			virtual yPushButton * createPushButton(Dialog * parent,std::string text);
+			virtual yLabel * createLabel(Dialog *,std::string);
+			virtual yLabel * createLabel(HLayout *,std::string);
+			virtual yLabel * createLabel(VLayout *,std::string);
+
+			virtual yPushButton * createPushButton(Dialog *,std::string);
+			virtual yPushButton * createPushButton(HLayout *,std::string);
+			virtual yPushButton * createPushButton(VLayout *,std::string);
+
 			virtual yImage * createImage(Dialog * parent,std::string text);
+			virtual yImage * createImage(HLayout * parent,std::string text);
+			virtual yImage * createImage(VLayout * parent,std::string text);
+
 	};	
 }
 

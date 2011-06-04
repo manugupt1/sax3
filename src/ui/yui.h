@@ -21,50 +21,13 @@
 namespace UI{
 
 	class yDialog;
-	class yLayout;
 	class yVLayout;
 	class yHLayout;
 	class yLabel;
 	class yPushButton;
 	class yImage;
 	
-	class yImage : public Image{
-		YImage * image;
-		public:
-		yImage(yDialog *,std::string path);
-		yImage(yLayout *,std::string path);
-
-	};
-	class yPushButton : public PushButton{
-		YPushButton * button;
-		public:
-		yPushButton(yDialog *,std::string text);
-		yPushButton(yLayout *,std::string text);
-		
-
-	};
-
-	class yLayout : public Layout{
-		protected :
-		YLayoutBox * layout;
-		public:
-		YLayoutBox * getElement();
-
-	};
-
-	class yHLayout : public HLayout, public yLayout{
-		public :
-			yHLayout(yLayout *);
-			yHLayout(yDialog *);
-	};
-
-	class yVLayout : public VLayout, public yLayout{
-		public:
-			yVLayout(yLayout *);
-			yVLayout(yDialog *);
-	};
-
-
+//YUIDIALOG
 	class yDialog : public Dialog{
 		YDialog * dialog;
 		YAlignment * alignment;
@@ -73,12 +36,51 @@ namespace UI{
 		YAlignment * getElement();
 		void event();
 	};
-
+//YUIHLAYOUT
+	class yHLayout : public HLayout{
+		YLayoutBox * layout;
+		public :
+			yHLayout(yHLayout *);
+			yHLayout(yVLayout *);
+			yHLayout(yDialog *);
+			YLayoutBox * getElement();
+	};
+//YUIVLAYOUT
+	class yVLayout : public VLayout{
+		YLayoutBox * layout;
+		public :
+			yVLayout(yHLayout *);
+			yVLayout(yVLayout *);
+			yVLayout(yDialog *);
+			YLayoutBox * getElement();
+	};
+//YUILABEL
 	class yLabel : public Label{
 		YLabel * label;
 		public:
 		yLabel(yDialog *,std::string text);
-		yLabel(yLayout *,std::string text);
+		yLabel(yHLayout *,std::string text);
+		yLabel(yVLayout *,std::string text);
+	};
+
+//YUIPUSHBUTTON
+	class yPushButton : public PushButton{
+		YPushButton * button;
+		public:
+		yPushButton(yDialog *,std::string text);
+		yPushButton(yHLayout *,std::string text);
+		yPushButton(yVLayout *,std::string text);
+
+	};
+
+//YUIIMAGE
+	class yImage : public Image{
+		YImage * image;
+		public:
+		yImage(yDialog *,std::string path);
+		yImage(yHLayout *,std::string path);
+		yImage(yVLayout *,std::string path);
+
 	};
 
 }
