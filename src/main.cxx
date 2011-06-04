@@ -1,10 +1,13 @@
 #include <iostream>
 
-#include "ui/YUI.h"
+#include "ui/yui.h"
+#include "ui/yuifactory.h"
 
 int main(){
-  UI::YUIDialog * dialog = new UI::YUIDialog();
-  return 0;
+	
+	UI::YUIFactory * factory = new UI::YUIFactory();
+	UI::yDialog * dialog = factory->createDialog(5,5);
+	return 0;
 }
 
 
