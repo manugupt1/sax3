@@ -11,6 +11,10 @@ namespace UI{
 		return alignment;
 	}
 
+	void yDialog::event(){
+		dialog->waitForEvent();
+	}
+
 	YLayoutBox * yLayout::getElement(){
 		return layout;
 	}
@@ -31,4 +35,18 @@ namespace UI{
 		layout = YUI::widgetFactory()->createVBox(parent->getElement());
 	}
 
+	yLabel::yLabel(yDialog * parent,std::string text){
+		label = YUI::widgetFactory()->createLabel(parent->getElement(),text);
+	}
+	yLabel::yLabel(yLayout * parent,std::string text){
+		label = YUI::widgetFactory()->createLabel(parent->getElement(),text);
+	}
+
+	yPushButton::yPushButton(yDialog * parent,std::string text){
+		button = YUI::widgetFactory()->createPushButton(parent->getElement(),text);
+	}
+
+	yImage::yImage(yDialog * parent,std::string path){
+		image = YUI::widgetFactory()->createImage(parent->getElement(),path);
+	}
 }

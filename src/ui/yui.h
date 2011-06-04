@@ -14,6 +14,7 @@
 #include "YLabel.h"
 #include "YWidget.h"
 #include "YAlignment.h"
+#include "YImage.h"
 
 #include<iostream>
 
@@ -21,9 +22,27 @@ namespace UI{
 
 	class yDialog;
 	class yLayout;
-	class yHLayout;
 	class yVLayout;
 	class yHLayout;
+	class yLabel;
+	class yPushButton;
+	class yImage;
+	
+	class yImage : public Image{
+		YImage * image;
+		public:
+		yImage(yDialog *,std::string path);
+		yImage(yLayout *,std::string path);
+
+	};
+	class yPushButton : public PushButton{
+		YPushButton * button;
+		public:
+		yPushButton(yDialog *,std::string text);
+		yPushButton(yLayout *,std::string text);
+		
+
+	};
 
 	class yLayout : public Layout{
 		protected :
@@ -52,6 +71,14 @@ namespace UI{
 		public:
 		yDialog(int width,int height);
 		YAlignment * getElement();
+		void event();
+	};
+
+	class yLabel : public Label{
+		YLabel * label;
+		public:
+		yLabel(yDialog *,std::string text);
+		yLabel(yLayout *,std::string text);
 	};
 
 }

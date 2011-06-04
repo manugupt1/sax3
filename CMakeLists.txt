@@ -4,4 +4,3 @@ project(SaX3)
 find_package(Libyui)
 set(CMAKE_CXX_FLAGS "-Wall -pedantic")
 add_subdirectory(src)
-
