@@ -35,6 +35,7 @@ namespace UI{
 		yDialog(int width,int height);
 		YAlignment * getElement();
 		void event();
+		~yDialog();
 	};
 //YUIHLAYOUT
 	class yHLayout : public HLayout{
@@ -44,6 +45,7 @@ namespace UI{
 			yHLayout(yVLayout *);
 			yHLayout(yDialog *);
 			YLayoutBox * getElement();
+			~yHLayout();
 	};
 //YUIVLAYOUT
 	class yVLayout : public VLayout{
@@ -53,6 +55,7 @@ namespace UI{
 			yVLayout(yVLayout *);
 			yVLayout(yDialog *);
 			YLayoutBox * getElement();
+			~yVLayout();
 	};
 //YUILABEL
 	class yLabel : public Label{
@@ -61,6 +64,7 @@ namespace UI{
 		yLabel(yDialog *,std::string text);
 		yLabel(yHLayout *,std::string text);
 		yLabel(yVLayout *,std::string text);
+		~yLabel();
 	};
 
 //YUIPUSHBUTTON
@@ -70,7 +74,7 @@ namespace UI{
 		yPushButton(yDialog *,std::string text);
 		yPushButton(yHLayout *,std::string text);
 		yPushButton(yVLayout *,std::string text);
-
+		~yPushButton();
 	};
 
 //YUIIMAGE
@@ -80,7 +84,7 @@ namespace UI{
 		yImage(yDialog *,std::string path);
 		yImage(yHLayout *,std::string path);
 		yImage(yVLayout *,std::string path);
-
+		~yImage();
 	};
 
 }

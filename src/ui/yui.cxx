@@ -17,6 +17,11 @@ namespace UI{
 	void yDialog::event(){
 		dialog->waitForEvent();
 	}
+
+	yDialog::~yDialog(){
+		delete alignment;
+		dialog->destroy();
+	}
 	//YDIALOG FUCNTIONS END
 
 
@@ -35,6 +40,9 @@ namespace UI{
 
 	YLayoutBox * yVLayout::getElement(){
 		return layout;
+	}
+	yVLayout::~yVLayout(){
+		delete layout;
 	}
 
 
@@ -56,6 +64,9 @@ namespace UI{
 	YLayoutBox * yHLayout::getElement(){
 		return layout;
 	}
+	yHLayout::~yHLayout(){
+		delete layout;
+	}
 	//YHLAYOUT FUNCTIONS END
 
 	//YLABEL FUNCTIONS START
@@ -71,6 +82,9 @@ namespace UI{
 	yLabel::yLabel(yVLayout * parent,std::string text){
 		label = YUI::widgetFactory()->createLabel(parent->getElement(),text);
 	}
+	yLabel::~yLabel(){
+		delete label;
+	}
 
 	//YLABEL FUNCTIONS END
 
@@ -84,6 +98,10 @@ namespace UI{
 	yPushButton::yPushButton(yHLayout * parent,std::string text){
 		button = YUI::widgetFactory()->createPushButton(parent->getElement(),text);
 	}
+	yPushButton::~yPushButton(){
+		delete button;
+	}
+
 	//YPUSHBUTTION FUNCTIONS END
 
 	//YIMAGE FUNCTIONS START
@@ -95,6 +113,9 @@ namespace UI{
 	}
 	yImage::yImage(yVLayout * parent,std::string path){
 		image = YUI::widgetFactory()->createImage(parent->getElement(),path);
+	}
+	yImage::~yImage(){
+		delete image;
 	}
 	//YIMAGE FUNCTIONS END
 }
