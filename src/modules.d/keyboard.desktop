@@ -1,0 +1,7 @@
+# A comment
+[DesktopEntry]
+Version=1.0
+Type=Sax3 Module
+Name=KeyBoard
+Comment=Key Board module for SaX3
+Icon=/usr/share/sax3/res/keyboard.png

@@ -61,7 +61,7 @@ class Init{
 					makeEntry("/files/usr/share/sax3/modules.d/",ep->d_name,"/*/Name");
 					err = aug_get(aug,getEntry,&value);
 					if(err==1)
-					UI::yLabel * button = factory->createButton(hLayout,value);
+					UI::yPushButton * button = factory->createPushButton(hLayout,value);
 					delete getEntry;	
 				}
 			}
