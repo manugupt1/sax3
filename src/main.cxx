@@ -54,14 +54,14 @@ class Init{
 					makeEntry("/files/usr/share/sax3/modules.d/",ep->d_name,"/*/Icon");
 					err = aug_get(aug,getEntry,&value);
 					if(err==1)
-					UI::yImage * image = factory->createImage(hLayout,value);
+					UI::yImage * image = factory->createImage(hLayout,_(value));
 					delete getEntry;
 
 					getEntry = new char[100];
 					makeEntry("/files/usr/share/sax3/modules.d/",ep->d_name,"/*/Name");
 					err = aug_get(aug,getEntry,&value);
 					if(err==1)
-					UI::yPushButton * button = factory->createPushButton(hLayout,value);
+					UI::yPushButton * button = factory->createPushButton(hLayout,_(value));
 					delete getEntry;	
 				}
 			}
