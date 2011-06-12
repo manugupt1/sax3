@@ -15,6 +15,11 @@ extern "C"{
 
 #define _(STRING) gettext(STRING)
 
+/*! \class Init
+    \brief This class initializes the window layout and the plugin mechanism
+
+    It scans /usr/share/sax3/modules.d/ to look for the modules available and once the modules are found, they are added to the main dialog
+    */
 
 class Init{
 
