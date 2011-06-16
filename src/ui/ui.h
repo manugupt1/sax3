@@ -17,15 +17,21 @@ namespace UI{
 
 	class PushButton{
 	};
+
 	class Dialog {
 	};
+
 	class HLayout{
 	};
+
 	class VLayout{
 	};
+
 	class Label{
 	};
 
+	class ComboBox{
+	};
 
 }
 

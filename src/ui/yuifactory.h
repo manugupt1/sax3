@@ -27,10 +27,15 @@ namespace UI{
 			virtual yPushButton * createPushButton(HLayout *,std::string);
 			virtual yPushButton * createPushButton(VLayout *,std::string);
 
+
 			virtual yImage * createImage(Dialog * parent,std::string text);
 			virtual yImage * createImage(HLayout * parent,std::string text);
 			virtual yImage * createImage(VLayout * parent,std::string text);
-
+			
+			virtual yComboBox * createComboBox(Dialog * parent,std::string text);
+			virtual yComboBox * createComboBox(HLayout * parent,std::string text);
+			virtual yComboBox * createComboBox(VLayout * parent,std::string text);
+		
 	};	
 }
 

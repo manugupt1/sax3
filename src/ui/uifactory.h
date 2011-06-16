@@ -28,6 +28,11 @@ namespace UI{
 			virtual Image * createImage(Dialog *,std::string)=0;
 			virtual Image * createImage(HLayout *,std::string)=0;
 			virtual Image * createImage(VLayout *,std::string)=0;
+
+			virtual ComboBox * createComboBox(Dialog *,std::string)=0;
+			virtual ComboBox * createComboBox(HLayout *,std::string)=0;
+			virtual ComboBox * createComboBox(VLayout *,std::string)=0;
+
 	};	
 }
 

@@ -15,6 +15,7 @@
 #include "YWidget.h"
 #include "YAlignment.h"
 #include "YImage.h"
+#include "YComboBox.h"
 
 #include<iostream>
 
@@ -26,7 +27,7 @@ namespace UI{
 	class yLabel;
 	class yPushButton;
 	class yImage;
-	
+	class yComboBox;	
 //YUIDIALOG
 	class yDialog : public Dialog{
 		YDialog * dialog;
@@ -86,6 +87,19 @@ namespace UI{
 		yImage(yVLayout *,std::string path);
 		~yImage();
 	};
+
+//YUICOMBOX - NON EDITABLE
+	class yComboBox : public ComboBox{
+		YComboBox * comboBox;
+//		YItemCollection items;
+		public:
+		yComboBox(yDialog*,std::string label);
+		yComboBox(yHLayout *,std::string label);
+		yComboBox(yVLayout *,std::string label);
+		
+		void addItem(std::string item);
+
+	};	
 
 }
 

@@ -118,4 +118,21 @@ namespace UI{
 		delete image;
 	}
 	//YIMAGE FUNCTIONS END
+	
+	//YCOMBOBOX FUNCTION STARTS
+	yComboBox::yComboBox(yDialog * parent,std::string text){
+		comboBox = YUI::widgetFactory()->createComboBox(parent->getElement(),text,false);
+
+	}
+	yComboBox::yComboBox(yHLayout * parent,std::string text){
+		comboBox = YUI::widgetFactory()->createComboBox(parent->getElement(),text,false);
+	}
+	yComboBox::yComboBox(yVLayout* parent,std::string text){
+		comboBox = YUI::widgetFactory()->createComboBox(parent->getElement(),text,false);
+	}
+	void yComboBox::addItem(string item){
+		comboBox->addItem(item);
+	}
+
+	//YCOMBOBOX FUNCION ENDS
 }
