@@ -77,7 +77,7 @@ class keyBoard{
 
 void keyBoard::split(){
 	
-	s1 = new char[480];s2 = new char [20];int len;
+	;int len;
 	int i=0,j=0,k=0;
 	len = strlen(s);
 	while(s[i]==' '){
@@ -92,19 +92,18 @@ void keyBoard::split(){
 		i++;
 	}
 	for(;i<=len;i++) s2[k++]=s[i];
-	s2[--k]='\0';
+	s2[k]='\0';
 	printf("\t%s",s2);
 	s = fgets(s,400,fp);
 	if(s!=NULL)len = strlen(s);
 	k=i=j=0;
-	delete s1;
-	delete s2;
-	
 }
 
 void keyBoard::createMaps(){
 
 	s = new char[500];
+	s1 = new char[480];
+	s2 = new char[20];
 	s = fgets(s,400,fp);
 
 	if(!strcmp(s,"! model\n")){
@@ -143,7 +142,7 @@ void keyBoard::createMaps(){
 		}
 	}
 
-	delete s;
+	
 
 }
 
@@ -226,7 +225,8 @@ int main(){
 	bindtextdomain("sax3","/usr/share/locale");
 	textdomain("sax3");
 
-	new expertMode();
+//	new expertMode();
+	new keyBoard();
 	return 0;
 }
 
