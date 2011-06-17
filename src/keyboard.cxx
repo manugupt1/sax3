@@ -56,7 +56,7 @@ class keyBoard{
 	map<string,string> model;
 	map<string,string> layout;
 	map<string,string> variant;
-
+	map<string,string> options;
 	char *s,*s1,*s2;
 	FILE * fp;
 
