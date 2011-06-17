@@ -14,8 +14,9 @@ namespace UI{
 		return alignment;
 	}
 
-	void yDialog::event(){
-		dialog->waitForEvent();
+	YWidget* yDialog::event(){
+		Event = dialog->waitForEvent();
+		return Event->widget();
 	}
 
 	yDialog::~yDialog(){
@@ -97,6 +98,9 @@ namespace UI{
 	}
 	yPushButton::yPushButton(yHLayout * parent,std::string text){
 		button = YUI::widgetFactory()->createPushButton(parent->getElement(),text);
+	}
+	YPushButton* yPushButton::getElement(){
+		return button;
 	}
 	yPushButton::~yPushButton(){
 		delete button;

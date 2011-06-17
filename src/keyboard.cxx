@@ -142,7 +142,6 @@ void keyBoard::createMaps(){
 		}
 	}
 
-	
 
 }
 
@@ -214,10 +213,16 @@ class simpleMode{
 			saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
 			cancelButton = factory->createPushButton(buttonLayout,_("&Cancel"));
 
-			dialog->event();
+			while(1){	
+				if(activateExpertMode->getElement()==dialog->event()){
+					new expertMode();
+					delete this;
+				}
+			};
 
 		}
 };
+
 
 int main(){
 	
@@ -225,8 +230,8 @@ int main(){
 	bindtextdomain("sax3","/usr/share/locale");
 	textdomain("sax3");
 
-//	new expertMode();
-	new keyBoard();
+	new simpleMode();
+//	new keyBoard();
 	return 0;
 }
 

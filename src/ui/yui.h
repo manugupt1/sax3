@@ -32,10 +32,11 @@ namespace UI{
 	class yDialog : public Dialog{
 		YDialog * dialog;
 		YAlignment * alignment;
+		YEvent * Event;
 		public:
 		yDialog(int width,int height);
 		YAlignment * getElement();
-		void event();
+		YWidget* event();
 		~yDialog();
 	};
 //YUIHLAYOUT
@@ -75,6 +76,7 @@ namespace UI{
 		yPushButton(yDialog *,std::string text);
 		yPushButton(yHLayout *,std::string text);
 		yPushButton(yVLayout *,std::string text);
+		YPushButton * getElement();
 		~yPushButton();
 	};
 
