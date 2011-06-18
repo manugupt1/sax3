@@ -33,6 +33,10 @@ namespace UI{
 			virtual ComboBox * createComboBox(HLayout *,std::string)=0;
 			virtual ComboBox * createComboBox(VLayout *,std::string)=0;
 
+			virtual MultiSelectionBox * createMultiSelectionBox(Dialog *,std::string)=0;
+			virtual MultiSelectionBox * createMultiSelectionBox(HLayout*,std::string)=0;
+			virtual MultiSelectionBox * createMultiSelectionBox(VLayout *,std::string)=0;
+
 	};	
 }
 

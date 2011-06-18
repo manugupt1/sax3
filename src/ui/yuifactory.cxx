@@ -72,4 +72,14 @@ namespace UI{
 		return new yComboBox((yVLayout*)parent,text);
 	}
 
+	yMultiSelectionBox * YUIFactory::createMultiSelectionBox(Dialog * parent,std::string text){
+		return new yMultiSelectionBox((yDialog*)parent,text);
+	}
+	yMultiSelectionBox * YUIFactory::createMultiSelectionBox(HLayout * parent,std::string text){
+		return new yMultiSelectionBox((yHLayout*)parent,text);
+	}
+	yMultiSelectionBox * YUIFactory::createMultiSelectionBox(VLayout * parent,std::string text){
+		return new yMultiSelectionBox((yVLayout*)parent,text);
+	}
+
 }

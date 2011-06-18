@@ -32,7 +32,8 @@ namespace UI{
 
 	class ComboBox{
 	};
-
+	class MultiSelectionBox{
+	};
 }
 
 #endif

@@ -16,6 +16,7 @@
 #include "YAlignment.h"
 #include "YImage.h"
 #include "YComboBox.h"
+#include "YMultiSelectionBox.h"
 
 #include<iostream>
 
@@ -27,7 +28,8 @@ namespace UI{
 	class yLabel;
 	class yPushButton;
 	class yImage;
-	class yComboBox;	
+	class yComboBox;
+	class yMultiSelectionBox;	
 //YUIDIALOG
 	class yDialog : public Dialog{
 		YDialog * dialog;
@@ -100,9 +102,19 @@ namespace UI{
 		yComboBox(yVLayout *,std::string label);
 		
 		void addItem(std::string item);
+		~yComboBox();
 
 	};	
-
+//YMULTISELECTIONBOX 
+	class yMultiSelectionBox : public MultiSelectionBox{
+		YMultiSelectionBox * multi;
+		public:
+		yMultiSelectionBox(yDialog*,std::string label);
+		yMultiSelectionBox(yHLayout*,std::string label);
+		yMultiSelectionBox(yVLayout*,std::string label);
+		void addItem(std::string item);
+		~yMultiSelectionBox();
+	};
 }
 
 #endif

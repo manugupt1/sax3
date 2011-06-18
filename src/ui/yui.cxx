@@ -137,6 +137,27 @@ namespace UI{
 	void yComboBox::addItem(string item){
 		comboBox->addItem(item);
 	}
+	yComboBox::~yComboBox(){
+		delete comboBox;
+	}
 
 	//YCOMBOBOX FUNCION ENDS
+	
+	//YMULTISELECTIONBOX FUNCTION STARTS
+	yMultiSelectionBox::yMultiSelectionBox(yDialog * parent,std::string label){
+		multi = YUI::widgetFactory()->createMultiSelectionBox(parent->getElement(),label);
+	}
+	yMultiSelectionBox::yMultiSelectionBox(yHLayout * parent,std::string label){
+		multi = YUI::widgetFactory()->createMultiSelectionBox(parent->getElement(),label);
+	}
+	yMultiSelectionBox::yMultiSelectionBox(yVLayout * parent,std::string label){
+		multi = YUI::widgetFactory()->createMultiSelectionBox(parent->getElement(),label);
+	}
+	void yMultiSelectionBox::addItem(string item){
+		multi->addItem(item);
+	}
+	yMultiSelectionBox::~yMultiSelectionBox(){
+		delete multi;
+	}
+	//YMULTISELECTIONBOX FUNCTION ENDS
 }

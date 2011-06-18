@@ -150,10 +150,10 @@ class expertMode{
 	UI::yDialog * dialog;
 	UI::yVLayout * mainLayout;
 	UI::yLabel * label1;
-	UI::yComboBox * layoutSelect;
+	UI::yMultiSelectionBox * layoutSelect;
 	UI::yComboBox * modelSelect;
 	UI::yComboBox * variantSelect;
-	UI::yComboBox * groupSelect;
+	UI::yComboBox * optionSelect;
 	UI::yHLayout * buttonLayout;
 	UI::yPushButton * activateSimpleMode,*saveButton,*cancelButton;
 	public:
@@ -165,17 +165,17 @@ class expertMode{
 
 			label1 = factory->createLabel(mainLayout,_("              SaX3 - Keyboard Module"));
 
-			layoutSelect = factory->createComboBox(mainLayout,_("Select your keyboard Layout                                       "));
+			layoutSelect = factory->createMultiSelectionBox(mainLayout,_("Select your keyboard Layout                                       "));
 			layoutSelect->addItem("Manu Gupta");
 
-			layoutSelect = factory->createComboBox(mainLayout,_("Select your keyboard model                                        "));
-			layoutSelect->addItem("Manu Gupta");
+			modelSelect = factory->createComboBox(mainLayout,_("Select your keyboard model                                        "));
+			modelSelect->addItem("Manu Gupta");
 
-			layoutSelect = factory->createComboBox(mainLayout,_("Select your keyboard Varaint                                      "));
-			layoutSelect->addItem("Manu Gupta");
+			variantSelect = factory->createComboBox(mainLayout,_("Select your keyboard Varaint                                      "));
+			variantSelect->addItem("Manu Gupta");
 
-			layoutSelect = factory->createComboBox(mainLayout,_("Select your keyboard Group                                        "));
-			layoutSelect->addItem("Manu Gupta");
+			optionSelect = factory->createComboBox(mainLayout,_("Select your keyboard Group                                        "));
+			optionSelect->addItem("Manu Gupta");
 
 
 			buttonLayout = factory->createHLayout(mainLayout);
