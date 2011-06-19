@@ -13,7 +13,8 @@ extern "C"{
 
 #include "ui/yuifactory.h"
 
-#include<stdio.h>
+#include<iostream>
+#include<fstream>
 #include<string>
 #include<map>
 #include<utility>
@@ -25,99 +26,73 @@ using namespace std;
 class simpleMode;
 class expertMode;
 
-class keyBoard{
-	protected:
-	map<char *,char *> model;
-	map<char *,char *> layout;
-	map<char *,char *> variant;
-	map<char *,char *> options;
-	char *s,*s1,*s2;
-	FILE * fp;
-	void split(map<char*,char*>);
-	void createMaps();
+class keyboard{
+	map<string,string> layout;
+	map<string,string> model;
+	map<string,string> variant;
+	map<string,string> options;
+	string s1,line;
+	ifstream baseFile;
+	int type;
+	void split();
 	public:
-	keyBoard();		
-}; 
+	keyboard();
+};
+keyboard::keyboard(){
+	string line;type=0;
+	baseFile.open("/usr/share/X11/xkb/rules/base.lst",ios::in);
+	if(baseFile.is_open()){
+			while(baseFile.good()){
+				getline(baseFile,line);
+				line.erase(0,2);
+				if(!line.compare("model")){type = 1;continue;}
+				if(!line.compare("layout")){type = 2;continue;}
+				if(!line.compare("variant")){type = 3;continue;}
+				if(!line.compare("option")){type = 4;continue;}
+				
+				if(type==1 && line.length()!=0){
+					int pos = line.find_first_of(' ');
+					s1 = line.substr(0,pos);line.erase(0,pos);
+					pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+					line.erase(0,pos-1);
+					cout<<s1<<'\t'<<line<<endl;
+					model[line]=s1;
+				}
+				if(type==2 && line.length()!=0){
+					int pos = line.find_first_of(' ');
+					s1 = line.substr(0,pos);line.erase(0,pos);
+					pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+					line.erase(0,pos-1);
+					cout<<s1<<'\t'<<line<<endl;
+					layout[line]=s1;
+				}
+				if(type==3 && line.length()!=0){
+					int pos = line.find_first_of(' ');
+					s1 = line.substr(0,pos);line.erase(0,pos);
+					pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+					line.erase(0,pos-1);
+					cout<<s1<<'\t'<<line<<endl;
+					variant[line]=s1;
+				}
+				if(type==4 && line.length()!=0){
+					int pos = line.find_first_of(' ');
+					s1 = line.substr(0,pos);line.erase(0,pos);
+					pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+					line.erase(0,pos-1);
+					cout<<s1<<'\t'<<line<<endl;
+					options[line]=s1;
+				}
+				
+			};
+	}
 
-keyBoard::keyBoard(){
-	fp = fopen("/usr/share/X11/xkb/rules/base.lst","r");
-
-	if(fp==NULL) printf("Error Loading layours, variants and models");
-	else printf("base.lst successfully loaded");
-	createMaps();
 }
 
-void keyBoard::split(map<char*,char*> Map){
+void keyboard::split(){
 	
-	int len;
-	int i=0,j=0,k=0;
-	len = strlen(s);
-	while(s[i]==' '){
-		i++;
-	}
-	while(s[i]!=' '){
-		s1[j++]=s[i++];
-	}
-	s1[j]='\0';
-//	printf("%s",s1);
-	while(s[i]==' '){
-		i++;
-	}
-	for(;i<=len;i++) s2[k++]=s[i];
-	s2[--k]='\0';
-//	printf("\t%s",s2);
-	s = fgets(s,400,fp);
-	if(s!=NULL){ len = strlen(s); Map[s1]=s2;}
-	k=i=j=0;
-}
-
-void keyBoard::createMaps(){
-
-	s = new char[500];
-	s1 = new char[480];
-	s2 = new char[20];
-	s = fgets(s,400,fp);
-
-	if(!strcmp(s,"! model\n")){
-		s = fgets(s,400,fp);
-		while(strcmp(s,"\n")){			
-			split(model);
-		}
-	}
-		
-	s= fgets(s,400,fp);
-
-	if(!strcmp(s,"! layout\n")){
-		s = fgets(s,400,fp);
-		while(strcmp(s,"\n")){			
-			split(layout);
-		}
 	}
 
-	s= fgets(s,400,fp);
-
-	if(!strcmp(s,"! variant\n")){
-		s = fgets(s,400,fp);
-		while(strcmp(s,"\n")){			
-			split(variant);
-		}
-	}
-
-
-	s= fgets(s,400,fp);
-
-	if(!strcmp(s,"! option\n")){
-		s = fgets(s,400,fp);
-		while(strcmp(s,"\n") ){			
-			split(options);
-			if(s==NULL)break;
-		}
-	}
-
-//	delete s;
-}
-
-class expertMode : protected keyBoard{
+class expertMode {
 	UI::YUIFactory * factory;
 	UI::yDialog * dialog;
 	UI::yVLayout * mainLayout;
@@ -192,6 +167,7 @@ int main(){
 	textdomain("sax3");
 
 	new expertMode();
+	new keyboard();
 	return 0;
 }
 
