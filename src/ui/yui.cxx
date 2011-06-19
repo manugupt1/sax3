@@ -137,6 +137,9 @@ namespace UI{
 	void yComboBox::addItem(string item){
 		comboBox->addItem(item);
 	}
+	YComboBox * yComboBox::getElement(){
+		return comboBox;
+	}
 	yComboBox::~yComboBox(){
 		delete comboBox;
 	}

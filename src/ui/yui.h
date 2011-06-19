@@ -102,6 +102,7 @@ namespace UI{
 		yComboBox(yVLayout *,std::string label);
 		
 		void addItem(std::string item);
+		YComboBox * getElement();
 		~yComboBox();
 
 	};	
