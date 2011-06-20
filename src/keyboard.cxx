@@ -34,6 +34,11 @@ class keyboard{
 	map<string,string> options;
 	string s1,line;
 	ifstream baseFile;
+	
+	augeas * aug;
+	char * root,* loadpath;
+	unsigned int flag;
+
 	int type;
 	void split();
 	public:
@@ -168,6 +173,13 @@ simpleMode::simpleMode(){
 
 bool simpleMode::writeConf(){
 	cout<<"Hello World";
+	aug=NULL;root=NULL;flag=0;
+	aug = aug_init(root,loadpath,flag);
+	aug_set(aug,"/files/etc/X11/xorg.conf.d/99-saxkeyboard.conf/InputClass/Idenifier","SaX Keyboard Conf");
+	aug_set(aug,"/files/etc/X11/xorg.conf.d/99-saxkeyboard.conf/InputClass/MatchIsKeyboard","on");
+	aug_set(aug,"/files/etc/X11/xorg.conf.d/99-saxkeyboard.conf/InputClass/Option","XkbLayout");
+	aug_set(aug,"/files/etc/X11/xorg.conf.d/99-saxkeyboard.conf/InputClass/Option/value","us");
+	aug_save(aug);
 }
 
 void simpleMode::fillUp(){
