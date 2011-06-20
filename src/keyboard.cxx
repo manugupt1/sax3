@@ -27,6 +27,7 @@ class simpleMode;
 class expertMode;
 
 class keyboard{
+	protected:
 	map<string,string> layout;
 	map<string,string> model;
 	map<string,string> variant;
@@ -38,6 +39,7 @@ class keyboard{
 	public:
 	keyboard();
 };
+
 keyboard::keyboard(){
 	string line;type=0;
 	baseFile.open("/usr/share/X11/xkb/rules/base.lst",ios::in);
@@ -88,10 +90,6 @@ keyboard::keyboard(){
 
 }
 
-void keyboard::split(){
-	
-	}
-
 class expertMode {
 	UI::YUIFactory * factory;
 	UI::yDialog * dialog;
@@ -107,7 +105,7 @@ class expertMode {
 		expertMode();
 };
 
-class simpleMode{
+class simpleMode : protected keyboard{
 	UI::YUIFactory * factory;
 	UI::yDialog * dialog;
 	UI::yVLayout * mainLayout;
@@ -117,6 +115,8 @@ class simpleMode{
 	UI::yPushButton * activateExpertMode,*saveButton,*cancelButton;
 	public:
 		simpleMode();
+		bool writeConf();
+		void fillUp();
 			
 };
 
@@ -149,22 +149,33 @@ simpleMode::simpleMode(){
 	mainLayout = factory->createVLayout(dialog);
 	label1 = factory->createLabel(mainLayout,_("              SaX3 - Keyboard Module"));
 	layoutSelect = factory->createComboBox(mainLayout,_("Select your keyboard Layout                               "));
-	layoutSelect->addItem("Manu Gupta");
 	buttonLayout = factory->createHLayout(mainLayout);
 	activateExpertMode = factory->createPushButton(buttonLayout,_("E&xpert Mode"));
 	saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
 	cancelButton = factory->createPushButton(buttonLayout,_("&Cancel"));
-	
+
+	fillUp();
+
 	dialog->wait();
 
 	if(activateExpertMode->getElement()==dialog->eventWidget()){
 		delete this;new expertMode();
 	}
 	if(saveButton->getElement()==dialog->eventWidget()){
-		delete this;new expertMode();
+		writeConf();cout<<endl;
 	}
 }
 
+bool simpleMode::writeConf(){
+	cout<<"Hello World";
+}
+
+void simpleMode::fillUp(){
+	map<string,string>::iterator it;
+	for(it=layout.begin();it!=layout.end();it++){
+		layoutSelect->addItem(it->first);
+	}
+}
 int main(){
 	
 	setlocale(LC_ALL,"");
