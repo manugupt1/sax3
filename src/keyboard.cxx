@@ -62,7 +62,7 @@ keyboard::keyboard(){
 					s1 = line.substr(0,pos);line.erase(0,pos);
 					pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 					line.erase(0,pos-1);
-					cout<<s1<<'\t'<<line<<endl;
+//					cout<<s1<<'\t'<<line<<endl;
 					model[line]=s1;
 				}
 				if(type==2 && line.length()!=0){
@@ -70,7 +70,7 @@ keyboard::keyboard(){
 					s1 = line.substr(0,pos);line.erase(0,pos);
 					pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 					line.erase(0,pos-1);
-					cout<<s1<<'\t'<<line<<endl;
+//					cout<<s1<<'\t'<<line<<endl;
 					layout[line]=s1;
 				}
 				if(type==3 && line.length()!=0){
@@ -78,7 +78,7 @@ keyboard::keyboard(){
 					s1 = line.substr(0,pos);line.erase(0,pos);
 					pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 					line.erase(0,pos-1);
-					cout<<s1<<'\t'<<line<<endl;
+//					cout<<s1<<'\t'<<line<<endl;
 					variant[line]=s1;
 				}
 				if(type==4 && line.length()!=0){
@@ -86,7 +86,7 @@ keyboard::keyboard(){
 					s1 = line.substr(0,pos);line.erase(0,pos);
 					pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 					line.erase(0,pos-1);
-					cout<<s1<<'\t'<<line<<endl;
+//					cout<<s1<<'\t'<<line<<endl;
 					options[line]=s1;
 				}
 				
@@ -172,14 +172,38 @@ simpleMode::simpleMode(){
 }
 
 bool simpleMode::writeConf(){
-	cout<<"Hello World";
+	char **match;int i=0,j=0,pos=0;string line,subPath,pathParam;
+	int error;
+	string layoutVal;
 	aug=NULL;root=NULL;flag=0;
 	aug = aug_init(root,loadpath,flag);
-	aug_set(aug,"/files/etc/X11/xorg.conf.d/99-saxkeyboard.conf/InputClass/Idenifier","SaX Keyboard Conf");
-	aug_set(aug,"/files/etc/X11/xorg.conf.d/99-saxkeyboard.conf/InputClass/MatchIsKeyboard","on");
-	aug_set(aug,"/files/etc/X11/xorg.conf.d/99-saxkeyboard.conf/InputClass/Option","XkbLayout");
-	aug_set(aug,"/files/etc/X11/xorg.conf.d/99-saxkeyboard.conf/InputClass/Option/value","us");
-	aug_save(aug);
+	int cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d/*/InputClass/MatchIsKeyboard",&match);
+	for(i=0;i<cnt-1;i++){
+		if(strcmp(match[i],match[i+1])<0)
+			j = i+1;
+	}
+	line.assign(match[j]);
+	subPath.assign("InputClass");
+	pos = line.find(subPath);
+	
+	line.erase(pos+subPath.length(),line.size());
+	line.append("[last()");
+	pathParam.assign(line);pathParam.append("+1]/Identifier");
+	error = aug_set(aug,pathParam.c_str(),"SaXKeyboardConf");
+	pathParam.assign(line);pathParam.append("]/MatchIsKeyboard");
+	error = aug_set(aug,pathParam.c_str(),"on");
+	pathParam.assign(line);pathParam.append("]/Option");
+	error = aug_set(aug,pathParam.c_str(),"XkbLayout");
+	pathParam.assign(line);pathParam.append("]/Option/value");
+
+	layoutVal = layout[layoutSelect->value()];
+
+	error = aug_set(aug,pathParam.c_str(),layoutVal.c_str());
+
+	error = aug_save(aug);
+	if(error==-1)cout<<error;
+	aug_print(aug,stdout,"/files/etc/X11/xorg.conf.d/*");
+	return true;
 }
 
 void simpleMode::fillUp(){

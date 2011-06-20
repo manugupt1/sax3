@@ -104,6 +104,7 @@ namespace UI{
 		
 		void addItem(std::string item);
 		YComboBox * getElement();
+		string value();
 		~yComboBox();
 
 	};	

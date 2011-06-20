@@ -142,6 +142,10 @@ namespace UI{
 	YComboBox * yComboBox::getElement(){
 		return comboBox;
 	}
+	string yComboBox::value(){
+		return comboBox->value();
+	}
+
 	yComboBox::~yComboBox(){
 		delete comboBox;
 	}
