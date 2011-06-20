@@ -137,9 +137,10 @@ factory = new UI::YUIFactory();
 	activateSimpleMode = factory->createPushButton(buttonLayout,_("&Simple Mode"));
 	saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
 	cancelButton = factory->createPushButton(buttonLayout,_("&Cancel"));
-	if(activateSimpleMode->getElement()==dialog->event()){
+	dialog->wait();
+/*	if(activateSimpleMode->getElement()==dialog->event()){
 		delete this;new simpleMode();
-	}
+	}*/
 }
 
 simpleMode::simpleMode(){
@@ -154,10 +155,14 @@ simpleMode::simpleMode(){
 	saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
 	cancelButton = factory->createPushButton(buttonLayout,_("&Cancel"));
 	
-	if(activateExpertMode->getElement()==dialog->event()){
+	dialog->wait();
+
+	if(activateExpertMode->getElement()==dialog->eventWidget()){
 		delete this;new expertMode();
 	}
-
+	if(saveButton->getElement()==dialog->eventWidget()){
+		delete this;new expertMode();
+	}
 }
 
 int main(){
@@ -166,7 +171,7 @@ int main(){
 	bindtextdomain("sax3","/usr/share/locale");
 	textdomain("sax3");
 
-	new expertMode();
+	new simpleMode();
 	new keyboard();
 	return 0;
 }

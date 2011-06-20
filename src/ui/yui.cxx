@@ -14,8 +14,10 @@ namespace UI{
 		return alignment;
 	}
 
-	YWidget* yDialog::event(){
+	void yDialog::wait(){
 		Event = dialog->waitForEvent();
+	}
+	YWidget* yDialog::eventWidget(){
 		return Event->widget();
 	}
 

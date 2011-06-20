@@ -38,7 +38,8 @@ namespace UI{
 		public:
 		yDialog(int width,int height);
 		YAlignment * getElement();
-		YWidget* event();
+		void wait();
+		YWidget* eventWidget();
 		~yDialog();
 	};
 //YUIHLAYOUT

@@ -72,7 +72,7 @@ class Init{
 			}
 
 		}	
-		dialog->event();
+		dialog->wait();
 		
 	}
 };
