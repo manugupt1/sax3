@@ -145,7 +145,10 @@ namespace UI{
 	string yComboBox::value(){
 		return comboBox->value();
 	}
-
+	void yComboBox::setValue(string value){
+		YItem * item = new YItem(value);
+		comboBox->selectItem(item);
+	}
 	yComboBox::~yComboBox(){
 		delete comboBox;
 	}

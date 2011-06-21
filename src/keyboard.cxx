@@ -39,7 +39,9 @@ class keyboard{
 	char * root,* loadpath;
 	unsigned int flag;
 
+	enum{MODEL,LAYOUT,VARIANT,OPTION};
 	int type;
+
 	void split();
 	public:
 	keyboard();
@@ -52,41 +54,26 @@ keyboard::keyboard(){
 			while(baseFile.good()){
 				getline(baseFile,line);
 				line.erase(0,2);
-				if(!line.compare("model")){type = 1;continue;}
-				if(!line.compare("layout")){type = 2;continue;}
-				if(!line.compare("variant")){type = 3;continue;}
-				if(!line.compare("option")){type = 4;continue;}
+				if(!line.compare("model")){type = MODEL;continue;}
+				if(!line.compare("layout")){type = LAYOUT;continue;}
+				if(!line.compare("variant")){type = VARIANT;continue;}
+				if(!line.compare("option")){type = OPTION;continue;}
 				
-				if(type==1 && line.length()!=0){
-					int pos = line.find_first_of(' ');
-					s1 = line.substr(0,pos);line.erase(0,pos);
-					pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-					line.erase(0,pos-1);
-//					cout<<s1<<'\t'<<line<<endl;
+				int pos = line.find_first_of(' ');
+				s1 = line.substr(0,pos);line.erase(0,pos);
+				pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+				line.erase(0,pos-1);
+
+				if(type==MODEL && line.length()!=0){
 					model[line]=s1;
 				}
-				if(type==2 && line.length()!=0){
-					int pos = line.find_first_of(' ');
-					s1 = line.substr(0,pos);line.erase(0,pos);
-					pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-					line.erase(0,pos-1);
-//					cout<<s1<<'\t'<<line<<endl;
+				if(type==LAYOUT && line.length()!=0){
 					layout[line]=s1;
 				}
-				if(type==3 && line.length()!=0){
-					int pos = line.find_first_of(' ');
-					s1 = line.substr(0,pos);line.erase(0,pos);
-					pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-					line.erase(0,pos-1);
-//					cout<<s1<<'\t'<<line<<endl;
+				if(type==VARIANT && line.length()!=0){
 					variant[line]=s1;
 				}
-				if(type==4 && line.length()!=0){
-					int pos = line.find_first_of(' ');
-					s1 = line.substr(0,pos);line.erase(0,pos);
-					pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-					line.erase(0,pos-1);
-//					cout<<s1<<'\t'<<line<<endl;
+				if(type==OPTION && line.length()!=0){
 					options[line]=s1;
 				}
 				
@@ -129,14 +116,14 @@ expertMode::expertMode(){
 factory = new UI::YUIFactory();
 	dialog = factory->createDialog(60,20);
 	mainLayout = factory->createVLayout(dialog);
-	label1 = factory->createLabel(mainLayout,_("              SaX3 - Keyboard Module"));
-	layoutSelect = factory->createMultiSelectionBox(mainLayout,_("Select your keyboard Layout                                       "));
+	label1 = factory->createLabel(mainLayout,_("SaX3 - Keyboard Module"));
+	layoutSelect = factory->createMultiSelectionBox(mainLayout,_("Select your keyboard Layout"));
 	layoutSelect->addItem("Manu Gupta");
-	modelSelect = factory->createComboBox(mainLayout,_("Select your keyboard model                                        "));
+	modelSelect = factory->createComboBox(mainLayout,_("Select your keyboard model"));
 	modelSelect->addItem("Manu Gupta");
-	variantSelect = factory->createComboBox(mainLayout,_("Select your keyboard Varaint                                      "));
+	variantSelect = factory->createComboBox(mainLayout,_("Select your keyboard Varaint"));
 	variantSelect->addItem("Manu Gupta");
-	optionSelect = factory->createComboBox(mainLayout,_("Select your keyboard Group                                        "));
+	optionSelect = factory->createComboBox(mainLayout,_("Select your keyboard Group"));
 	optionSelect->addItem("Manu Gupta");
 	buttonLayout = factory->createHLayout(mainLayout);
 	activateSimpleMode = factory->createPushButton(buttonLayout,_("&Simple Mode"));

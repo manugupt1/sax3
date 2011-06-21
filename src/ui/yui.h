@@ -17,6 +17,7 @@
 #include "YImage.h"
 #include "YComboBox.h"
 #include "YMultiSelectionBox.h"
+#include "YItem.h"
 
 #include<iostream>
 
@@ -105,6 +106,7 @@ namespace UI{
 		void addItem(std::string item);
 		YComboBox * getElement();
 		string value();
+		void setValue(string);
 		~yComboBox();
 
 	};	
