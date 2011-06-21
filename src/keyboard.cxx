@@ -182,7 +182,11 @@ bool simpleMode::writeConf(){
 		if(strcmp(match[i],match[i+1])<0)
 			j = i+1;
 	}
-	line.assign(match[j]);
+	if(cnt)
+		line.assign(match[j]);
+	else
+		line.assign("/files/etc/X11/xorg.conf.d/99-saxkeyboard.conf/InputClass");
+
 	subPath.assign("InputClass");
 	pos = line.find(subPath);
 	
@@ -190,6 +194,7 @@ bool simpleMode::writeConf(){
 	line.append("[last()");
 	pathParam.assign(line);pathParam.append("+1]/Identifier");
 	error = aug_set(aug,pathParam.c_str(),"SaXKeyboardConf");
+	cout<<pathParam<<endl;
 	pathParam.assign(line);pathParam.append("]/MatchIsKeyboard");
 	error = aug_set(aug,pathParam.c_str(),"on");
 	pathParam.assign(line);pathParam.append("]/Option");
@@ -202,7 +207,7 @@ bool simpleMode::writeConf(){
 
 	error = aug_save(aug);
 	if(error==-1)cout<<error;
-	aug_print(aug,stdout,"/files/etc/X11/xorg.conf.d/*");
+//	aug_print(aug,stdout,"/augeas//error");
 	return true;
 }
 
