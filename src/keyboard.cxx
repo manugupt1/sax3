@@ -32,7 +32,7 @@ class keyboard{
 	map<string,string> model;
 	map<string,string> variant;
 	map<string,string> options;
-	string s1,line;
+	string s1,line,optionType;
 	ifstream baseFile;
 	
 	augeas * aug;
@@ -95,7 +95,8 @@ keyboard::keyboard(){
 					variant[line]=s1;
 				}
 				if(type==OPTION && line.length()!=0){
-					options[line]=s1;
+					if(s1.find(':')==-1) { optionType.assign("["+line+"]"); continue; }
+					options[line+optionType]=s1;
 				}
 
 			};
@@ -227,7 +228,7 @@ bool keyboard::simpleWriteConf(){
 
 	error = aug_save(aug);
 	if(error==-1)return false;
-//	aug_print(aug,stdout,"/augeas//error");
+	aug_print(aug,stdout,"/augeas//error");
 	return true;
 }
 
