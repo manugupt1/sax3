@@ -25,6 +25,9 @@ namespace UI{
 		delete alignment;
 		dialog->destroy();
 	}
+	void yDialog::redraw(){
+		dialog->recalcLayout();
+	}
 	//YDIALOG FUCNTIONS END
 
 
@@ -145,9 +148,8 @@ namespace UI{
 	string yComboBox::value(){
 		return comboBox->value();
 	}
-	void yComboBox::setValue(string value){
-		YItem * item = new YItem(value);
-		comboBox->selectItem(item);
+	void yComboBox::setValue(string &value){
+		comboBox->setValue(value);
 	}
 	yComboBox::~yComboBox(){
 		delete comboBox;

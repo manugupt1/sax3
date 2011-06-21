@@ -41,6 +41,7 @@ namespace UI{
 		YAlignment * getElement();
 		void wait();
 		YWidget* eventWidget();
+		void redraw();
 		~yDialog();
 	};
 //YUIHLAYOUT
@@ -97,7 +98,6 @@ namespace UI{
 //YUICOMBOX - NON EDITABLE
 	class yComboBox : public ComboBox{
 		YComboBox * comboBox;
-//		YItemCollection items;
 		public:
 		yComboBox(yDialog*,std::string label);
 		yComboBox(yHLayout *,std::string label);
@@ -106,7 +106,7 @@ namespace UI{
 		void addItem(std::string item);
 		YComboBox * getElement();
 		string value();
-		void setValue(string);
+		void setValue(string&);
 		~yComboBox();
 
 	};	

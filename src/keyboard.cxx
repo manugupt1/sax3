@@ -41,14 +41,34 @@ class keyboard{
 
 	enum{MODEL,LAYOUT,VARIANT,OPTION};
 	int type;
+	
+	UI::YUIFactory * factory;
+	UI::yDialog * dialog;
+	UI::yVLayout * mainLayout;
+	UI::yLabel * label1;
+	UI::yComboBox * layoutSelect;
+	UI::yHLayout * buttonLayout;
+	UI::yPushButton * activateMode,*saveButton,*cancelButton;
+	UI::yMultiSelectionBox * multiLayoutSelect;
+	UI::yComboBox * modelSelect;
+	UI::yMultiSelectionBox * multiVariantSelect;
+	UI::yMultiSelectionBox * multiOptionSelect;
+	bool SIMPLEMODE;
+
+	void drawSimpleMode();
+	void drawExpertMode();
 
 	void split();
+	void fillUp();
+
 	public:
 	keyboard();
+	void drawLayout();
+	bool respondToEvent();
 };
 
 keyboard::keyboard(){
-	string line;type=0;
+	type=0;int i=0;
 	baseFile.open("/usr/share/X11/xkb/rules/base.lst",ios::in);
 	if(baseFile.is_open()){
 			while(baseFile.good()){
@@ -58,12 +78,12 @@ keyboard::keyboard(){
 				if(!line.compare("layout")){type = LAYOUT;continue;}
 				if(!line.compare("variant")){type = VARIANT;continue;}
 				if(!line.compare("option")){type = OPTION;continue;}
-				
+
 				int pos = line.find_first_of(' ');
 				s1 = line.substr(0,pos);line.erase(0,pos);
 				pos=line.find_first_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-				line.erase(0,pos-1);
-
+				line.erase(0,pos-1);				
+				cout<<s1<<'\t'<<line<<endl;
 				if(type==MODEL && line.length()!=0){
 					model[line]=s1;
 				}
@@ -76,35 +96,97 @@ keyboard::keyboard(){
 				if(type==OPTION && line.length()!=0){
 					options[line]=s1;
 				}
-				
+
 			};
 	}
-
+	cout<<model.size()+variant.size()+options.size()+layout.size();
+	SIMPLEMODE = true;
+	factory = new UI::YUIFactory();
 }
 
-class expertMode {
-	UI::YUIFactory * factory;
-	UI::yDialog * dialog;
-	UI::yVLayout * mainLayout;
-	UI::yLabel * label1;
-	UI::yMultiSelectionBox * layoutSelect;
-	UI::yComboBox * modelSelect;
-	UI::yComboBox * variantSelect;
-	UI::yComboBox * optionSelect;
-	UI::yHLayout * buttonLayout;
-	UI::yPushButton * activateSimpleMode,*saveButton,*cancelButton;
+void keyboard::drawLayout(){
+	if(SIMPLEMODE){
+		drawSimpleMode();
+	}else{
+		drawExpertMode();
+	}
+}
+
+
+void keyboard::drawSimpleMode(){
+	factory = new UI::YUIFactory();
+	dialog = factory->createDialog(60,20);
+	mainLayout = factory->createVLayout(dialog);
+	label1 = factory->createLabel(mainLayout,_("SaX3 - Keyboard Module"));
+	layoutSelect = factory->createComboBox(mainLayout,_("Select your keyboard Layout"));
+	buttonLayout = factory->createHLayout(mainLayout);
+	activateMode = factory->createPushButton(buttonLayout,_("E&xpert Mode"));
+	saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
+	cancelButton = factory->createPushButton(buttonLayout,_("&Cancel"));
+	fillUp();
+	dialog->wait();
+}
+
+void keyboard::drawExpertMode(){
+	dialog = factory->createDialog(120,60);
+	mainLayout = factory->createVLayout(dialog);
+	label1 = factory->createLabel(mainLayout,_("SaX3 - Keyboard Module"));
+	multiLayoutSelect = factory->createMultiSelectionBox(mainLayout,_("Select your keyboard Layout"));
+	modelSelect = factory->createComboBox(mainLayout,_("Select your keyboard model"));
+	multiVariantSelect = factory->createMultiSelectionBox(mainLayout,_("Select your keyboard Varaint"));
+	multiOptionSelect = factory->createMultiSelectionBox(mainLayout,_("Select your keyboard Group"));
+	buttonLayout = factory->createHLayout(mainLayout);
+	activateMode = factory->createPushButton(buttonLayout,_("&Simple Mode"));
+	saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
+	cancelButton = factory->createPushButton(buttonLayout,_("&Cancel"));
+	fillUp();
+	dialog->redraw();
+	dialog->wait();
+}
+
+bool keyboard::respondToEvent(){
+	if(activateMode->getElement()==dialog->eventWidget()){delete dialog;
+		SIMPLEMODE ? SIMPLEMODE = false : SIMPLEMODE = true;
+		!SIMPLEMODE ? drawExpertMode() : drawSimpleMode(); 
+		return true;
+	}else return false;
+}
+
+void keyboard::fillUp(){
+	map<string,string>::iterator it;
+	int i=0;
+	if(SIMPLEMODE){
+	        for(it=layout.begin();it!=layout.end();it++){
+	                layoutSelect->addItem(it->first);
+	        }
+
+	}else{
+		for(it=layout.begin();it!=layout.end();it++){
+			multiLayoutSelect->addItem(it->first);
+		}
+
+		for(it=model.begin();it!=model.end();it++){
+			modelSelect->addItem(it->first);
+		}
+		for(it=variant.begin();it!=variant.end();it++){
+			multiVariantSelect->addItem(it->first);
+		}
+		for(it=options.begin();it!=options.end();it++,i++){
+			multiOptionSelect->addItem(it->first);
+
+		}
+
+	}
+}
+
+
+
+/*class expertMode {
 	public:
 		expertMode();
 };
 
 class simpleMode : protected keyboard{
-	UI::YUIFactory * factory;
-	UI::yDialog * dialog;
-	UI::yVLayout * mainLayout;
-	UI::yLabel * label1;
-	UI::yComboBox * layoutSelect;
-	UI::yHLayout * buttonLayout;
-	UI::yPushButton * activateExpertMode,*saveButton,*cancelButton;
 	public:
 		simpleMode();
 		bool writeConf();
@@ -113,42 +195,13 @@ class simpleMode : protected keyboard{
 };
 
 expertMode::expertMode(){
-factory = new UI::YUIFactory();
-	dialog = factory->createDialog(60,20);
-	mainLayout = factory->createVLayout(dialog);
-	label1 = factory->createLabel(mainLayout,_("SaX3 - Keyboard Module"));
-	layoutSelect = factory->createMultiSelectionBox(mainLayout,_("Select your keyboard Layout"));
-	layoutSelect->addItem("Manu Gupta");
-	modelSelect = factory->createComboBox(mainLayout,_("Select your keyboard model"));
-	modelSelect->addItem("Manu Gupta");
-	variantSelect = factory->createComboBox(mainLayout,_("Select your keyboard Varaint"));
-	variantSelect->addItem("Manu Gupta");
-	optionSelect = factory->createComboBox(mainLayout,_("Select your keyboard Group"));
-	optionSelect->addItem("Manu Gupta");
-	buttonLayout = factory->createHLayout(mainLayout);
-	activateSimpleMode = factory->createPushButton(buttonLayout,_("&Simple Mode"));
-	saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
-	cancelButton = factory->createPushButton(buttonLayout,_("&Cancel"));
-	dialog->wait();
+
 /*	if(activateSimpleMode->getElement()==dialog->event()){
 		delete this;new simpleMode();
-	}*/
+	}
 }
 
 simpleMode::simpleMode(){
-	factory = new UI::YUIFactory();
-	dialog = factory->createDialog(60,20);
-	mainLayout = factory->createVLayout(dialog);
-	label1 = factory->createLabel(mainLayout,_("              SaX3 - Keyboard Module"));
-	layoutSelect = factory->createComboBox(mainLayout,_("Select your keyboard Layout                               "));
-	buttonLayout = factory->createHLayout(mainLayout);
-	activateExpertMode = factory->createPushButton(buttonLayout,_("E&xpert Mode"));
-	saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
-	cancelButton = factory->createPushButton(buttonLayout,_("&Cancel"));
-
-	fillUp();
-
-	dialog->wait();
 
 	if(activateExpertMode->getElement()==dialog->eventWidget()){
 		delete this;new expertMode();
@@ -164,7 +217,7 @@ bool simpleMode::writeConf(){
 	string layoutVal;
 	aug=NULL;root=NULL;flag=0;
 	aug = aug_init(root,loadpath,flag);
-	int cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d/*/InputClass/MatchIsKeyboard",&match);
+	int cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d//InputClass/MatchIsKeyboard",&match);
 	for(i=0;i<cnt-1;i++){
 		if(strcmp(match[i],match[i+1])<0)
 			j = i+1;
@@ -203,15 +256,18 @@ void simpleMode::fillUp(){
 	for(it=layout.begin();it!=layout.end();it++){
 		layoutSelect->addItem(it->first);
 	}
-}
+}*/
 int main(){
 	
 	setlocale(LC_ALL,"");
 	bindtextdomain("sax3","/usr/share/locale");
 	textdomain("sax3");
 
-	new simpleMode();
-	new keyboard();
+	keyboard * kb = new keyboard();
+	kb->drawLayout();
+	while(kb->respondToEvent());
+	delete kb;	
+
 	return 0;
 }
 
