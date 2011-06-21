@@ -154,9 +154,9 @@ bool keyboard::respondToEvent(){
 	if(saveButton->getElement()==dialog->eventWidget()){
 		if(SIMPLEMODE){
 			if(simpleWriteConf()){
-				cout<<"Successfully written";
+				cerr<<"Successfully written";
 			}else{
-				cout<<"Successfully NOT written";
+				cerr<<"Successfully NOT written";
 			}
 		}
 		return false;
