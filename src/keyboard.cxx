@@ -65,10 +65,11 @@ class keyboard{
 	keyboard();
 	void drawLayout();
 	bool respondToEvent();
+	bool simpleWriteConf();
 };
 
 keyboard::keyboard(){
-	type=0;int i=0;
+	type=0;
 	baseFile.open("/usr/share/X11/xkb/rules/base.lst",ios::in);
 	if(baseFile.is_open()){
 			while(baseFile.good()){
@@ -149,7 +150,17 @@ bool keyboard::respondToEvent(){
 		SIMPLEMODE ? SIMPLEMODE = false : SIMPLEMODE = true;
 		!SIMPLEMODE ? drawExpertMode() : drawSimpleMode(); 
 		return true;
-	}else return false;
+	}
+	if(saveButton->getElement()==dialog->eventWidget()){
+		if(SIMPLEMODE){
+			if(simpleWriteConf()){
+				cout<<"Successfully written";
+			}else{
+				cout<<"Successfully NOT written";
+			}
+		}
+		return false;
+	}
 }
 
 void keyboard::fillUp(){
@@ -180,44 +191,13 @@ void keyboard::fillUp(){
 }
 
 
-
-/*class expertMode {
-	public:
-		expertMode();
-};
-
-class simpleMode : protected keyboard{
-	public:
-		simpleMode();
-		bool writeConf();
-		void fillUp();
-			
-};
-
-expertMode::expertMode(){
-
-/*	if(activateSimpleMode->getElement()==dialog->event()){
-		delete this;new simpleMode();
-	}
-}
-
-simpleMode::simpleMode(){
-
-	if(activateExpertMode->getElement()==dialog->eventWidget()){
-		delete this;new expertMode();
-	}
-	if(saveButton->getElement()==dialog->eventWidget()){
-		writeConf();cout<<endl;
-	}
-}
-
-bool simpleMode::writeConf(){
+bool keyboard::simpleWriteConf(){
 	char **match;int i=0,j=0,pos=0;string line,subPath,pathParam;
 	int error;
 	string layoutVal;
 	aug=NULL;root=NULL;flag=0;
 	aug = aug_init(root,loadpath,flag);
-	int cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d//InputClass/MatchIsKeyboard",&match);
+	int cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d/*/InputClass/MatchIsKeyboard",&match);
 	for(i=0;i<cnt-1;i++){
 		if(strcmp(match[i],match[i+1])<0)
 			j = i+1;
@@ -246,17 +226,11 @@ bool simpleMode::writeConf(){
 	error = aug_set(aug,pathParam.c_str(),layoutVal.c_str());
 
 	error = aug_save(aug);
-	if(error==-1)cout<<error;
+	if(error==-1)return false;
 //	aug_print(aug,stdout,"/augeas//error");
 	return true;
 }
 
-void simpleMode::fillUp(){
-	map<string,string>::iterator it;
-	for(it=layout.begin();it!=layout.end();it++){
-		layoutSelect->addItem(it->first);
-	}
-}*/
 int main(){
 	
 	setlocale(LC_ALL,"");
