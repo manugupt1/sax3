@@ -98,7 +98,7 @@ keyboard::keyboard(){
 				}
 				if(type==OPTION && line.length()!=0){
 					if(s1.find(':')==-1) { optionType.assign("["+line+"]"); continue; }
-					options[line+optionType]=s1;
+					options[optionType+line]=s1;
 				}
 
 			};
@@ -151,6 +151,7 @@ void keyboard::drawExpertMode(){
 }
 
 bool keyboard::respondToEvent(){
+	cout<<"Event handler";
 	if(activateMode->getElement()==dialog->eventWidget()){delete dialog;
 		SIMPLEMODE ? SIMPLEMODE = false : SIMPLEMODE = true;
 		!SIMPLEMODE ? drawExpertMode() : drawSimpleMode(); 
@@ -167,8 +168,14 @@ bool keyboard::respondToEvent(){
 			expertWriteConf();
 		}
 		return false;
+	}	
+	if(cancelButton->getElement()==dialog->eventWidget()){
+		return false;
 	}
-	return false;
+	if(dialog->eventReason()==2){
+		printf("selection changed");
+	}
+	return true;
 }
 
 void keyboard::fillUp(){
