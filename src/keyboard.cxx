@@ -295,10 +295,12 @@ bool keyboard::expertWriteConf(){
 	pathParam.assign(line);pathParam.append("]/MatchIsKeyboard");
 	error = aug_set(aug,pathParam.c_str(),"on");
 //Option XkbLayout
+	if(layoutList.size()){
 	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
 	error = aug_set(aug,pathParam.c_str(),"XkbLayout");
 	pathParam.assign(line);pathParam.append("]/Option[last()]/value");
 	error = aug_set(aug,pathParam.c_str(),layoutList.c_str());
+	}
 //Option Model
 	if(modelList.compare("None")){
 	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
@@ -307,16 +309,19 @@ bool keyboard::expertWriteConf(){
 	error = aug_set(aug,pathParam.c_str(),modelList.c_str());
 	}
 //Option Variant
+	if(variantList.size()){
 	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
 	error = aug_set(aug,pathParam.c_str(),"XkbVariant");
 	pathParam.assign(line);pathParam.append("]/Option[last()]/value");
 	error = aug_set(aug,pathParam.c_str(),variantList.c_str());
+	}
 //Option Options
+	if(optionList.size()){
 	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
 	error = aug_set(aug,pathParam.c_str(),"XkbOptions");
 	pathParam.assign(line);pathParam.append("]/Option[last()]/value");
 	error = aug_set(aug,pathParam.c_str(),optionList.c_str());
-
+	}
 	error = aug_save(aug);
 	if(error==-1){
 		aug_print(aug,stdout,"/augeas//error");
