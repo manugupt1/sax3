@@ -15,7 +15,7 @@ namespace UI{
 	}
 
 	void yDialog::wait(){
-		Event = dialog->waitForEvent();
+		Event = (YWidgetEvent*)dialog->waitForEvent();
 	}
 	YWidget* yDialog::eventWidget(){
 		return Event->widget();
@@ -27,6 +27,9 @@ namespace UI{
 	}
 	void yDialog::redraw(){
 		dialog->recalcLayout();
+	}
+	int yDialog::eventReason(){
+		return Event->reason();
 	}
 	//YDIALOG FUCNTIONS END
 

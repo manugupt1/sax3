@@ -61,7 +61,7 @@ class keyboard{
 
 	void split();
 	void fillUp();
-
+	bool writeConf(string &line,bool newNode,string parameter,bool isLastParameter,string extraParam,string value);
 	public:
 	keyboard();
 	void drawLayout();
@@ -151,7 +151,6 @@ void keyboard::drawExpertMode(){
 }
 
 bool keyboard::respondToEvent(){
-	cout<<"Event handler";
 	if(activateMode->getElement()==dialog->eventWidget()){delete dialog;
 		SIMPLEMODE ? SIMPLEMODE = false : SIMPLEMODE = true;
 		!SIMPLEMODE ? drawExpertMode() : drawSimpleMode(); 
@@ -205,11 +204,32 @@ void keyboard::fillUp(){
 	}
 }
 
-
+bool keyboard::writeConf(string &line,bool newNode,string parameter,bool isLastParameter,string extraParam,string value){
+	string pathParam;int error;
+	pathParam.assign(line);
+	if(newNode==true){
+		pathParam.append("[last()+1]/");
+	}else{
+		pathParam.append("[last()]/");
+	}
+	pathParam.append(parameter);
+	if(isLastParameter){
+		pathParam.append("[last()+1]");
+	}else{
+		pathParam.append("[last()]");
+	}
+	pathParam.append(extraParam);
+	cout<<pathParam<<endl;
+	error = aug_set(aug,pathParam.c_str(),value.c_str());
+	
+	if(error==-1)
+		return false;
+	return true;
+}
 bool keyboard::simpleWriteConf(){
 	char **match;int i=0,j=0,pos=0;string line,subPath,pathParam;
 	int error;
-	string layoutVal;
+	string layoutVal = layout[layoutSelect->value()];
 	int cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d/*/InputClass/MatchIsKeyboard",&match);
 	for(i=0;i<cnt-1;i++){
 		if(strcmp(match[i],match[i+1])<0)
@@ -222,21 +242,10 @@ bool keyboard::simpleWriteConf(){
 
 	subPath.assign("InputClass");
 	pos = line.find(subPath);
-	
 	line.erase(pos+subPath.length(),line.size());
-	line.append("[last()");
-	pathParam.assign(line);pathParam.append("+1]/Identifier");
-	error = aug_set(aug,pathParam.c_str(),"SaXKeyboardConf");
-	cout<<pathParam<<endl;
-	pathParam.assign(line);pathParam.append("]/MatchIsKeyboard");
-	error = aug_set(aug,pathParam.c_str(),"on");
-	pathParam.assign(line);pathParam.append("]/Option");
-	error = aug_set(aug,pathParam.c_str(),"XkbLayout");
-	pathParam.assign(line);pathParam.append("]/Option/value");
-
-	layoutVal = layout[layoutSelect->value()];
-
-	error = aug_set(aug,pathParam.c_str(),layoutVal.c_str());
+	writeConf(line,true,"Identifier",false,"","SaXKeyBoardConf") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",false,"","XkbLayout") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",false,"/value",layoutVal.c_str()) ? cout<<"no error\n" : cout<<"error\n";
 
 	error = aug_save(aug);
 	if(error==-1){
@@ -295,39 +304,26 @@ bool keyboard::expertWriteConf(){
 	pos = line.find(subPath);
 	
 	line.erase(pos+subPath.length(),line.size());
-	line.append("[last()");
-	pathParam.assign(line);pathParam.append("+1]/Identifier");
-	error = aug_set(aug,pathParam.c_str(),"SaXKeyboardConf");
-	cout<<pathParam<<endl;
-	pathParam.assign(line);pathParam.append("]/MatchIsKeyboard");
-	error = aug_set(aug,pathParam.c_str(),"on");
-//Option XkbLayout
+
+	writeConf(line,true,"Identifier",false,"","SaXKeyBoardConf") ? cout<<"no error\n" : cout<<"error\n";
 	if(layoutList.size()){
-	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
-	error = aug_set(aug,pathParam.c_str(),"XkbLayout");
-	pathParam.assign(line);pathParam.append("]/Option[last()]/value");
-	error = aug_set(aug,pathParam.c_str(),layoutList.c_str());
+	writeConf(line,false,"Option",true,"","XkbLayout") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",false,"/value",layoutList.c_str()) ? cout<<"no error\n" : cout<<"error\n";
 	}
-//Option Model
+	cout<<modelList<<endl;
 	if(modelList.compare("None")){
-	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
-	error = aug_set(aug,pathParam.c_str(),"XkbModel");
-	pathParam.assign(line);pathParam.append("]/Option[last()]/value");
-	error = aug_set(aug,pathParam.c_str(),modelList.c_str());
+	writeConf(line,false,"Option",true,"","XkbModel") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",false,"/value",model[modelList.c_str()]) ? cout<<"no error\n" : cout<<"error\n";
 	}
-//Option Variant
 	if(variantList.size()){
-	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
-	error = aug_set(aug,pathParam.c_str(),"XkbVariant");
-	pathParam.assign(line);pathParam.append("]/Option[last()]/value");
-	error = aug_set(aug,pathParam.c_str(),variantList.c_str());
+	writeConf(line,false,"Option",true,"","XkbVariant") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",false,"/value",variantList.c_str()) ? cout<<"no error\n" : cout<<"error\n";
 	}
-//Option Options
+	cout<<optionList.size();
 	if(optionList.size()){
-	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
-	error = aug_set(aug,pathParam.c_str(),"XkbOptions");
-	pathParam.assign(line);pathParam.append("]/Option[last()]/value");
-	error = aug_set(aug,pathParam.c_str(),optionList.c_str());
+	cout<<"In here";
+	writeConf(line,false,"Option",true,"","XkbOptions") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",false,"/value",optionList.c_str()) ? cout<<"no error\n" : cout<<"error\n";
 	}
 	error = aug_save(aug);
 	if(error==-1){
