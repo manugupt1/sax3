@@ -319,8 +319,8 @@ bool keyboard::expertWriteConf(){
 
 	error = aug_save(aug);
 	if(error==-1){
-		return false;
 		aug_print(aug,stdout,"/augeas//error");
+		return false;
 	}
 	return true;
 
