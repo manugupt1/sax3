@@ -300,10 +300,12 @@ bool keyboard::expertWriteConf(){
 	pathParam.assign(line);pathParam.append("]/Option[last()]/value");
 	error = aug_set(aug,pathParam.c_str(),layoutList.c_str());
 //Option Model
+	if(modelList.compare("None")){
 	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
 	error = aug_set(aug,pathParam.c_str(),"XkbModel");
 	pathParam.assign(line);pathParam.append("]/Option[last()]/value");
 	error = aug_set(aug,pathParam.c_str(),modelList.c_str());
+	}
 //Option Variant
 	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
 	error = aug_set(aug,pathParam.c_str(),"XkbVariant");
