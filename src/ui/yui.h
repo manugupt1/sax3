@@ -113,11 +113,13 @@ namespace UI{
 //YMULTISELECTIONBOX 
 	class yMultiSelectionBox : public MultiSelectionBox{
 		YMultiSelectionBox * multi;
+		YItemCollection slist;
 		public:
 		yMultiSelectionBox(yDialog*,std::string label);
 		yMultiSelectionBox(yHLayout*,std::string label);
 		yMultiSelectionBox(yVLayout*,std::string label);
 		void addItem(std::string item);
+		void selectedItems(vector<string> &list);
 		~yMultiSelectionBox();
 	};
 }

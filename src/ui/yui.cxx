@@ -173,5 +173,12 @@ namespace UI{
 	yMultiSelectionBox::~yMultiSelectionBox(){
 		delete multi;
 	}
+	void yMultiSelectionBox::selectedItems(vector<string> &list){
+		slist = multi->selectedItems();
+		for(int i=0;i<slist.size();i++){
+			list.push_back(slist.at(i)->label());
+		}		
+	}
+	
 	//YMULTISELECTIONBOX FUNCTION ENDS
 }

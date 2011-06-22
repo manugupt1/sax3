@@ -17,6 +17,7 @@ extern "C"{
 #include<fstream>
 #include<string>
 #include<map>
+#include<vector>
 #include<utility>
 
 #define _(STRING) gettext(STRING)
@@ -66,6 +67,7 @@ class keyboard{
 	void drawLayout();
 	bool respondToEvent();
 	bool simpleWriteConf();
+	bool expertWriteConf();
 };
 
 keyboard::keyboard(){
@@ -101,9 +103,11 @@ keyboard::keyboard(){
 
 			};
 	}
-	cout<<model.size()+variant.size()+options.size()+layout.size();
 	SIMPLEMODE = true;
 	factory = new UI::YUIFactory();
+	aug=NULL;root=NULL;flag=0;loadpath=NULL;
+	aug = aug_init(root,loadpath,flag);
+
 }
 
 void keyboard::drawLayout(){
@@ -159,9 +163,12 @@ bool keyboard::respondToEvent(){
 			}else{
 				cerr<<"Successfully NOT written";
 			}
+		}else{
+			expertWriteConf();
 		}
 		return false;
 	}
+	return false;
 }
 
 void keyboard::fillUp(){
@@ -176,7 +183,7 @@ void keyboard::fillUp(){
 		for(it=layout.begin();it!=layout.end();it++){
 			multiLayoutSelect->addItem(it->first);
 		}
-
+		modelSelect->addItem("None");
 		for(it=model.begin();it!=model.end();it++){
 			modelSelect->addItem(it->first);
 		}
@@ -196,8 +203,6 @@ bool keyboard::simpleWriteConf(){
 	char **match;int i=0,j=0,pos=0;string line,subPath,pathParam;
 	int error;
 	string layoutVal;
-	aug=NULL;root=NULL;flag=0;
-	aug = aug_init(root,loadpath,flag);
 	int cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d/*/InputClass/MatchIsKeyboard",&match);
 	for(i=0;i<cnt-1;i++){
 		if(strcmp(match[i],match[i+1])<0)
@@ -227,9 +232,96 @@ bool keyboard::simpleWriteConf(){
 	error = aug_set(aug,pathParam.c_str(),layoutVal.c_str());
 
 	error = aug_save(aug);
-	if(error==-1)return false;
-	aug_print(aug,stdout,"/augeas//error");
+	if(error==-1){
+		return false;
+		aug_print(aug,stdout,"/augeas//error");
+	}
 	return true;
+}
+
+bool keyboard::expertWriteConf(){
+	vector<string> list;
+	
+	string layoutList,modelList,variantList,optionList,temp;
+	multiLayoutSelect->selectedItems(list);
+
+	for(int i=0;i<list.size();i++){
+		temp = layout[list.at(i)];
+		layoutList.append(temp);
+		layoutList.push_back(',');
+	}
+	list.erase(list.begin(),list.end());
+
+	modelList = modelSelect->value();
+	multiVariantSelect->selectedItems(list);
+	for(int i=0;i<list.size();i++){
+		temp = variant[list.at(i)];
+		variantList.append(temp);
+		variantList.push_back(',');
+	}
+	list.erase(list.begin(),list.end());
+
+	multiOptionSelect->selectedItems(list);
+	for(int i=0;i<list.size();i++){
+		temp = options[list.at(i)];
+		optionList.append(temp);
+		optionList.push_back(',');
+	}
+	list.erase(list.begin(),list.end());
+
+	cout<<layoutList<<endl<<modelList<<endl<<variantList<<endl<<optionList<<endl;
+
+	char **match;int i=0,j=0,pos=0;string line,subPath,pathParam;
+	int error;
+	string layoutVal;
+	int cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d/*/InputClass/MatchIsKeyboard",&match);
+	for(i=0;i<cnt-1;i++){
+		if(strcmp(match[i],match[i+1])<0)
+			j = i+1;
+	}
+	if(cnt)
+		line.assign(match[j]);
+	else
+		line.assign("/files/etc/X11/xorg.conf.d/99-saxkeyboard.conf/InputClass");
+
+	subPath.assign("InputClass");
+	pos = line.find(subPath);
+	
+	line.erase(pos+subPath.length(),line.size());
+	line.append("[last()");
+	pathParam.assign(line);pathParam.append("+1]/Identifier");
+	error = aug_set(aug,pathParam.c_str(),"SaXKeyboardConf");
+	cout<<pathParam<<endl;
+	pathParam.assign(line);pathParam.append("]/MatchIsKeyboard");
+	error = aug_set(aug,pathParam.c_str(),"on");
+//Option XkbLayout
+	pathParam.assign(line);pathParam.append("]/Option");
+	error = aug_set(aug,pathParam.c_str(),"XkbLayout");
+	pathParam.assign(line);pathParam.append("]/Option/value");
+	error = aug_set(aug,pathParam.c_str(),layoutList.c_str());
+//Option Model
+	pathParam.assign(line);pathParam.append("]/Option");
+	error = aug_set(aug,pathParam.c_str(),"XkbModel");
+	pathParam.assign(line);pathParam.append("]/Option/value");
+	error = aug_set(aug,pathParam.c_str(),modelList.c_str());
+//Option Variant
+	pathParam.assign(line);pathParam.append("]/Option");
+	error = aug_set(aug,pathParam.c_str(),"XkbVariant");
+	pathParam.assign(line);pathParam.append("]/Option/value");
+	error = aug_set(aug,pathParam.c_str(),variantList.c_str());
+//Option Options
+	pathParam.assign(line);pathParam.append("]/Option");
+	error = aug_set(aug,pathParam.c_str(),"XkbOptions");
+	pathParam.assign(line);pathParam.append("]/Option/value");
+	error = aug_set(aug,pathParam.c_str(),optionList.c_str());
+
+	error = aug_save(aug);
+	if(error==-1){
+		return false;
+		aug_print(aug,stdout,"/augeas//error");
+	}
+	return true;
+
 }
 
 int main(){
@@ -244,7 +336,7 @@ int main(){
 	delete kb;	
 
 	return 0;
-}
+ }
 
 
 
