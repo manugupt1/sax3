@@ -35,7 +35,7 @@ namespace UI{
 	class yDialog : public Dialog{
 		YDialog * dialog;
 		YAlignment * alignment;
-		YEvent * Event;
+		YWidgetEvent * Event;
 		public:
 		yDialog(int width,int height);
 		YAlignment * getElement();
