@@ -295,24 +295,24 @@ bool keyboard::expertWriteConf(){
 	pathParam.assign(line);pathParam.append("]/MatchIsKeyboard");
 	error = aug_set(aug,pathParam.c_str(),"on");
 //Option XkbLayout
-	pathParam.assign(line);pathParam.append("]/Option");
+	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
 	error = aug_set(aug,pathParam.c_str(),"XkbLayout");
-	pathParam.assign(line);pathParam.append("]/Option/value");
+	pathParam.assign(line);pathParam.append("]/Option[last()]/value");
 	error = aug_set(aug,pathParam.c_str(),layoutList.c_str());
 //Option Model
-	pathParam.assign(line);pathParam.append("]/Option");
+	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
 	error = aug_set(aug,pathParam.c_str(),"XkbModel");
-	pathParam.assign(line);pathParam.append("]/Option/value");
+	pathParam.assign(line);pathParam.append("]/Option[last()]/value");
 	error = aug_set(aug,pathParam.c_str(),modelList.c_str());
 //Option Variant
-	pathParam.assign(line);pathParam.append("]/Option");
+	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
 	error = aug_set(aug,pathParam.c_str(),"XkbVariant");
-	pathParam.assign(line);pathParam.append("]/Option/value");
+	pathParam.assign(line);pathParam.append("]/Option[last()]/value");
 	error = aug_set(aug,pathParam.c_str(),variantList.c_str());
 //Option Options
-	pathParam.assign(line);pathParam.append("]/Option");
+	pathParam.assign(line);pathParam.append("]/Option[last()+1]");
 	error = aug_set(aug,pathParam.c_str(),"XkbOptions");
-	pathParam.assign(line);pathParam.append("]/Option/value");
+	pathParam.assign(line);pathParam.append("]/Option[last()]/value");
 	error = aug_set(aug,pathParam.c_str(),optionList.c_str());
 
 	error = aug_save(aug);
