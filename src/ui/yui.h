@@ -18,6 +18,8 @@
 #include "YComboBox.h"
 #include "YMultiSelectionBox.h"
 #include "YItem.h"
+#include "YTable.h"
+#include "YTableHeader.h"
 
 #include<iostream>
 
@@ -30,12 +32,25 @@ namespace UI{
 	class yPushButton;
 	class yImage;
 	class yComboBox;
-	class yMultiSelectionBox;	
+	class yMultiSelectionBox;
 //YUIDIALOG
 	class yDialog : public Dialog{
 		YDialog * dialog;
 		YAlignment * alignment;
-		YWidgetEvent * Event;
+		YEvent * Event;
+		enum EventType
+	        {
+		        NoEvent = 0,
+		        UnknownEvent,
+		        WidgetEvent,
+		        MenuEvent,
+		        KeyEvent,
+		        CancelEvent,
+		        TimeoutEvent,
+		        DebugEvent,
+		        InvalidEvent = 0x4242
+		};
+
 		public:
 		yDialog(int width,int height);
 		YAlignment * getElement();
@@ -72,6 +87,7 @@ namespace UI{
 		yLabel(yDialog *,std::string text);
 		yLabel(yHLayout *,std::string text);
 		yLabel(yVLayout *,std::string text);
+		void setValue(std::string);
 		~yLabel();
 	};
 
@@ -108,6 +124,7 @@ namespace UI{
 		YComboBox * getElement();
 		string value();
 		void setValue(string&);
+		void deleteAllItems();
 		~yComboBox();
 
 	};	
@@ -123,6 +140,16 @@ namespace UI{
 		void selectedItems(vector<string> &list);
 		~yMultiSelectionBox();
 	};
-}
 
+//YTABLE
+	class yTable : public Table{
+		YTable * table;
+		YTableHeader * header;
+		public:
+		yTable(yDialog*,std::string,std::string,std::string);
+		yTable(yHLayout*,std::string,std::string,std::string);
+		yTable(yVLayout*,std::string,std::string,std::string);
+		void addItem(std::string,std::string,std::string);
+	};
+}
 #endif

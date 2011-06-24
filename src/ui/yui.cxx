@@ -15,7 +15,7 @@ namespace UI{
 	}
 
 	void yDialog::wait(){
-		Event = (YWidgetEvent*)dialog->waitForEvent();
+		Event = dialog->waitForEvent();
 	}
 	YWidget* yDialog::eventWidget(){
 		return Event->widget();
@@ -29,7 +29,7 @@ namespace UI{
 		dialog->recalcLayout();
 	}
 	int yDialog::eventReason(){
-		return Event->reason();
+		return Event->eventType();
 	}
 	//YDIALOG FUCNTIONS END
 
@@ -91,6 +91,9 @@ namespace UI{
 	yLabel::yLabel(yVLayout * parent,std::string text){
 		label = YUI::widgetFactory()->createLabel(parent->getElement(),text);
 	}
+	void yLabel::setValue(std::string text){
+		label->setValue(text);
+	}
 	yLabel::~yLabel(){
 		delete label;
 	}
@@ -134,13 +137,16 @@ namespace UI{
 	//YCOMBOBOX FUNCTION STARTS
 	yComboBox::yComboBox(yDialog * parent,std::string text){
 		comboBox = YUI::widgetFactory()->createComboBox(parent->getElement(),text,false);
+		comboBox->setNotify(true);
 
 	}
 	yComboBox::yComboBox(yHLayout * parent,std::string text){
 		comboBox = YUI::widgetFactory()->createComboBox(parent->getElement(),text,false);
+		comboBox->setNotify(true);
 	}
 	yComboBox::yComboBox(yVLayout* parent,std::string text){
 		comboBox = YUI::widgetFactory()->createComboBox(parent->getElement(),text,false);
+		comboBox->setNotify(true);
 	}
 	void yComboBox::addItem(string item){
 		comboBox->addItem(item);
@@ -154,9 +160,13 @@ namespace UI{
 	void yComboBox::setValue(string &value){
 		comboBox->setValue(value);
 	}
+	void yComboBox::deleteAllItems(){
+		comboBox->deleteAllItems();
+	}
 	yComboBox::~yComboBox(){
 		delete comboBox;
 	}
+
 
 	//YCOMBOBOX FUNCION ENDS
 	
@@ -178,10 +188,46 @@ namespace UI{
 	}
 	void yMultiSelectionBox::selectedItems(vector<string> &list){
 		slist = multi->selectedItems();
-		for(int i=0;i<slist.size();i++){
+		for(unsigned i=0;i<slist.size();i++){
 			list.push_back(slist.at(i)->label());
 		}		
 	}
 	
 	//YMULTISELECTIONBOX FUNCTION ENDS
+	
+	//YTABLE FUNCTION STARTS
+	yTable::yTable(yDialog* parent,std::string HeaderCol1,std::string HeaderCol2,std::string HeaderCol3=""){
+		header = new YTableHeader();
+		YUI_CHECK_NEW(header);
+		header->addColumn(HeaderCol1);
+		header->addColumn(HeaderCol2);
+		if(HeaderCol3!="")header->addColumn(HeaderCol3);	
+		table=YUI::widgetFactory()->createTable(parent->getElement(),header);
+	}
+	yTable::yTable(yHLayout* parent,std::string HeaderCol1,std::string HeaderCol2,std::string HeaderCol3=""){
+		header = new YTableHeader();
+		YUI_CHECK_NEW(header);
+		header->addColumn(HeaderCol1);
+		header->addColumn(HeaderCol2);
+		if(HeaderCol3!="")header->addColumn(HeaderCol3);	
+		table=YUI::widgetFactory()->createTable(parent->getElement(),header);
+	}
+	yTable::yTable(yVLayout* parent,std::string HeaderCol1,std::string HeaderCol2,std::string HeaderCol3=""){
+		header = new YTableHeader();
+		YUI_CHECK_NEW(header);
+		header->addColumn(HeaderCol1);
+		header->addColumn(HeaderCol2);
+		if(HeaderCol3!="")header->addColumn(HeaderCol3);	
+		table=YUI::widgetFactory()->createTable(parent->getElement(),header);
+	}
+	void yTable::addItem(std::string item1,std::string item2,std::string item3){
+		YTableItem * i;
+		if(item3==""){
+			i = new YTableItem(item1,item2);
+		}else{
+			i = new YTableItem(item1,item2,item3);
+		}
+		table->addItem(i);
+	}
+	//YTABLE FUNCTION ENDS
 }

@@ -37,6 +37,10 @@ namespace UI{
 			virtual MultiSelectionBox * createMultiSelectionBox(HLayout*,std::string)=0;
 			virtual MultiSelectionBox * createMultiSelectionBox(VLayout *,std::string)=0;
 
+			virtual Table * createTable(Dialog *,std::string,std::string,std::string)=0;
+			virtual Table * createTable(HLayout *,std::string,std::string,std::string)=0;
+			virtual Table * createTable(VLayout *,std::string,std::string,std::string)=0;
+
 	};	
 }
 

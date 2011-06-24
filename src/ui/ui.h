@@ -34,6 +34,8 @@ namespace UI{
 	};
 	class MultiSelectionBox{
 	};
+	class Table{
+	};
 }
 
 #endif

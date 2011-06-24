@@ -81,5 +81,14 @@ namespace UI{
 	yMultiSelectionBox * YUIFactory::createMultiSelectionBox(VLayout * parent,std::string text){
 		return new yMultiSelectionBox((yVLayout*)parent,text);
 	}
-
+	
+	yTable * YUIFactory::createTable(Dialog *parent,std::string t1,std::string t2,std::string t3){
+		return new yTable((yDialog*)parent,t1,t2,t3);
+	}
+	yTable * YUIFactory::createTable(HLayout *parent,std::string t1,std::string t2,std::string t3){
+		return new yTable((yHLayout*)parent,t1,t2,t3);
+	}
+	yTable * YUIFactory::createTable(VLayout *parent,std::string t1,std::string t2,std::string t3){
+		return new yTable((yVLayout*)parent,t1,t2,t3);
+	}
 }

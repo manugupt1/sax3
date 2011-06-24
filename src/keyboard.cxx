@@ -48,19 +48,22 @@ class keyboard{
 	UI::yVLayout * mainLayout;
 	UI::yLabel * label1;
 	UI::yComboBox * layoutSelect;
-	UI::yHLayout * buttonLayout;
-	UI::yPushButton * activateMode,*saveButton,*cancelButton;
-	UI::yMultiSelectionBox * multiLayoutSelect;
-	UI::yComboBox * modelSelect;
-	UI::yMultiSelectionBox * multiVariantSelect;
-	UI::yMultiSelectionBox * multiOptionSelect;
+	UI::yHLayout * buttonLayout,*upperLayout,*addGroupLayout;
+	UI::yPushButton * activateMode,*saveButton,*cancelButton,*addLayoutVariant,*deleteLayoutVariant,*addGroup,*deleteGroup;
+	UI::yComboBox * modelSelect,*variantSelect,*groupCategory,*groupOptions;
+	UI::yLabel * labelSelect;
+	UI::yTable * layoutTable,*groupTable;
 	bool SIMPLEMODE;
 
 	void drawSimpleMode();
 	void drawExpertMode();
 
 	void split();
-	void fillUp();
+	void fillUpLayoutSelect();
+	void fillUpVariant();
+	void fillUpModelSelect();
+	void fillUpGroupCategory();
+	void fillUpGroupOptions();
 	bool writeConf(string &line,bool newNode,string parameter,bool isLastParameter,string extraParam,string value);
 	public:
 	keyboard();
@@ -97,8 +100,7 @@ keyboard::keyboard(){
 					variant[line]=s1;
 				}
 				if(type==OPTION && line.length()!=0){
-					if(s1.find(':')==-1) { optionType.assign("["+line+"]"); continue; }
-					options[optionType+line]=s1;
+					options[line]=s1;
 				}
 
 			};
@@ -129,79 +131,120 @@ void keyboard::drawSimpleMode(){
 	activateMode = factory->createPushButton(buttonLayout,_("E&xpert Mode"));
 	saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
 	cancelButton = factory->createPushButton(buttonLayout,_("&Cancel"));
-	fillUp();
-	dialog->wait();
+	fillUpLayoutSelect();
 }
 
 void keyboard::drawExpertMode(){
-	dialog = factory->createDialog(120,60);
+	dialog = factory->createDialog(30,40);
 	mainLayout = factory->createVLayout(dialog);
 	label1 = factory->createLabel(mainLayout,_("SaX3 - Keyboard Module"));
-	multiLayoutSelect = factory->createMultiSelectionBox(mainLayout,_("Select your keyboard Layout"));
-	modelSelect = factory->createComboBox(mainLayout,_("Select your keyboard model"));
-	multiVariantSelect = factory->createMultiSelectionBox(mainLayout,_("Select your keyboard Varaint"));
-	multiOptionSelect = factory->createMultiSelectionBox(mainLayout,_("Select your keyboard Group"));
+	
+	upperLayout = factory->createHLayout(mainLayout);
+	layoutSelect = factory->createComboBox(upperLayout,_("Select your keyboard Layout"));
+	fillUpLayoutSelect();
+	variantSelect = factory->createComboBox(upperLayout,_("Select appropriate layout"));
+	addLayoutVariant = factory->createPushButton(upperLayout,_("Add"));
+	layoutTable = factory->createTable(mainLayout,"Layout","Variant","");
+	deleteLayoutVariant = factory->createPushButton(mainLayout,_("Delete selected Layout & Variant"));
+	modelSelect = factory->createComboBox(mainLayout,_("Select your Model"));
+	fillUpModelSelect();
+	addGroupLayout = factory->createHLayout(mainLayout);
+	groupCategory = factory->createComboBox(addGroupLayout,_("Group Category"));
+	fillUpGroupCategory();
+	groupOptions = factory->createComboBox(addGroupLayout,_("Options"));
+	addGroup = factory->createPushButton(addGroupLayout,_("Add"));
+	UI::yLabel * label3 = factory->createLabel(mainLayout,_("Another Table here"));
+	groupTable = factory->createTable(mainLayout,"Manu","Gagan","");
+	deleteGroup = factory->createPushButton(mainLayout,_("Delete Selected Group"));
 	buttonLayout = factory->createHLayout(mainLayout);
 	activateMode = factory->createPushButton(buttonLayout,_("&Simple Mode"));
 	saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
 	cancelButton = factory->createPushButton(buttonLayout,_("&Cancel"));
-	fillUp();
-	dialog->redraw();
-	dialog->wait();
 }
 
 bool keyboard::respondToEvent(){
-	if(activateMode->getElement()==dialog->eventWidget()){delete dialog;
-		SIMPLEMODE ? SIMPLEMODE = false : SIMPLEMODE = true;
-		!SIMPLEMODE ? drawExpertMode() : drawSimpleMode(); 
-		return true;
-	}
-	if(saveButton->getElement()==dialog->eventWidget()){
-		if(SIMPLEMODE){
-			if(simpleWriteConf()){
-				cerr<<"Successfully written";
-			}else{
-				cerr<<"Successfully NOT written";
-			}
-		}else{
-			expertWriteConf();
+	while(1){
+		dialog->wait();
+		if(activateMode->getElement()==dialog->eventWidget()){delete dialog;
+			SIMPLEMODE ? SIMPLEMODE = false : SIMPLEMODE = true;
+			!SIMPLEMODE ? drawExpertMode() : drawSimpleMode(); 
+			return true;
 		}
-		return false;
-	}	
-	if(cancelButton->getElement()==dialog->eventWidget()){
-		return false;
+		if(saveButton->getElement()==dialog->eventWidget()){
+			if(SIMPLEMODE){
+				if(simpleWriteConf()){
+					cerr<<"Successfully written";
+				}else{
+					cerr<<"Successfully NOT written";
+				}
+			}else{
+				expertWriteConf();
+			}
+			return false;
+		}	
+		if(cancelButton->getElement()==dialog->eventWidget()){
+			return false;
+		}
+		if(!SIMPLEMODE){
+			if(layoutSelect->getElement()==dialog->eventWidget()){
+				fillUpVariant();
+			}
+			if(groupCategory->getElement()==dialog->eventWidget()){
+				fillUpGroupOptions();
+			}	
+			if(addLayoutVariant->getElement()==dialog->eventWidget()){
+				layoutTable->addItem(layoutSelect->value(),variantSelect->value(),"");
+			}
+		}
 	}
-	if(dialog->eventReason()==2){
-		printf("selection changed");
-	}
-	return true;
 }
 
-void keyboard::fillUp(){
+void keyboard::fillUpLayoutSelect(){
+	layoutSelect->deleteAllItems();
 	map<string,string>::iterator it;
-	int i=0;
-	if(SIMPLEMODE){
-	        for(it=layout.begin();it!=layout.end();it++){
-	                layoutSelect->addItem(it->first);
-	        }
-
-	}else{
-		for(it=layout.begin();it!=layout.end();it++){
-			multiLayoutSelect->addItem(it->first);
-		}
-		modelSelect->addItem("None");
-		for(it=model.begin();it!=model.end();it++){
-			modelSelect->addItem(it->first);
-		}
-		for(it=variant.begin();it!=variant.end();it++){
-			multiVariantSelect->addItem(it->first);
-		}
-		for(it=options.begin();it!=options.end();it++,i++){
-			multiOptionSelect->addItem(it->first);
-
-		}
-
+	for(it=layout.begin();it!=layout.end();it++){
+	        layoutSelect->addItem(it->first);
 	}
+}
+void keyboard::fillUpModelSelect(){
+	modelSelect->deleteAllItems();
+	map<string,string>::iterator it;
+	for(it=model.begin();it!=model.end();it++){
+		modelSelect->addItem(it->first);
+	}
+}
+void keyboard::fillUpVariant(){
+	variantSelect->deleteAllItems();
+	map<string,string>::iterator it;int temp;
+	variantSelect->addItem("Default");
+	for(it=variant.begin();it!=variant.end();it++){
+		temp = it->first.find(layout[layoutSelect->value()]);
+		if(temp==1){
+			variantSelect->addItem(it->first);
+		}
+	}
+}
+
+void keyboard::fillUpGroupCategory(){
+	groupCategory->deleteAllItems();
+	map<string,string>::iterator it;
+	for(it=options.begin();it!=options.end();it++){
+		if(it->second.find(':')==string::npos)
+			groupCategory->addItem(it->first);
+	}
+}
+
+void keyboard::fillUpGroupOptions(){
+	groupOptions->deleteAllItems();
+	map<string,string>::iterator it;
+	string temp = options[groupCategory->value()];
+	for(it = options.begin();it!=options.end();it++){
+		if(it->second.find(temp)==0){
+			groupOptions->addItem(it->second);
+		}
+	}
+
+
 }
 
 bool keyboard::writeConf(string &line,bool newNode,string parameter,bool isLastParameter,string extraParam,string value){
@@ -256,82 +299,7 @@ bool keyboard::simpleWriteConf(){
 }
 
 bool keyboard::expertWriteConf(){
-	vector<string> list;
-	
-	string layoutList,modelList,variantList,optionList,temp;
-	multiLayoutSelect->selectedItems(list);
-
-	for(int i=0;i<list.size();i++){
-		temp = layout[list.at(i)];
-		layoutList.append(temp);
-		layoutList.push_back(',');
-	}
-	list.erase(list.begin(),list.end());
-
-	modelList = modelSelect->value();
-	multiVariantSelect->selectedItems(list);
-	for(int i=0;i<list.size();i++){
-		temp = variant[list.at(i)];
-		variantList.append(temp);
-		variantList.push_back(',');
-	}
-	list.erase(list.begin(),list.end());
-
-	multiOptionSelect->selectedItems(list);
-	for(int i=0;i<list.size();i++){
-		temp = options[list.at(i)];
-		optionList.append(temp);
-		optionList.push_back(',');
-	}
-	list.erase(list.begin(),list.end());
-
-	cout<<layoutList<<endl<<modelList<<endl<<variantList<<endl<<optionList<<endl;
-
-	char **match;int i=0,j=0,pos=0;string line,subPath,pathParam;
-	int error;
-	string layoutVal;
-	int cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d/*/InputClass/MatchIsKeyboard",&match);
-	for(i=0;i<cnt-1;i++){
-		if(strcmp(match[i],match[i+1])<0)
-			j = i+1;
-	}
-	if(cnt)
-		line.assign(match[j]);
-	else
-		line.assign("/files/etc/X11/xorg.conf.d/99-saxkeyboard.conf/InputClass");
-
-	subPath.assign("InputClass");
-	pos = line.find(subPath);
-	
-	line.erase(pos+subPath.length(),line.size());
-
-	writeConf(line,true,"Identifier",false,"","SaXKeyBoardConf") ? cout<<"no error\n" : cout<<"error\n";
-	if(layoutList.size()){
-	writeConf(line,false,"Option",true,"","XkbLayout") ? cout<<"no error\n" : cout<<"error\n";
-	writeConf(line,false,"Option",false,"/value",layoutList.c_str()) ? cout<<"no error\n" : cout<<"error\n";
-	}
-	cout<<modelList<<endl;
-	if(modelList.compare("None")){
-	writeConf(line,false,"Option",true,"","XkbModel") ? cout<<"no error\n" : cout<<"error\n";
-	writeConf(line,false,"Option",false,"/value",model[modelList.c_str()]) ? cout<<"no error\n" : cout<<"error\n";
-	}
-	if(variantList.size()){
-	writeConf(line,false,"Option",true,"","XkbVariant") ? cout<<"no error\n" : cout<<"error\n";
-	writeConf(line,false,"Option",false,"/value",variantList.c_str()) ? cout<<"no error\n" : cout<<"error\n";
-	}
-	cout<<optionList.size();
-	if(optionList.size()){
-	cout<<"In here";
-	writeConf(line,false,"Option",true,"","XkbOptions") ? cout<<"no error\n" : cout<<"error\n";
-	writeConf(line,false,"Option",false,"/value",optionList.c_str()) ? cout<<"no error\n" : cout<<"error\n";
-	}
-	error = aug_save(aug);
-	if(error==-1){
-		aug_print(aug,stdout,"/augeas//error");
-		return false;
-	}
 	return true;
-
 }
 
 int main(){

@@ -39,6 +39,10 @@ namespace UI{
 			virtual yMultiSelectionBox * createMultiSelectionBox(Dialog * parent,std::string text);
 			virtual yMultiSelectionBox * createMultiSelectionBox(HLayout * parent,std::string text);
 			virtual yMultiSelectionBox * createMultiSelectionBox(VLayout * parent,std::string text);
+
+			virtual yTable * createTable(Dialog *,std::string t1,std::string t2,std::string t3);
+			virtual yTable * createTable(HLayout *,std::string t1,std::string t2,std::string t3);
+			virtual yTable * createTable(VLayout *,std::string t1,std::string t2,std::string t3);
 	};	
 }
 
