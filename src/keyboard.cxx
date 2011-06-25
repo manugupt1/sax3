@@ -154,7 +154,7 @@ void keyboard::drawExpertMode(){
 	groupOptions = factory->createComboBox(addGroupLayout,_("Options"));
 	addGroup = factory->createPushButton(addGroupLayout,_("Add"));
 	UI::yLabel * label3 = factory->createLabel(mainLayout,_("Another Table here"));
-	groupTable = factory->createTable(mainLayout,"Manu","Gagan","");
+	groupTable = factory->createTable(mainLayout,"Group","Option","");
 	deleteGroup = factory->createPushButton(mainLayout,_("Delete Selected Group"));
 	buttonLayout = factory->createHLayout(mainLayout);
 	activateMode = factory->createPushButton(buttonLayout,_("&Simple Mode"));
@@ -193,7 +193,17 @@ bool keyboard::respondToEvent(){
 				fillUpGroupOptions();
 			}	
 			if(addLayoutVariant->getElement()==dialog->eventWidget()){
-				layoutTable->addItem(layoutSelect->value(),variantSelect->value(),"");
+				layoutTable->addItem(layoutSelect->value(),variantSelect->value());
+//				return true
+				cerr<<"manu";
+			}
+			if(addGroup->getElement()==dialog->eventWidget()){
+				groupTable->addItem(groupCategory->value(),groupOptions->value());
+			}
+			if(deleteGroup->getElement()==dialog->eventWidget()){
+				groupTable->getElement()->selectedItem()->index();
+				groupTable->deleteSelected();
+				cerr<<"manu";
 			}
 		}
 	}
@@ -240,6 +250,7 @@ void keyboard::fillUpGroupOptions(){
 	string temp = options[groupCategory->value()];
 	for(it = options.begin();it!=options.end();it++){
 		if(it->second.find(temp)==0){
+			if(it->second.find(':')!=string::npos)
 			groupOptions->addItem(it->second);
 		}
 	}

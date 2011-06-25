@@ -145,11 +145,15 @@ namespace UI{
 	class yTable : public Table{
 		YTable * table;
 		YTableHeader * header;
+		YItemCollection items;
 		public:
 		yTable(yDialog*,std::string,std::string,std::string);
 		yTable(yHLayout*,std::string,std::string,std::string);
 		yTable(yVLayout*,std::string,std::string,std::string);
-		void addItem(std::string,std::string,std::string);
+		void addItem(std::string,std::string);
+		void deleteSelected();
+		YTable * getElement();
+		friend class YWidgetSelection;
 	};
 }
 #endif

@@ -219,15 +219,23 @@ namespace UI{
 		header->addColumn(HeaderCol2);
 		if(HeaderCol3!="")header->addColumn(HeaderCol3);	
 		table=YUI::widgetFactory()->createTable(parent->getElement(),header);
+		table->setNotify(true);
 	}
-	void yTable::addItem(std::string item1,std::string item2,std::string item3){
-		YTableItem * i;
-		if(item3==""){
-			i = new YTableItem(item1,item2);
-		}else{
-			i = new YTableItem(item1,item2,item3);
+	void yTable::addItem(std::string item1,std::string item2){
+		table->addItem(new YTableItem(item1,item2));
+	}
+	void yTable::deleteSelected(){
+		YItemIterator it = table->itemsBegin();
+		while(it!=table->itemsEnd()){
+			YItem * item = *it;
+			++it;
+			std::cout<<*it;
+			if(*it==table->selectedItem())
+				priv->itemCollection.erase(it);
 		}
-		table->addItem(i);
+	}
+	YTable* yTable::getElement(){
+		return table;
 	}
 	//YTABLE FUNCTION ENDS
 }
