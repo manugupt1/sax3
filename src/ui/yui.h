@@ -146,6 +146,8 @@ namespace UI{
 		YTable * table;
 		YTableHeader * header;
 		YItemCollection items;
+		typedef std::pair<string,string> P;
+		std::vector<P> i;
 		public:
 		yTable(yDialog*,std::string,std::string,std::string);
 		yTable(yHLayout*,std::string,std::string,std::string);

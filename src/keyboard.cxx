@@ -203,7 +203,7 @@ bool keyboard::respondToEvent(){
 			if(deleteGroup->getElement()==dialog->eventWidget()){
 				groupTable->getElement()->selectedItem()->index();
 				groupTable->deleteSelected();
-				cerr<<"manu";
+				dialog->redraw();
 			}
 		}
 	}

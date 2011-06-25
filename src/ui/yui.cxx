@@ -203,6 +203,7 @@ namespace UI{
 		header->addColumn(HeaderCol2);
 		if(HeaderCol3!="")header->addColumn(HeaderCol3);	
 		table=YUI::widgetFactory()->createTable(parent->getElement(),header);
+		table->setNotify(true);
 	}
 	yTable::yTable(yHLayout* parent,std::string HeaderCol1,std::string HeaderCol2,std::string HeaderCol3=""){
 		header = new YTableHeader();
@@ -211,6 +212,7 @@ namespace UI{
 		header->addColumn(HeaderCol2);
 		if(HeaderCol3!="")header->addColumn(HeaderCol3);	
 		table=YUI::widgetFactory()->createTable(parent->getElement(),header);
+		table->setNotify(true);
 	}
 	yTable::yTable(yVLayout* parent,std::string HeaderCol1,std::string HeaderCol2,std::string HeaderCol3=""){
 		header = new YTableHeader();
@@ -223,16 +225,23 @@ namespace UI{
 	}
 	void yTable::addItem(std::string item1,std::string item2){
 		table->addItem(new YTableItem(item1,item2));
+		i.push_back(std::make_pair<string,string> (item1,item2));	
 	}
 	void yTable::deleteSelected(){
 		YItemIterator it = table->itemsBegin();
+		vector<P>::iterator ii = i.begin();
 		while(it!=table->itemsEnd()){
 			YItem * item = *it;
-			++it;
-			std::cout<<*it;
+			++it;++ii;
 			if(*it==table->selectedItem())
-				priv->itemCollection.erase(it);
+				break;
+			
 		}
+		table->deleteAllItems();
+		i.erase(ii);
+		for(ii=i.begin();ii!=i.end();ii++)
+			table->addItem(new YTableItem("Manu","Gagan"));
+
 	}
 	YTable* yTable::getElement(){
 		return table;
