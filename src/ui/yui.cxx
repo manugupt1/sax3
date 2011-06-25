@@ -229,7 +229,7 @@ namespace UI{
 	}
 	void yTable::deleteSelected(){
 		YItemIterator it = table->itemsBegin();
-		vector<P>::iterator ii = i.begin();
+		std::vector<P>::iterator ii = i.begin();
 		while(it!=table->itemsEnd()){
 			YItem * item = *it;
 			++it;++ii;
@@ -239,10 +239,20 @@ namespace UI{
 		}
 		table->deleteAllItems();
 		i.erase(ii);
-		for(ii=i.begin();ii!=i.end();ii++)
-			table->addItem(new YTableItem("Manu","Gagan"));
-
+		items = createList();
+		table->addItems(items);
 	}
+	YItemCollection yTable::createList(){
+		YItemCollection list;
+		std::vector<P>::iterator ii;
+		ii = i.begin();
+		while(ii!=i.end()){
+			list.push_back(new YTableItem(ii->first,ii->second));
+			ii++;
+		}
+		return list;
+	}
+
 	YTable* yTable::getElement(){
 		return table;
 	}

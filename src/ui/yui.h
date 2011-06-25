@@ -148,6 +148,7 @@ namespace UI{
 		YItemCollection items;
 		typedef std::pair<string,string> P;
 		std::vector<P> i;
+		YItemCollection createList();
 		public:
 		yTable(yDialog*,std::string,std::string,std::string);
 		yTable(yHLayout*,std::string,std::string,std::string);
@@ -155,7 +156,6 @@ namespace UI{
 		void addItem(std::string,std::string);
 		void deleteSelected();
 		YTable * getElement();
-		friend class YWidgetSelection;
 	};
 }
 #endif
