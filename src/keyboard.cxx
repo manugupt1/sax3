@@ -51,7 +51,7 @@ class keyboard{
 	UI::yHLayout * buttonLayout,*upperLayout,*addGroupLayout;
 	UI::yPushButton * activateMode,*saveButton,*cancelButton,*addLayoutVariant,*deleteLayoutVariant,*addGroup,*deleteGroup;
 	UI::yComboBox * modelSelect,*variantSelect,*groupCategory,*groupOptions;
-	UI::yLabel * labelSelect;
+	UI::yLabel * labelSelect,*showDefaultLayout;
 	UI::yTable * layoutTable,*groupTable;
 	bool SIMPLEMODE;
 
@@ -65,12 +65,16 @@ class keyboard{
 	void fillUpGroupCategory();
 	void fillUpGroupOptions();
 	bool writeConf(string &line,bool newNode,string parameter,bool isLastParameter,string extraParam,string value);
+	void loadSimpleConf();
+	void loadExpertConf();
+	vector<string> match(string,string);
 	public:
 	keyboard();
 	void drawLayout();
 	bool respondToEvent();
 	bool simpleWriteConf();
 	bool expertWriteConf();
+	void loadConf();
 };
 
 keyboard::keyboard(){
@@ -121,13 +125,21 @@ void keyboard::drawLayout(){
 	}
 }
 
+void keyboard::loadConf(){
+	if(SIMPLEMODE){
+		loadSimpleConf();
+	}else{
+		loadExpertConf();
+	}
+}
 
 void keyboard::drawSimpleMode(){
 	factory = new UI::YUIFactory();
-	dialog = factory->createDialog(60,20);
+	dialog = factory->createDialog(60,10);
 	mainLayout = factory->createVLayout(dialog);
 	label1 = factory->createLabel(mainLayout,_("SaX3 - Keyboard Module"));
 	layoutSelect = factory->createComboBox(mainLayout,_("Select your keyboard Layout"));
+	showDefaultLayout = factory->createLabel(mainLayout,"No configuration exists");
 	buttonLayout = factory->createHLayout(mainLayout);
 	activateMode = factory->createPushButton(buttonLayout,_("E&xpert Mode"));
 	saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
@@ -314,6 +326,73 @@ bool keyboard::expertWriteConf(){
 	return true;
 }
 
+
+vector<string> keyboard::match(string p,string v){
+	int cnt;
+	const char *pattern = p.c_str();
+	const char *value = v.c_str();
+	char **matches;
+	vector<string> s;
+	bool filter = (value != NULL) && (strlen(value) > 0);
+	cnt = aug_match(aug, pattern, &matches);
+    	if (cnt < 0) {
+        	printf("  (error matching %s)\n", pattern);
+	        goto done;
+    	}
+    	if (cnt == 0) {
+        	goto done;
+    	}
+	for (int i=0; i < cnt; i++) {
+        	const char *val;
+        	aug_get(aug, matches[i], &val);
+        	if (val == NULL)
+            		val = "(none)";
+        	if (filter) {
+            		if (!strcmp(value, val)){
+                		printf("%s\n", matches[i]);
+				s.push_back(matches[i]);
+			}
+        	} else {
+            		printf("%s = %s\n", matches[i], val);
+        	}
+    	}
+	done:
+    	for (int i=0; i < cnt; i++)
+        	free(matches[i]);
+  	free(matches);
+	return s;
+}
+
+void keyboard::loadSimpleConf(){
+	vector<string> matches = match("/files/etc/X11/xorg.conf.d/*/InputClass/Option","XkbLayout");
+	if(matches.size()==0){
+		cerr<<"No Keyboard file exists, will load the default one"<<endl;
+		return;
+	}
+	const char *match;int cnt;
+	string temp = matches.back();
+	temp.append("/value");
+	cnt = aug_get(aug,temp.c_str(),&match);
+	if(cnt==0 || cnt==-1){
+		cerr<<"No matching nodes or illegal path expression";
+		return;
+	}
+	string m = match;
+	m = m.substr(0,m.find_first_of(','));
+
+	map<string,string>::iterator it;
+	for(it=layout.begin();it!=layout.end();it++){
+		if(m==it->second){
+			cout<<it->first<<endl;
+			break;
+		}
+	}
+	string x = "Your Current default selection is "+it->first + " and you can find detailed info in expert mode";
+	showDefaultLayout->setValue(x);
+}
+void keyboard::loadExpertConf(){
+}
+
 int main(){
 	
 	setlocale(LC_ALL,"");
@@ -322,6 +401,7 @@ int main(){
 
 	keyboard * kb = new keyboard();
 	kb->drawLayout();
+	kb->loadConf();
 	while(kb->respondToEvent());
 	delete kb;	
 
