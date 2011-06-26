@@ -32,7 +32,7 @@ class keyboard{
 	map<string,string> layout;
 	map<string,string> model;
 	map<string,string> variant;
-	map<string,string> options;
+	vector< pair<string,string> >options;
 	string s1,line,optionType;
 	ifstream baseFile;
 	
@@ -100,7 +100,8 @@ keyboard::keyboard(){
 					variant[line]=s1;
 				}
 				if(type==OPTION && line.length()!=0){
-					options[line]=s1;
+					options.push_back(make_pair(line,s1));
+//					options[line]=s1;
 				}
 
 			};
@@ -194,16 +195,15 @@ bool keyboard::respondToEvent(){
 			}	
 			if(addLayoutVariant->getElement()==dialog->eventWidget()){
 				layoutTable->addItem(layoutSelect->value(),variantSelect->value());
-//				return true
-				cerr<<"manu";
 			}
 			if(addGroup->getElement()==dialog->eventWidget()){
 				groupTable->addItem(groupCategory->value(),groupOptions->value());
 			}
 			if(deleteGroup->getElement()==dialog->eventWidget()){
-				groupTable->getElement()->selectedItem()->index();
 				groupTable->deleteSelected();
-				dialog->redraw();
+			}
+			if(deleteLayoutVariant->getElement()==dialog->eventWidget()){
+				layoutTable->deleteSelected();
 			}
 		}
 	}
@@ -237,7 +237,7 @@ void keyboard::fillUpVariant(){
 
 void keyboard::fillUpGroupCategory(){
 	groupCategory->deleteAllItems();
-	map<string,string>::iterator it;
+	vector< pair<string,string> >::iterator it;
 	for(it=options.begin();it!=options.end();it++){
 		if(it->second.find(':')==string::npos)
 			groupCategory->addItem(it->first);
@@ -246,16 +246,17 @@ void keyboard::fillUpGroupCategory(){
 
 void keyboard::fillUpGroupOptions(){
 	groupOptions->deleteAllItems();
-	map<string,string>::iterator it;
-	string temp = options[groupCategory->value()];
-	for(it = options.begin();it!=options.end();it++){
-		if(it->second.find(temp)==0){
-			if(it->second.find(':')!=string::npos)
-			groupOptions->addItem(it->second);
+	vector< pair<string,string> >::iterator it;
+	for(it=options.begin();it!=options.end();it++){
+		if(!groupCategory->value().compare(it->first)){
+			++it;
+			while(it!=options.end() && it->second.find(':')!=string::npos){
+				groupOptions->addItem(it->second);
+				++it;
+			}
+			break;
 		}
 	}
-
-
 }
 
 bool keyboard::writeConf(string &line,bool newNode,string parameter,bool isLastParameter,string extraParam,string value){
