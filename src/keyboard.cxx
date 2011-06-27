@@ -157,6 +157,7 @@ void keyboard::drawExpertMode(){
 	layoutSelect = factory->createComboBox(upperLayout,_("Select your keyboard Layout"));
 	fillUpLayoutSelect();
 	variantSelect = factory->createComboBox(upperLayout,_("Select appropriate layout"));
+	fillUpVariant();
 	addLayoutVariant = factory->createPushButton(upperLayout,_("Add"));
 	layoutTable = factory->createTable(mainLayout,"Layout","Variant","");
 	deleteLayoutVariant = factory->createPushButton(mainLayout,_("Delete selected Layout & Variant"));
@@ -166,6 +167,7 @@ void keyboard::drawExpertMode(){
 	groupCategory = factory->createComboBox(addGroupLayout,_("Group Category"));
 	fillUpGroupCategory();
 	groupOptions = factory->createComboBox(addGroupLayout,_("Options"));
+	fillUpGroupOptions();
 	addGroup = factory->createPushButton(addGroupLayout,_("Add"));
 	UI::yLabel * label3 = factory->createLabel(mainLayout,_("Another Table here"));
 	groupTable = factory->createTable(mainLayout,"Group","Option","");
