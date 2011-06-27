@@ -232,12 +232,13 @@ namespace UI{
 		std::vector<P>::iterator ii = i.begin();
 		while(it!=table->itemsEnd()){
 			YItem * item = *it;
-			++it;++ii;
 			if(*it==table->selectedItem())
 				break;
+			++ii;++it;
 			
 		}
 		table->deleteAllItems();
+		
 		i.erase(ii);
 		items = createList();
 		table->addItems(items);

@@ -46,12 +46,11 @@ class keyboard{
 	UI::YUIFactory * factory;
 	UI::yDialog * dialog;
 	UI::yVLayout * mainLayout;
-	UI::yLabel * label1;
 	UI::yComboBox * layoutSelect;
 	UI::yHLayout * buttonLayout,*upperLayout,*addGroupLayout;
 	UI::yPushButton * activateMode,*saveButton,*cancelButton,*addLayoutVariant,*deleteLayoutVariant,*addGroup,*deleteGroup;
 	UI::yComboBox * modelSelect,*variantSelect,*groupCategory,*groupOptions;
-	UI::yLabel * labelSelect,*showDefaultLayout;
+	UI::yLabel * labelSelect,*showDefaultLayout,*label1;
 	UI::yTable * layoutTable,*groupTable;
 	bool SIMPLEMODE;
 
@@ -137,7 +136,6 @@ void keyboard::drawSimpleMode(){
 	factory = new UI::YUIFactory();
 	dialog = factory->createDialog(60,10);
 	mainLayout = factory->createVLayout(dialog);
-	label1 = factory->createLabel(mainLayout,_("SaX3 - Keyboard Module"));
 	layoutSelect = factory->createComboBox(mainLayout,_("Select your keyboard Layout"));
 	showDefaultLayout = factory->createLabel(mainLayout,"No configuration exists");
 	buttonLayout = factory->createHLayout(mainLayout);
@@ -149,27 +147,25 @@ void keyboard::drawSimpleMode(){
 }
 
 void keyboard::drawExpertMode(){
-	dialog = factory->createDialog(30,40);
+	dialog = factory->createDialog(120,40);
 	mainLayout = factory->createVLayout(dialog);
-	label1 = factory->createLabel(mainLayout,_("SaX3 - Keyboard Module"));
-	
 	upperLayout = factory->createHLayout(mainLayout);
 	layoutSelect = factory->createComboBox(upperLayout,_("Select your keyboard Layout"));
 	fillUpLayoutSelect();
-	variantSelect = factory->createComboBox(upperLayout,_("Select appropriate layout"));
+	variantSelect = factory->createComboBox(upperLayout,_("Select Layout Variant"));
 	fillUpVariant();
 	addLayoutVariant = factory->createPushButton(upperLayout,_("Add"));
 	layoutTable = factory->createTable(mainLayout,"Layout","Variant","");
 	deleteLayoutVariant = factory->createPushButton(mainLayout,_("Delete selected Layout & Variant"));
 	modelSelect = factory->createComboBox(mainLayout,_("Select your Model"));
 	fillUpModelSelect();
+	label1 = factory->createLabel(mainLayout,"Advanced Options");
 	addGroupLayout = factory->createHLayout(mainLayout);
-	groupCategory = factory->createComboBox(addGroupLayout,_("Group Category"));
+	groupCategory = factory->createComboBox(addGroupLayout,_("Category"));
 	fillUpGroupCategory();
-	groupOptions = factory->createComboBox(addGroupLayout,_("Options"));
+	groupOptions = factory->createComboBox(addGroupLayout,_("Relevant Options"));
 	fillUpGroupOptions();
 	addGroup = factory->createPushButton(addGroupLayout,_("Add"));
-	UI::yLabel * label3 = factory->createLabel(mainLayout,_("Another Table here"));
 	groupTable = factory->createTable(mainLayout,"Group","Option","");
 	deleteGroup = factory->createPushButton(mainLayout,_("Delete Selected Group"));
 	buttonLayout = factory->createHLayout(mainLayout);
