@@ -256,5 +256,8 @@ namespace UI{
 	YTable* yTable::getElement(){
 		return table;
 	}
+	std::vector< std::pair<string,string> > yTable::getItems(){
+		return i;
+	}
 	//YTABLE FUNCTION ENDS
 }

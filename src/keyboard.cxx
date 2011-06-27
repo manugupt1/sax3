@@ -106,7 +106,6 @@ keyboard::keyboard(){
 				}
 				if(type==OPTION && line.length()!=0){
 					options.push_back(make_pair(line,s1));
-//					options[line]=s1;
 				}
 
 			};
@@ -266,7 +265,7 @@ void keyboard::fillUpGroupOptions(){
 		if(!groupCategory->value().compare(it->first)){
 			++it;
 			while(it!=options.end() && it->second.find(':')!=string::npos){
-				groupOptions->addItem(it->second);
+				groupOptions->addItem(it->first);
 				++it;
 			}
 			break;
@@ -326,6 +325,66 @@ bool keyboard::simpleWriteConf(){
 }
 
 bool keyboard::expertWriteConf(){
+	vector< pair<string,string> > lvg;
+	vector< pair<string,string> >::iterator it,it1;
+	lvg = layoutTable->getItems();
+	string l,v,g,m;
+	for(it=lvg.begin();it!=lvg.end();it++){
+		cout<<layout[it->first]<<'\t'<<variant[it->second]<<endl;
+		l.append(layout[it->first]);l.push_back(',');
+		v.append(variant[it->second]);v.push_back(',');
+	}
+	l.erase(l.size()-1);
+	v.erase(v.size()-1);
+	cout<<l<<'\t'<<v<<endl;
+	m = model[modelSelect->value()];
+	cout<<m<<endl;
+	lvg=groupTable->getItems();
+	for(it=lvg.begin();it!=lvg.end();it++){
+		for(it1=options.begin();it1!=options.end();it1++){	
+			if(it1->first==it->second){
+				cout<<it1->first<<'\t'<<it->second<<'\t'<<it1->second<<endl;
+				g.append(it1->second);g.push_back(',');
+				break;
+			}
+		}	
+	}
+	g.erase(g.size()-1);
+	cout<<g<<endl;
+
+	char **match;int i=0,j=0,pos=0;string line,subPath,pathParam;
+	int error;
+	string layoutVal = layout[layoutSelect->value()];
+	int cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d/*/InputClass/MatchIsKeyboard",&match);
+	for(i=0;i<cnt-1;i++){
+		if(strcmp(match[i],match[i+1])<0)
+			j = i+1;
+	}
+	if(cnt)
+		line.assign(match[j]);
+	else
+		line.assign("/files/etc/X11/xorg.conf.d/99-saxkeyboard.conf/InputClass");
+
+	subPath.assign("InputClass");
+	pos = line.find(subPath);
+	line.erase(pos+subPath.size(),line.size());
+
+	cout<<line<<endl;
+	cout<<subPath;
+
+	writeConf(line,true,"Identifier",false,"","SaXKeyBoardConf") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",true,"","XkbLayout") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",false,"/value",l.c_str()) ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",true,"","XkbVaraint") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",false,"/value",v.c_str()) ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",true,"","XkbOptions") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",false,"/value",g.c_str()) ? cout<<"no error\n" : cout<<"error\n";
+
+	error = aug_save(aug);
+	if(error==-1){
+		aug_print(aug,stdout,"/augeas//error");
+		return false;
+	}
 	return true;
 }
 
@@ -393,6 +452,7 @@ void keyboard::loadSimpleConf(){
 	string x = "Your Current default selection is "+it->first + " and you can find detailed info in expert mode";
 	showDefaultLayout->setValue(x);
 }
+
 vector<string> keyboard::parseOption(const char *value){
 	vector<string> x;
 	string temp;
