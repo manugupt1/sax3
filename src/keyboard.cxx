@@ -68,6 +68,7 @@ class keyboard{
 	void loadSimpleConf();
 	void loadExpertConf();
 	vector<string> match(string,string);
+	vector<string> parseOption(const char*);
 	public:
 	keyboard();
 	void drawLayout();
@@ -145,6 +146,7 @@ void keyboard::drawSimpleMode(){
 	saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
 	cancelButton = factory->createPushButton(buttonLayout,_("&Cancel"));
 	fillUpLayoutSelect();
+	loadSimpleConf();
 }
 
 void keyboard::drawExpertMode(){
@@ -173,6 +175,7 @@ void keyboard::drawExpertMode(){
 	activateMode = factory->createPushButton(buttonLayout,_("&Simple Mode"));
 	saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
 	cancelButton = factory->createPushButton(buttonLayout,_("&Cancel"));
+	loadExpertConf();
 }
 
 bool keyboard::respondToEvent(){
@@ -390,8 +393,116 @@ void keyboard::loadSimpleConf(){
 	string x = "Your Current default selection is "+it->first + " and you can find detailed info in expert mode";
 	showDefaultLayout->setValue(x);
 }
-void keyboard::loadExpertConf(){
+vector<string> keyboard::parseOption(const char *value){
+	vector<string> x;
+	string temp;
+	for(int i=0;i<=strlen(value);i++){
+		if(value[i]==','){
+			x.push_back(temp);
+			temp.erase();
+			++i;
+		}
+		temp.push_back(value[i]);
+	}
+	temp.erase(temp.size()-1);
+	x.push_back(temp);
+	return x;
 }
+
+void keyboard::loadExpertConf(){
+	vector<string> lMatches = match("/files/etc/X11/xorg.conf.d/*/InputClass/Option","XkbLayout");
+	vector<string> vMatches = match("/files/etc/X11/xorg.conf.d/*/InputClass/Option","XkbVariant");
+	vector<string> oMatches = match("/files/etc/X11/xorg.conf.d/*/InputClass/Option","XkbOptions");
+	const char * match;string temp;int cnt,i;
+	if(lMatches.size()==0){
+		cerr<<"No Layout, so need to write a new configuration"<<endl;
+		return;
+	}
+	temp = lMatches.back();
+	temp = temp.append("/value");
+	cnt = aug_get(aug,temp.c_str(),&match);
+	if(cnt==0 ||cnt==-1){
+		cerr<<"No Matching nodes";
+		return;
+	}
+	vector<string> l = parseOption(match);
+	vector<string> v,o;
+	if(vMatches.size()!=0 && (vMatches.back()>lMatches.back())){
+		temp = vMatches.back();
+		temp.append("/value");
+		cnt = aug_get(aug,temp.c_str(),&match);
+		if(cnt==0||cnt==-1){
+			cerr<<"Error in variants, No Matching Nodes";
+			goto skip;
+		}
+		v = parseOption(match);
+	}
+	if(oMatches.size()==0 || (lMatches.back()>=oMatches.back()))
+		goto skip;
+	
+	temp = oMatches.back();
+	temp.append("/value");
+	cnt = aug_get(aug,temp.c_str(),&match);
+	if(cnt==0 || cnt==-1){
+		cerr<<"Error in groups,No Matching nodes";
+		goto skip;
+	}
+	o  = parseOption(match);
+
+skip:
+	
+	for(i=0;i<v.size();i++){
+		if(v[i]==""){
+			v[i] = "Default";
+		}
+	}
+	for(;i<l.size();i++){
+		v.push_back("Default");
+	}
+
+	map<string,string>::iterator it;
+	string var,lay;
+	cout<<"Checking for values"<<endl;	
+	for(i=0;i<l.size();i++){
+		if(l[i]=="")continue;
+		for(it=layout.begin();it!=layout.end();it++){
+			if(!it->second.compare(l[i])){//|| !it->second.compare(l[i].append(' '))){
+				lay = it->first;
+				break;
+			}
+		}
+		for(it=variant.begin();it!=variant.end();it++){
+			if(v[i]=="Default"){
+				cout<<"Default"<<endl;
+				var = "Default";
+				break;
+			}
+			 if(it->second==v[i]){
+				cout<<it->first<<endl;
+				var = it->first;
+				break;
+			}
+		}
+		layoutTable->addItem(lay,var);
+	}
+	vector< pair<string,string> >::iterator it1;
+	string gc,gv;
+	for(i=0;i<o.size();i++){
+		for(it1=options.begin();it1!=options.end();it1++){	
+			if(o[i]==it1->second){
+				cout<<it1->second;
+				gv = it1->first;
+				while(it1->second.find(':')!=string::npos){
+					--it1;
+				}
+				cout<<it1->second;
+				gc= it1->first;
+				groupTable->addItem(gc,gv);
+				break;
+			}
+		}
+	}
+}	
 
 int main(){
 	
