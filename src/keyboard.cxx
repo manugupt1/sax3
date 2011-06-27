@@ -235,6 +235,7 @@ void keyboard::fillUpLayoutSelect(){
 void keyboard::fillUpModelSelect(){
 	modelSelect->deleteAllItems();
 	map<string,string>::iterator it;
+	modelSelect->addItem("Default");
 	for(it=model.begin();it!=model.end();it++){
 		modelSelect->addItem(it->first);
 	}
