@@ -252,19 +252,20 @@ namespace UI{
 		table->addItems(items);
 	}
 	void yTable::swap(int pos){
-		YItemIterator it=table->itemsBegin();
+		YItemConstIterator it=table->itemsBegin(),ic=table->itemsEnd()-1;
 		std::vector<P>::iterator ii = i.begin(),ir = i.begin();
 		std::pair<string,string> x;
-		if(pos>0 && it == table->itemsEnd()){return;}
-		std::cout<<"VOILA"<<endl;
+		std::cout<<"NAPANM:"<<table->itemsCount();
+		std::cout<<*ic<<'\t'<<table->selectedItem()<<endl;
+		if(*ic==table->selectedItem() && pos >0) return;
+
 		while(it!=table->itemsEnd()){
 			YItem * item = *it;
+
 			if(*it==table->selectedItem()){
-//		std::cout<<ii->first<<'\t'<<ii->second<<endl;
 				x = std::make_pair(ii->first,ii->second);
 				break;
 			}
-	std::cout<<"BLAH";
 			++ii;++it;++ir;
 		}
 //Pos > 0 signifies move down, pos < 0 signifies up
@@ -278,11 +279,9 @@ namespace UI{
 			std::cout<<"In HERE";
 			if(it==table->itemsBegin()) return;
 			while(it!=table->itemsEnd() && pos!=0){
-				std::cout<<"-->"<<ii->first<<"<--"<<endl;
 				--ii;--it;++pos;
 			}
 		}
-//std::cout<<ii->first<<'\t'<<ii->second<<endl;
 		ir->first = ii->first;
 		ir->second = ii->second;
 		ii->first = x.first;
