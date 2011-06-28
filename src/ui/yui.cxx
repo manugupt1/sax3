@@ -258,12 +258,12 @@ namespace UI{
 		while(it!=table->itemsEnd()){
 			YItem * item = *it;
 			if(*it==table->selectedItem()){
-				std::cout<<ii->first<<'\t'<<ii->second<<endl;
+//		std::cout<<ii->first<<'\t'<<ii->second<<endl;
 				x = std::make_pair(ii->first,ii->second);
 				break;
 			}
-			std::cout<<"BLAH";
-			+ii;++it;++ir;
+//	std::cout<<"BLAH";
+			++ii;++it;++ir;
 		}
 		if(pos>0){
 			if(it==table->itemsBegin()) return;
@@ -272,12 +272,14 @@ namespace UI{
 			}
 		}
 		if(pos<0){
-			if(it==table->itemsBegin()) return;
-			while(it!=table->itemsBegin() && pos!=0){
+			std::cout<<"In HERE";
+			if(it==table->itemsEnd()) return;
+			while(it!=table->itemsEnd() && pos!=0){
+				std::cout<<"-->"<<ii->first<<"<--"<<endl;
 				--ii;--it;++pos;
 			}
 		}
-		std::cout<<ii->first<<'\t'<<ii->second<<endl;
+//std::cout<<ii->first<<'\t'<<ii->second<<endl;
 		ir->first = ii->first;
 		ir->second = ii->second;
 		ii->first = x.first;
