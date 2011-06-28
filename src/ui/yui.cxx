@@ -255,6 +255,8 @@ namespace UI{
 		YItemIterator it=table->itemsBegin();
 		std::vector<P>::iterator ii = i.begin(),ir = i.begin();
 		std::pair<string,string> x;
+		if(pos>0 && it == table->itemsEnd()){return;}
+		std::cout<<"VOILA"<<endl;
 		while(it!=table->itemsEnd()){
 			YItem * item = *it;
 			if(*it==table->selectedItem()){
@@ -262,18 +264,19 @@ namespace UI{
 				x = std::make_pair(ii->first,ii->second);
 				break;
 			}
-//	std::cout<<"BLAH";
+	std::cout<<"BLAH";
 			++ii;++it;++ir;
 		}
+//Pos > 0 signifies move down, pos < 0 signifies up
 		if(pos>0){
-			if(it==table->itemsBegin()) return;
+			if(it==table->itemsEnd()) {return;}
 			while(it!=table->itemsEnd() && pos!=0){
 				++ii;++it;--pos;
 			}
 		}
 		if(pos<0){
 			std::cout<<"In HERE";
-			if(it==table->itemsEnd()) return;
+			if(it==table->itemsBegin()) return;
 			while(it!=table->itemsEnd() && pos!=0){
 				std::cout<<"-->"<<ii->first<<"<--"<<endl;
 				--ii;--it;++pos;
