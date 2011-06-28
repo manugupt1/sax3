@@ -154,9 +154,11 @@ namespace UI{
 		yTable(yHLayout*,std::string,std::string,std::string);
 		yTable(yVLayout*,std::string,std::string,std::string);
 		void addItem(std::string,std::string);
+		void addItem(std::string,std::string,std::string);
 		std::vector<P> getItems();
 		void deleteSelected();
 		YTable * getElement();
+		void swap(int);
 	};
 }
 #endif

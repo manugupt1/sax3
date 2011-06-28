@@ -52,6 +52,11 @@ class keyboard{
 	UI::yComboBox * modelSelect,*variantSelect,*groupCategory,*groupOptions;
 	UI::yLabel * labelSelect,*showDefaultLayout,*label1;
 	UI::yTable * layoutTable,*groupTable;
+
+	UI::yVLayout * upDown1;
+	UI::yPushButton *upLayout,*downLayout;
+	UI::yHLayout *layoutLayout,*groupLayout;
+
 	bool SIMPLEMODE;
 
 	void drawSimpleMode();
@@ -68,6 +73,7 @@ class keyboard{
 	void loadExpertConf();
 	vector<string> match(string,string);
 	vector<string> parseOption(const char*);
+	int colNo;string xcolNo;
 	public:
 	keyboard();
 	void drawLayout();
@@ -113,6 +119,7 @@ keyboard::keyboard(){
 	factory = new UI::YUIFactory();
 	aug=NULL;root=NULL;flag=0;loadpath=NULL;
 	aug = aug_init(root,loadpath,flag);
+	colNo=0;
 
 }
 
@@ -155,7 +162,11 @@ void keyboard::drawExpertMode(){
 	variantSelect = factory->createComboBox(upperLayout,_("Select Layout Variant"));
 	fillUpVariant();
 	addLayoutVariant = factory->createPushButton(upperLayout,_("Add"));
-	layoutTable = factory->createTable(mainLayout,"Layout","Variant","");
+	layoutLayout = factory->createHLayout(mainLayout);
+	layoutTable = factory->createTable(layoutLayout,"Order","Layout","Variant");
+	upDown1 = factory->createVLayout(layoutLayout);
+	upLayout = factory->createPushButton(upDown1,_("&Up"));
+	downLayout = factory->createPushButton(upDown1,_("&Down"));
 	deleteLayoutVariant = factory->createPushButton(mainLayout,_("Delete selected Layout & Variant"));
 	modelSelect = factory->createComboBox(mainLayout,_("Select your Model"));
 	fillUpModelSelect();
@@ -166,7 +177,8 @@ void keyboard::drawExpertMode(){
 	groupOptions = factory->createComboBox(addGroupLayout,_("Relevant Options"));
 	fillUpGroupOptions();
 	addGroup = factory->createPushButton(addGroupLayout,_("Add"));
-	groupTable = factory->createTable(mainLayout,"Group","Option","");
+	groupLayout = factory->createHLayout(mainLayout);
+	groupTable = factory->createTable(groupLayout,"Group","Option","");
 	deleteGroup = factory->createPushButton(mainLayout,_("Delete Selected Group"));
 	buttonLayout = factory->createHLayout(mainLayout);
 	activateMode = factory->createPushButton(buttonLayout,_("&Simple Mode"));
@@ -206,7 +218,11 @@ bool keyboard::respondToEvent(){
 				fillUpGroupOptions();
 			}	
 			if(addLayoutVariant->getElement()==dialog->eventWidget()){
-				layoutTable->addItem(layoutSelect->value(),variantSelect->value());
+				char * temp = new char [20];
+				sprintf(temp,"%d",++colNo);
+				xcolNo = temp;
+				cout<<xcolNo;
+				layoutTable->addItem(xcolNo,layoutSelect->value(),variantSelect->value());
 			}
 			if(addGroup->getElement()==dialog->eventWidget()){
 				groupTable->addItem(groupCategory->value(),groupOptions->value());
@@ -216,6 +232,13 @@ bool keyboard::respondToEvent(){
 			}
 			if(deleteLayoutVariant->getElement()==dialog->eventWidget()){
 				layoutTable->deleteSelected();
+				--colNo;
+			}
+			if(upLayout->getElement()==dialog->eventWidget()){
+				layoutTable->swap(-1);
+			}
+			if(downLayout->getElement()==dialog->eventWidget()){
+				layoutTable->swap(1);
 			}
 		}
 	}
@@ -455,7 +478,7 @@ void keyboard::loadSimpleConf(){
 vector<string> keyboard::parseOption(const char *value){
 	vector<string> x;
 	string temp;
-	for(int i=0;i<=strlen(value);i++){
+	for(unsigned i=0;i<=strlen(value);i++){
 		if(value[i]==','){
 			x.push_back(temp);
 			temp.erase();
@@ -472,7 +495,7 @@ void keyboard::loadExpertConf(){
 	vector<string> lMatches = match("/files/etc/X11/xorg.conf.d/*/InputClass/Option","XkbLayout");
 	vector<string> vMatches = match("/files/etc/X11/xorg.conf.d/*/InputClass/Option","XkbVariant");
 	vector<string> oMatches = match("/files/etc/X11/xorg.conf.d/*/InputClass/Option","XkbOptions");
-	const char * match;string temp;int cnt,i;
+	const char * match;string temp;int cnt;unsigned i;
 	if(lMatches.size()==0){
 		cerr<<"No Layout, so need to write a new configuration"<<endl;
 		return;
@@ -542,7 +565,10 @@ skip:
 				break;
 			}
 		}
-		layoutTable->addItem(lay,var);
+		char * temp = new char[5];
+		sprintf(temp,"%d",++colNo);
+		xcolNo = temp;
+		layoutTable->addItem(xcolNo,lay,var);
 	}
 	vector< pair<string,string> >::iterator it1;
 	string gc,gv;

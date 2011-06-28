@@ -1,6 +1,7 @@
 #include "yui.h"
 
 #include<iostream>
+#include<stdio.h>
 
 namespace UI{
 
@@ -204,6 +205,7 @@ namespace UI{
 		if(HeaderCol3!="")header->addColumn(HeaderCol3);	
 		table=YUI::widgetFactory()->createTable(parent->getElement(),header);
 		table->setNotify(true);
+		//table->setKeepSorting(false);
 	}
 	yTable::yTable(yHLayout* parent,std::string HeaderCol1,std::string HeaderCol2,std::string HeaderCol3=""){
 		header = new YTableHeader();
@@ -213,6 +215,7 @@ namespace UI{
 		if(HeaderCol3!="")header->addColumn(HeaderCol3);	
 		table=YUI::widgetFactory()->createTable(parent->getElement(),header);
 		table->setNotify(true);
+		//table->setKeepSorting(false);
 	}
 	yTable::yTable(yVLayout* parent,std::string HeaderCol1,std::string HeaderCol2,std::string HeaderCol3=""){
 		header = new YTableHeader();
@@ -222,10 +225,15 @@ namespace UI{
 		if(HeaderCol3!="")header->addColumn(HeaderCol3);	
 		table=YUI::widgetFactory()->createTable(parent->getElement(),header);
 		table->setNotify(true);
+		//table->setKeepSorting(false);
 	}
 	void yTable::addItem(std::string item1,std::string item2){
 		table->addItem(new YTableItem(item1,item2));
 		i.push_back(std::make_pair<string,string> (item1,item2));	
+	}
+	void yTable::addItem(std::string n,std::string item1,std::string item2){
+		table->addItem(new YTableItem(n,item1,item2));
+		i.push_back(std::make_pair(item1,item2));
 	}
 	void yTable::deleteSelected(){
 		YItemIterator it = table->itemsBegin();
@@ -243,13 +251,63 @@ namespace UI{
 		items = createList();
 		table->addItems(items);
 	}
+	void yTable::swap(int pos){
+		YItemIterator it=table->itemsBegin();
+		std::vector<P>::iterator ii = i.begin(),ir = i.begin();
+		std::pair<string,string> x;
+		while(it!=table->itemsEnd()){
+			YItem * item = *it;
+			if(*it==table->selectedItem()){
+				std::cout<<ii->first<<'\t'<<ii->second<<endl;
+				x = std::make_pair(ii->first,ii->second);
+				break;
+			}
+			std::cout<<"BLAH";
+			+ii;++it;++ir;
+		}
+		if(pos>0){
+			if(it==table->itemsBegin()) return;
+			while(it!=table->itemsEnd() && pos!=0){
+				++ii;++it;--pos;
+			}
+		}
+		if(pos<0){
+			if(it==table->itemsBegin()) return;
+			while(it!=table->itemsBegin() && pos!=0){
+				--ii;--it;++pos;
+			}
+		}
+		std::cout<<ii->first<<'\t'<<ii->second<<endl;
+		ir->first = ii->first;
+		ir->second = ii->second;
+		ii->first = x.first;
+		ii->second = x.second;
+		table->deleteAllItems();
+		for(ii=i.begin();ii!=i.end();ii++){
+			std::cout<<ii->first<<'\t'<<ii->second<<endl;
+		}
+		items = createList();
+		table->addItems(items);
+
+	}
 	YItemCollection yTable::createList(){
 		YItemCollection list;
 		std::vector<P>::iterator ii;
 		ii = i.begin();
-		while(ii!=i.end()){
-			list.push_back(new YTableItem(ii->first,ii->second));
-			ii++;
+		if(table->columns()==2){
+			while(ii!=i.end()){
+				std::cout<<"inserting :"<<ii->first<<'\t'<<ii->second<<endl;
+				list.push_back(new YTableItem(ii->first,ii->second));
+				ii++;
+			}
+		}else{
+			int x=0;
+			char * s = new char[10];
+			while(ii!=i.end()){
+				sprintf(s,"%d",++x);
+				list.push_back(new YTableItem(s,ii->first,ii->second));
+				ii++;
+			}
 		}
 		return list;
 	}
