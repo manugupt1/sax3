@@ -11,5 +11,5 @@ add_subdirectory(lens)
 add_executable(main main.cxx)
 add_executable(keyboard keyboard.cxx)
 
-target_link_libraries(main yui yuif ${LIBYUI_LIBRARY})
-target_link_libraries(keyboard yui yuif ${LIBYUI_LIBRARY})
+target_link_libraries(main yui yuif ${LIBYUI_LIBRARY} augeas)
+target_link_libraries(keyboard yui yuif ${LIBYUI_LIBRARY} augeas)
