@@ -73,7 +73,7 @@ class Init{
 
 		}	
 		dialog->wait();
-		
+		std::cout<<dialog->eventWidget()->label()<endl;	
 	}
 };
 
