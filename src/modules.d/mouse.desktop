@@ -4,4 +4,5 @@ Version=1.0
 Type=SaX3 Module
 Name=Mouse
 Comment=Mouse SaX3 Module
-Icon=//usr/share/sax3/res/mouse.png
+Icon=/usr/share/sax3/res/mouse.png
+Exec=sax3-mouse

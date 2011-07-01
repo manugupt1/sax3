@@ -114,9 +114,13 @@ namespace UI{
 	YPushButton* yPushButton::getElement(){
 		return button;
 	}
+	string yPushButton::value(){
+		return button->label();
+	}
 	yPushButton::~yPushButton(){
 		delete button;
 	}
+
 
 	//YPUSHBUTTION FUNCTIONS END
 

@@ -5,3 +5,4 @@ Type=Sax3 Module
 Name=KeyBoard
 Comment=Key Board module for SaX3
 Icon=/usr/share/sax3/res/keyboard.png
+Exec=sax3-keyboard

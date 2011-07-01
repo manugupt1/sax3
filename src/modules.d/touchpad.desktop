@@ -5,3 +5,4 @@ Type=SaX3 Module
 Name=Touch Pad
 Comment=SaX3 Module for Touchpad
 Icon=/usr/share/sax3/res/touchpad.png
+Exec=sax3-touchpad

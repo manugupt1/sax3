@@ -6,6 +6,8 @@
 #include<sys/types.h>
 #include<string.h>
 #include<list>
+#include<unistd.h>
+#include<errno.h>
 
 extern "C"{
 #include<augeas.h>
@@ -14,6 +16,8 @@ extern "C"{
 #include "ui/yuifactory.h"
 
 #define _(STRING) gettext(STRING)
+
+using namespace std;
 
 /*! \class Init
     \brief This class initializes the window layout and the plugin mechanism
@@ -32,6 +36,10 @@ class Init{
 	const char *value;
 	int err;
 	char* getEntry;
+	vector<UI::yPushButton*> button;
+	vector<UI::yImage*> image;
+	vector<string> execs;
+//	UI::yImage image;UI::yPushButton button;
 	protected:
 		void makeEntry(char s1[],char s2[],char s3[]){
 			strcpy(getEntry,s1);
@@ -59,21 +67,37 @@ class Init{
 					makeEntry("/files/usr/share/sax3/modules.d/",ep->d_name,"/*/Icon");
 					err = aug_get(aug,getEntry,&value);
 					if(err==1)
-					UI::yImage * image = factory->createImage(hLayout,_(value));
+					image.push_back(factory->createImage(hLayout,_(value)));
 					delete getEntry;
 
 					getEntry = new char[100];
 					makeEntry("/files/usr/share/sax3/modules.d/",ep->d_name,"/*/Name");
 					err = aug_get(aug,getEntry,&value);
 					if(err==1)
-					UI::yPushButton * button = factory->createPushButton(hLayout,_(value));
+					button.push_back(factory->createPushButton(hLayout,_(value)));
 					delete getEntry;	
+
+					getEntry = new char[100];
+					makeEntry("/files/usr/share/sax3/modules.d/",ep->d_name,"/*/Exec");
+					err = aug_get(aug,getEntry,&value);
+					if(err==1)
+					execs.push_back(value);
+					delete getEntry;
 				}
 			}
 
-		}	
+		}	 
 		dialog->wait();
-		std::cout<<dialog->eventWidget()->label()<endl;	
+		for(int i=0;i<button.size();i++){
+			if(dialog->eventWidget()==button[i]->getElement()){
+				getEntry = new char[100];
+				string temp = button[i]->value();
+				temp.erase(temp.find('&'),temp.find('&'));
+				cout<<execs[i]<<endl;
+				err = execl("sax3-keyboard","");
+				break;
+			}
+		}
 	}
 };
 
@@ -85,7 +109,7 @@ int main(){
 
 	new Init();
 /*	UI::YUIFactory * factory = new UI::YUIFactory();
-	UI::yDialog * dialog = factory->createDialog(30,10);
+	UI::yDialog * dialog = factoryntWidget->createDialog(30,10);
 
 	UI::yVLayout * mainLayout = factory->createVLayout(dialog);
 

@@ -4,3 +4,4 @@ Type=SaX3 Module
 Name=Monitor
 Comment=Monitor module for SaX3
 Icon=/usr/share/sax3/res/monitor.png
+Exec=sax3-monitor

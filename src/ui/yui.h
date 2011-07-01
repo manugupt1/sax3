@@ -99,6 +99,7 @@ namespace UI{
 		yPushButton(yHLayout *,std::string text);
 		yPushButton(yVLayout *,std::string text);
 		YPushButton * getElement();
+		string value();
 		~yPushButton();
 	};
 
