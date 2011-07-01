@@ -1,3 +1,0 @@
-/home/hawk/sax3/sax3-0.1/b/src/CMakeFiles/sax3.dir
-/home/hawk/sax3/sax3-0.1/b/src/CMakeFiles/sax3-keyboard.dir
-/home/hawk/sax3/sax3-0.1/b/src/ui/CMakeFiles/sax3-yuif.dir
