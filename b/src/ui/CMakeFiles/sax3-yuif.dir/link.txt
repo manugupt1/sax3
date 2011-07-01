@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC -Wall -pedantic -laugeas  -shared -Wl,-soname,libsax3-yuif.so -o libsax3-yuif.so CMakeFiles/sax3-yuif.dir/yuifactory.cxx.o CMakeFiles/sax3-yuif.dir/yui.cxx.o -L/home/hawk/sax3/sax3-0.1/b/src -L/home/hawk/sax3/sax3-0.1/b/src/ui -Wl,-rpath,/home/hawk/sax3/sax3-0.1/b/src:/home/hawk/sax3/sax3-0.1/b/src/ui 

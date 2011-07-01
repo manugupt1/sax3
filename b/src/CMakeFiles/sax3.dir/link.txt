@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall -pedantic -laugeas   CMakeFiles/sax3.dir/main.cxx.o  -o sax3 -rdynamic -L/home/hawk/sax3/sax3-0.1/b/src ui/libsax3-yuif.so -lyui -laugeas -Wl,-rpath,/home/hawk/sax3/sax3-0.1/b/src:/home/hawk/sax3/sax3-0.1/b/src/ui 
