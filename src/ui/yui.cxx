@@ -359,4 +359,15 @@ namespace UI{
 	yIntField::yIntField(yVLayout* parent,string text,int min,int max,int value){
 		field = YUI::widgetFactory()->createIntField(parent->getElement(),text,min,max,value);
 	}
+
+	yCheckBox::yCheckBox(yDialog * parent,string text,bool checked){
+		cb = YUI::widgetFactory()->createCheckBox(parent->getElement(),text,checked);
+	}
+	yCheckBox::yCheckBox(yHLayout * parent,string text,bool checked){
+		cb = YUI::widgetFactory()->createCheckBox(parent->getElement(),text,checked);
+	}
+	yCheckBox::yCheckBox(yVLayout * parent,string text,bool checked){
+		cb = YUI::widgetFactory()->createCheckBox(parent->getElement(),text,checked);
+	}
+
 }

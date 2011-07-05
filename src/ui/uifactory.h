@@ -49,6 +49,10 @@ namespace UI{
 			virtual  IntField * createIntField(HLayout *,std::string,int,int,int)=0;
 			virtual  IntField * createIntField(VLayout *,std::string,int,int,int)=0;
 			virtual  IntField * createIntField(Dialog *,std::string,int,int,int)=0;
+			
+			virtual  CheckBox * createCheckBox(HLayout *,std::string,bool)=0;
+			virtual  CheckBox * createCheckBox(VLayout *,std::string,bool)=0;
+			virtual  CheckBox * createCheckBox(Dialog *,std::string,bool)=0;
 	};	
 }
 

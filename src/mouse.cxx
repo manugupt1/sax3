@@ -37,7 +37,8 @@ class Mouse{
 	UI::yPushButton * okButton,*cancelButton;
 	UI::yRadioButtonGroup * button3,*wheel;
 	UI::yLabel * button3Label,*enableButton3Label,*wheelLabel,*enableWheelLabel;
-	UI::yIntField * timeout,*wheeltimeout;
+	UI::yIntField * timeout,*wheeltimeout,*AngleOffset;
+	UI::yCheckBox * InvX,*InvY;
 	void getProductVendor();
 	void getName();
 	public:
@@ -107,7 +108,7 @@ void Mouse::autodetect(){
 }
 
 void Mouse::initUI(){
-	dialog = factory->createDialog(30,10);
+	dialog = factory->createDialog(40,10);
 
 	vl1 = factory->createVLayout(dialog);
 	hl1 = factory->createHLayout(vl1);
@@ -128,6 +129,10 @@ void Mouse::initUI(){
 	wheel->addButton("No");
 	wheeltimeout = factory->createIntField(vl1,"3 Button Timeout Time",0,100,50);
 
+	InvX = factory->createCheckBox(vl1,"Invert X Axis",false);
+	InvY = factory->createCheckBox(vl1,"Invert Y Axis",false);
+
+	AngleOffset = factory->createIntField(vl1,"Angle Offset in degrees",0,360,0);
 	dialog->wait();
 }
 

@@ -13,7 +13,10 @@ namespace UI{
 	class Image;
 	class RadioButtonGroup;
 	class IntField;
+	class CheckBox;
 
+	class CheckBox{
+	};
 	class IntField{
 	};
 	class Image{

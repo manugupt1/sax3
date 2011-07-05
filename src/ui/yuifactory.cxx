@@ -111,4 +111,14 @@ namespace UI{
 	yIntField * YUIFactory::createIntField(VLayout *parent,std::string text,int min,int max,int val){
 		return new yIntField((yVLayout*)parent,text,min,max,val);
 	}
+
+	yCheckBox * YUIFactory::createCheckBox(Dialog * parent,std::string text,bool checked){
+		return new yCheckBox((yDialog*)parent,text,checked);
+	}
+	yCheckBox * YUIFactory::createCheckBox(HLayout * parent,std::string text,bool checked){
+		return new yCheckBox((yHLayout*)parent,text,checked);
+	}
+	yCheckBox * YUIFactory::createCheckBox(VLayout * parent,std::string text,bool checked){
+		return new yCheckBox((yVLayout*)parent,text,checked);
+	}
 }

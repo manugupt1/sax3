@@ -38,6 +38,7 @@ namespace UI{
 	class yMultiSelectionBox;
 	class yRadioButtonGroup;
 	class yIntField;
+	class yCheckBox;
 //YUIDIALOG
 	class yDialog : public Dialog{
 		YDialog * dialog;
@@ -188,6 +189,15 @@ namespace UI{
 		yIntField(yDialog*,string,int,int,int);
 		yIntField(yHLayout*,string,int,int,int);
 		yIntField(yVLayout*,string,int,int,int);
+	};
+
+//YCHECKBOX
+	class yCheckBox : public CheckBox{
+		YCheckBox * cb;
+		public:
+		yCheckBox(yDialog*,string,bool);
+		yCheckBox(yHLayout*,string,bool);
+		yCheckBox(yVLayout*,string,bool);
 	};
 }
 #endif
