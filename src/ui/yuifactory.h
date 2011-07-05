@@ -43,6 +43,14 @@ namespace UI{
 			virtual yTable * createTable(Dialog *,std::string t1,std::string t2,std::string t3);
 			virtual yTable * createTable(HLayout *,std::string t1,std::string t2,std::string t3);
 			virtual yTable * createTable(VLayout *,std::string t1,std::string t2,std::string t3);
+
+			virtual yRadioButtonGroup * createRadioButtonGroup(HLayout *);
+			virtual yRadioButtonGroup * createRadioButtonGroup(VLayout *);
+			virtual yRadioButtonGroup * createRadioButtonGroup(Dialog *);
+			
+			virtual yIntField * createIntField(HLayout *,string,int,int,int);
+			virtual yIntField * createIntField(VLayout *,string,int,int,int);
+			virtual yIntField * createIntField(Dialog *,string,int,int,int);
 	};	
 }
 

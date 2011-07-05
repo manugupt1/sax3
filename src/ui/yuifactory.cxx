@@ -91,4 +91,24 @@ namespace UI{
 	yTable * YUIFactory::createTable(VLayout *parent,std::string t1,std::string t2,std::string t3){
 		return new yTable((yVLayout*)parent,t1,t2,t3);
 	}
+
+	yRadioButtonGroup * YUIFactory::createRadioButtonGroup(Dialog * parent){
+		return new yRadioButtonGroup((yDialog*)parent);
+	}
+	yRadioButtonGroup * YUIFactory::createRadioButtonGroup(HLayout * parent){
+		return new yRadioButtonGroup((yHLayout*)parent);
+	}
+	yRadioButtonGroup * YUIFactory::createRadioButtonGroup(VLayout * parent){
+		return new yRadioButtonGroup((yVLayout*)parent);
+	}
+
+	yIntField * YUIFactory::createIntField(Dialog *parent,std::string text,int min,int max,int val){
+		return new yIntField((yDialog*)parent,text,min,max,val);
+	}
+	yIntField * YUIFactory::createIntField(HLayout *parent,std::string text,int min,int max,int val){
+		return new yIntField((yHLayout*)parent,text,min,max,val);
+	}
+	yIntField * YUIFactory::createIntField(VLayout *parent,std::string text,int min,int max,int val){
+		return new yIntField((yVLayout*)parent,text,min,max,val);
+	}
 }

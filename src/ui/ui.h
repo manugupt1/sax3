@@ -11,7 +11,11 @@ namespace UI{
 	class Label;
 	class PushButton;
 	class Image;
+	class RadioButtonGroup;
+	class IntField;
 
+	class IntField{
+	};
 	class Image{
 	};
 
@@ -35,6 +39,8 @@ namespace UI{
 	class MultiSelectionBox{
 	};
 	class Table{
+	};
+	class RadioButtonGroup{
 	};
 }
 

@@ -20,6 +20,9 @@
 #include "YItem.h"
 #include "YTable.h"
 #include "YTableHeader.h"
+#include "YRadioButtonGroup.h"
+#include "YRadioButton.h"
+#include "YIntField.h"
 
 #include<iostream>
 
@@ -33,6 +36,8 @@ namespace UI{
 	class yImage;
 	class yComboBox;
 	class yMultiSelectionBox;
+	class yRadioButtonGroup;
+	class yIntField;
 //YUIDIALOG
 	class yDialog : public Dialog{
 		YDialog * dialog;
@@ -160,6 +165,29 @@ namespace UI{
 		void deleteSelected();
 		YTable * getElement();
 		void swap(int);
+	};
+
+//YRADIOBUTTONGROUP
+	class yRadioButtonGroup : public RadioButtonGroup{
+		YRadioButtonGroup * group;
+		YLayoutBox * layout1;
+		YLayoutBox * layout2;
+		std::vector<YRadioButton *> buttonList;
+		
+		public:
+		yRadioButtonGroup(yDialog*);
+		yRadioButtonGroup(yHLayout*);
+		yRadioButtonGroup(yVLayout*);
+		void addButton(std::string);
+	};
+
+//YINTFIELD 
+	class yIntField : public IntField{
+		YIntField * field;
+		public:
+		yIntField(yDialog*,string,int,int,int);
+		yIntField(yHLayout*,string,int,int,int);
+		yIntField(yVLayout*,string,int,int,int);
 	};
 }
 #endif

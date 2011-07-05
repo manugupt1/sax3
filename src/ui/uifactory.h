@@ -13,10 +13,11 @@ namespace UI{
 			virtual HLayout * createHLayout(VLayout *)=0;
 			virtual HLayout * createHLayout(Dialog *)=0;
 
+
 			virtual VLayout * createVLayout(HLayout *)=0;
 			virtual VLayout * createVLayout(VLayout *)=0;
 			virtual VLayout * createVLayout(Dialog *)=0;
-
+			
 			virtual Label * createLabel(Dialog *,std::string) = 0;
 			virtual Label * createLabel(HLayout *,std::string) = 0;
 			virtual Label * createLabel(VLayout *,std::string) = 0;
@@ -41,6 +42,13 @@ namespace UI{
 			virtual Table * createTable(HLayout *,std::string,std::string,std::string)=0;
 			virtual Table * createTable(VLayout *,std::string,std::string,std::string)=0;
 
+			virtual RadioButtonGroup * createRadioButtonGroup(HLayout *)=0;
+			virtual RadioButtonGroup * createRadioButtonGroup(VLayout *)=0;
+			virtual RadioButtonGroup * createRadioButtonGroup(Dialog *)=0;
+	
+			virtual  IntField * createIntField(HLayout *,std::string,int,int,int)=0;
+			virtual  IntField * createIntField(VLayout *,std::string,int,int,int)=0;
+			virtual  IntField * createIntField(Dialog *,std::string,int,int,int)=0;
 	};	
 }
 

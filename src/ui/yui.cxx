@@ -327,4 +327,36 @@ namespace UI{
 		return i;
 	}
 	//YTABLE FUNCTION ENDS
+	
+	//YRADIOBUTTONGROUP FUNCTION STARTS
+	yRadioButtonGroup::yRadioButtonGroup(yDialog *parent){
+		layout1 = YUI::widgetFactory()->createVBox(parent->getElement());
+		group = YUI::widgetFactory()->createRadioButtonGroup(layout1);
+		layout2 = YUI::widgetFactory()->createHBox(group);
+	}
+	yRadioButtonGroup::yRadioButtonGroup(yHLayout *parent){
+		layout1 = YUI::widgetFactory()->createHBox(parent->getElement());
+		group = YUI::widgetFactory()->createRadioButtonGroup(layout1);
+		layout2 = YUI::widgetFactory()->createHBox(group);
+	}
+	yRadioButtonGroup::yRadioButtonGroup(yVLayout * parent){
+		layout1 = YUI::widgetFactory()->createVBox(parent->getElement());
+		group = YUI::widgetFactory()->createRadioButtonGroup(layout1);
+		layout2 = YUI::widgetFactory()->createVBox(group);
+	}
+	void yRadioButtonGroup::addButton(std::string text){
+		YRadioButton * b = YUI::widgetFactory()->createRadioButton(layout2,text);
+		b->setNotify(true);
+		buttonList.push_back(b);
+	}
+
+	yIntField::yIntField(yDialog* parent,string text,int min,int max,int value){
+		field = YUI::widgetFactory()->createIntField(parent->getElement(),text,min,max,value);
+	}
+	yIntField::yIntField(yHLayout* parent,string text,int min,int max,int value){
+		field = YUI::widgetFactory()->createIntField(parent->getElement(),text,min,max,value);
+	}
+	yIntField::yIntField(yVLayout* parent,string text,int min,int max,int value){
+		field = YUI::widgetFactory()->createIntField(parent->getElement(),text,min,max,value);
+	}
 }
