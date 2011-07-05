@@ -24,6 +24,7 @@ class Mouse{
 		void setVendor(string);
 		void setName(string);	
 		void setDevice(string);
+		string getName();
 		Details();
 	};
 	
@@ -32,20 +33,27 @@ class Mouse{
 
 	UI::YUIFactory * factory;
 	UI::yDialog *dialog;
-	UI::yHLayout * hl1,*enableButton3Layout,*enableWheelLayout;
+	UI::yHLayout * hl1,*enableButton3Layout,*enableWheelLayout,*buttonLayout;
 	UI::yVLayout * vl1;
 	UI::yPushButton * okButton,*cancelButton;
 	UI::yRadioButtonGroup * button3,*wheel;
 	UI::yLabel * button3Label,*enableButton3Label,*wheelLabel,*enableWheelLabel;
 	UI::yIntField * timeout,*wheeltimeout,*AngleOffset;
 	UI::yCheckBox * InvX,*InvY;
+	UI::yComboBox * mouseList;
 	void getProductVendor();
 	void getName();
+	void fillUpMouseList();
 	public:
 	void autodetect();
 	void initUI();
+	bool respondToEvent();
 	Mouse();
 };
+
+string Mouse::Details::getName(){
+	return name;
+}
 
 void Mouse::Details::setProduct(string p){
 	product = p;
@@ -112,14 +120,17 @@ void Mouse::initUI(){
 
 	vl1 = factory->createVLayout(dialog);
 	hl1 = factory->createHLayout(vl1);
-
+	
+	mouseList = factory->createComboBox(vl1,"Auto Detected Mouse");
+	mouseList->addItem("Generic Mouse");
+	fillUpMouseList();
 	button3Label = factory->createLabel(vl1,"3 button Emulation Options");
 	enableButton3Layout = factory->createHLayout(vl1);
 	enableButton3Label = factory->createLabel(enableButton3Layout,"Enable 3 Buttons");
 	button3 = factory->createRadioButtonGroup(enableButton3Layout);
 	button3->addButton("Yes");
 	button3->addButton("No");
-	timeout = factory->createIntField(vl1,"3 Button Timeout Time",0,100,50);
+	timeout = factory->createIntField(vl1,"3 Button Timeout Time",0,1000,50);
 
 	wheelLabel = factory->createLabel(vl1,"Wheel Emulation Options");
 	enableWheelLayout = factory->createHLayout(vl1);
@@ -127,22 +138,39 @@ void Mouse::initUI(){
 	wheel = factory->createRadioButtonGroup(enableWheelLayout);
 	wheel->addButton("Yes");
 	wheel->addButton("No");
-	wheeltimeout = factory->createIntField(vl1,"3 Button Timeout Time",0,100,50);
+	wheeltimeout = factory->createIntField(vl1,"3 Button Timeout Time",0,1000,200);
 
 	InvX = factory->createCheckBox(vl1,"Invert X Axis",false);
 	InvY = factory->createCheckBox(vl1,"Invert Y Axis",false);
 
 	AngleOffset = factory->createIntField(vl1,"Angle Offset in degrees",0,360,0);
+	buttonLayout = factory->createHLayout(vl1);
+	okButton = factory->createPushButton(buttonLayout,"Save");
+	cancelButton = factory->createPushButton(buttonLayout,"Close");
 	dialog->wait();
+}
+
+void Mouse::fillUpMouseList(){
+	for(int i=0;i<d.size();i++){
+		if(d[i]->getName().find("ETPS")==-1 && d[i]->getName().find("ALPS")==-1)
+			mouseList->addItem(d[i]->getName());
+	}
 }
 
 Mouse::Mouse(){
 	factory = new UI::YUIFactory();
 }
 
+bool Mouse::respondToEvent(){
+	if(cancelButton->getElement()==dialog->eventWidget())
+		return false;
+	return true;
+}
+
 int main(){
 	Mouse * m = new Mouse();
 	m->autodetect();
 	m->initUI();
+	while(m->respondToEvent());
 	return 0;
 }
