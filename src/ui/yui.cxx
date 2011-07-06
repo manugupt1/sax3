@@ -345,9 +345,12 @@ namespace UI{
 		layout2 = YUI::widgetFactory()->createVBox(group);
 	}
 	void yRadioButtonGroup::addButton(std::string text){
-		YRadioButton * b = YUI::widgetFactory()->createRadioButton(layout2,text);
+		YRadioButton * b = YUI::widgetFactory()->createRadioButton(layout2,text,true);
 		b->setNotify(true);
 		buttonList.push_back(b);
+	}
+	string yRadioButtonGroup::selectedLabel(){
+		return group->currentButton()->label();
 	}
 
 	yIntField::yIntField(yDialog* parent,string text,int min,int max,int value){
@@ -359,6 +362,15 @@ namespace UI{
 	yIntField::yIntField(yVLayout* parent,string text,int min,int max,int value){
 		field = YUI::widgetFactory()->createIntField(parent->getElement(),text,min,max,value);
 	}
+	int yIntField::value(){
+		return field->value();
+	}
+	void yIntField::setDisabled(){
+		return field->setDisabled();
+	}
+	void yIntField::setEnabled(){
+		return field->setEnabled();
+	}
 
 	yCheckBox::yCheckBox(yDialog * parent,string text,bool checked){
 		cb = YUI::widgetFactory()->createCheckBox(parent->getElement(),text,checked);
@@ -368,6 +380,9 @@ namespace UI{
 	}
 	yCheckBox::yCheckBox(yVLayout * parent,string text,bool checked){
 		cb = YUI::widgetFactory()->createCheckBox(parent->getElement(),text,checked);
+	}
+	bool yCheckBox::isChecked(){
+		return cb->isChecked();
 	}
 
 }

@@ -23,6 +23,7 @@
 #include "YRadioButtonGroup.h"
 #include "YRadioButton.h"
 #include "YIntField.h"
+#include "YCheckBox.h"
 
 #include<iostream>
 
@@ -179,6 +180,7 @@ namespace UI{
 		yRadioButtonGroup(yDialog*);
 		yRadioButtonGroup(yHLayout*);
 		yRadioButtonGroup(yVLayout*);
+		string selectedLabel();
 		void addButton(std::string);
 	};
 
@@ -189,6 +191,9 @@ namespace UI{
 		yIntField(yDialog*,string,int,int,int);
 		yIntField(yHLayout*,string,int,int,int);
 		yIntField(yVLayout*,string,int,int,int);
+		int value();
+		void setDisabled();
+		void setEnabled();
 	};
 
 //YCHECKBOX
@@ -198,6 +203,7 @@ namespace UI{
 		yCheckBox(yDialog*,string,bool);
 		yCheckBox(yHLayout*,string,bool);
 		yCheckBox(yVLayout*,string,bool);
+		bool isChecked();
 	};
 }
 #endif
