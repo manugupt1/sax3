@@ -182,6 +182,8 @@ namespace UI{
 		yRadioButtonGroup(yVLayout*);
 		string selectedLabel();
 		void addButton(std::string);
+		bool isButton(int,YWidget*);
+		void setValue(int,int);
 	};
 
 //YINTFIELD 

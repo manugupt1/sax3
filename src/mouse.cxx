@@ -23,21 +23,26 @@ class Mouse{
 		string InvX;
 		string InvY;
 		string AngleOffset;
-		string Emulate3Buttons;
-		string Emulate3Timeout;
-		string ChordMiddle;
-		string EmulateWheel;
-		string EmulateWheelTimeout;
+		int Emulate3Buttons;
+		int Emulate3Timeout;
+		int EmulateWheel;
+		int EmulateWheelTimeout;
 		public:
 		void setProduct(string);
 		void setVendor(string);
 		void setName(string);	
 		void setDevice(string);
-		void setEmulate3Buttons(string);
-		void setEmulateWheel(string);
+		void setEmulate3(int);
+		void setEmulate3Timeout(int);
+		void setEmulateWheel(int);
+		void setEmulateWheelTimeout(int);
 		string getName();
 		string getVendor();
 		string getProduct();
+		int getEmulate3();
+		int getEmulate3Timeout();
+		int getEmulateWheel();
+		int getEmulateWheelTimeout();
 		Details();
 	};
 	
@@ -62,6 +67,8 @@ class Mouse{
 	void getName();
 	void fillUpMouseList();
 	bool writeConf(string &line,bool newNode,string parameter,bool isLastParameter,string extraParam,string value);
+	void loadState();
+	void saveState();
 	public:
 	void autodetect();
 	void initUI();
@@ -69,6 +76,38 @@ class Mouse{
 	bool respondToEvent();
 	Mouse();
 };
+
+void Mouse::Details::setEmulateWheel(int v){
+	EmulateWheel = v;
+}
+
+int Mouse::Details::getEmulateWheel(){
+	return EmulateWheelTimeout;
+}
+
+void Mouse::Details::setEmulateWheelTimeout(int v){
+	EmulateWheelTimeout = v;
+}
+
+int Mouse::Details::getEmulateWheelTimeout(){
+	return EmulateWheelTimeout;
+}
+
+void Mouse::Details::setEmulate3(int v){
+	Emulate3Buttons = v;
+}
+
+int Mouse::Details::getEmulate3(){
+	return Emulate3Buttons;
+}
+
+void Mouse::Details::setEmulate3Timeout(int v){
+	Emulate3Timeout = v;
+}
+
+int Mouse::Details::getEmulate3Timeout(){
+	return Emulate3Timeout;
+}
 
 string Mouse::Details::getProduct(){
 	return product;
@@ -97,6 +136,7 @@ void Mouse::Details::setVendor(string v){
 
 void Mouse::Details::setName(string n){
 	name = n;
+	Emulate3Buttons = 0;
 }
 
 void Mouse::Details::setDevice(string d){
@@ -107,6 +147,41 @@ Mouse::Details::Details(){
 	protocol = "Auto";
 }
 
+void Mouse::loadState(){
+	int i;
+	for(i=0;i<d.size();i++)
+		if(d[i]->getName()==mouseList->value())
+			break;
+	int b3 = d[i]->getEmulate3();
+	if(b3==0){
+		button3->setValue(0,0);
+		button3->setValue(1,1);
+		timeout->setDisabled();
+	}else{
+		button3->setValue(1,0);
+		button3->setValue(0,1);
+		timeout->setEnabled();
+	}
+}
+
+void Mouse::saveState(){
+	int i;
+	for(i=0;i<d.size();i++)
+		if(d[i]->getName()==mouseList->value())
+			break;
+	string b3 = button3->selectedLabel();
+
+	b3 = b3.erase(b3.find('&'),b3.find('&')+1);
+	cout<<b3<<endl;	
+	if(!b3.compare("Yes")){
+		d[i]->setEmulate3(1);
+	}else{
+		d[i]->setEmulate3(0);
+	}
+	d[i]->setEmulate3Timeout(timeout->value());
+
+
+}
 void Mouse::getProductVendor(){
 	string pv = line.substr(line.find_first_of('/')+1,line.find_last_of('/'));
 	string v = pv.substr(0,pv.find_first_of('/'));
@@ -154,7 +229,6 @@ void Mouse::initUI(){
 	hl1 = factory->createHLayout(vl1);
 	
 	mouseList = factory->createComboBox(vl1,"Auto Detected Mouse");
-	mouseList->addItem("Generic Mouse");
 	fillUpMouseList();
 	button3Label = factory->createLabel(vl1,"3 button Emulation Options");
 	enableButton3Layout = factory->createHLayout(vl1);
@@ -162,7 +236,7 @@ void Mouse::initUI(){
 	button3 = factory->createRadioButtonGroup(enableButton3Layout);
 	button3->addButton("Yes");
 	button3->addButton("No");
-	timeout = factory->createIntField(vl1,"3 Button Timeout Time",0,1000,50);
+	timeout = factory->createIntField(vl1,"3 Button Timeout",0,1000,50);
 	timeout->setDisabled();
 	wheelLabel = factory->createLabel(vl1,"Wheel Emulation Options");
 	enableWheelLayout = factory->createHLayout(vl1);
@@ -170,7 +244,7 @@ void Mouse::initUI(){
 	wheel = factory->createRadioButtonGroup(enableWheelLayout);
 	wheel->addButton("Yes");
 	wheel->addButton("No");
-	wheeltimeout = factory->createIntField(vl1,"3 Button Timeout Time",0,1000,200);
+	wheeltimeout = factory->createIntField(vl1,"Wheel Button Timeout",0,1000,200);
 	wheeltimeout->setDisabled();
 	InvX = factory->createCheckBox(vl1,"Invert X Axis",false);
 	InvY = factory->createCheckBox(vl1,"Invert Y Axis",false);
@@ -210,6 +284,22 @@ bool Mouse::respondToEvent(){
 		if(okButton->getElement()==dialog->eventWidget()){
 			saveConf();
 		}
+		if(button3->isButton(0,dialog->eventWidget())){
+			timeout->setEnabled();
+		}
+		if(button3->isButton(1,dialog->eventWidget())){
+			timeout->setDisabled();
+		}
+		if(wheel->isButton(0,dialog->eventWidget())){
+			wheeltimeout->setEnabled();
+		}
+		if(wheel->isButton(1,dialog->eventWidget())){
+			wheeltimeout->setDisabled();
+		}
+		if(mouseList->getElement()==dialog->eventWidget()){
+			loadState();
+		}
+		saveState();
 	};
 	return true;
 }

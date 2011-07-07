@@ -352,6 +352,15 @@ namespace UI{
 	string yRadioButtonGroup::selectedLabel(){
 		return group->currentButton()->label();
 	}
+	bool yRadioButtonGroup::isButton(int index,YWidget* w){
+		if(w==buttonList[index])
+			return true;
+		else
+			return false;
+	}
+	void yRadioButtonGroup::setValue(int index,int value){
+		buttonList[index]->setValue(value);
+	}
 
 	yIntField::yIntField(yDialog* parent,string text,int min,int max,int value){
 		field = YUI::widgetFactory()->createIntField(parent->getElement(),text,min,max,value);
