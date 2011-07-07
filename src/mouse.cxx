@@ -20,9 +20,9 @@ class Mouse{
 		string name;
 		string protocol;
 		string device;
-		string InvX;
-		string InvY;
-		string AngleOffset;
+		int InvX;
+		int InvY;
+		int AngleOffset;
 		int Emulate3Buttons;
 		int Emulate3Timeout;
 		int EmulateWheel;
@@ -36,6 +36,9 @@ class Mouse{
 		void setEmulate3Timeout(int);
 		void setEmulateWheel(int);
 		void setEmulateWheelTimeout(int);
+		void setInvX(int);
+		void setInvY(int);
+		void setAngleOffset(int);
 		string getName();
 		string getVendor();
 		string getProduct();
@@ -43,6 +46,9 @@ class Mouse{
 		int getEmulate3Timeout();
 		int getEmulateWheel();
 		int getEmulateWheelTimeout();
+		int getAngleOffset();
+		int getInvX();
+		int getInvY();
 		Details();
 	};
 	
@@ -77,12 +83,36 @@ class Mouse{
 	Mouse();
 };
 
+void Mouse::Details::setAngleOffset(int v){
+	AngleOffset = v;
+}
+
+int Mouse::Details::getAngleOffset(){
+	return AngleOffset;
+}
+
+void Mouse::Details::setInvX(int v){
+	InvX = v;
+}
+
+int Mouse::Details::getInvX(){
+	return InvX;
+}
+
+void Mouse::Details::setInvY(int v){
+	InvY = v;
+}
+
+int Mouse::Details::getInvY(){
+	return InvY;
+}
+
 void Mouse::Details::setEmulateWheel(int v){
 	EmulateWheel = v;
 }
 
 int Mouse::Details::getEmulateWheel(){
-	return EmulateWheelTimeout;
+	return EmulateWheel;
 }
 
 void Mouse::Details::setEmulateWheelTimeout(int v){
@@ -137,6 +167,7 @@ void Mouse::Details::setVendor(string v){
 void Mouse::Details::setName(string n){
 	name = n;
 	Emulate3Buttons = 0;
+	EmulateWheel = 0;
 }
 
 void Mouse::Details::setDevice(string d){
@@ -162,6 +193,31 @@ void Mouse::loadState(){
 		button3->setValue(0,1);
 		timeout->setEnabled();
 	}
+	timeout->setValue(d[i]->getEmulate3Timeout());
+
+	int w = d[i]->getEmulateWheel();
+	if(w==0){
+		wheel->setValue(0,0);
+		wheel->setValue(1,1);
+		wheeltimeout->setDisabled();
+	}else{
+		wheel->setValue(1,0);
+		wheel->setValue(0,1);
+		wheeltimeout->setEnabled();
+	}
+	wheeltimeout->setValue(d[i]->getEmulateWheelTimeout());
+	if(d[i]->getInvX()){
+		InvX->setChecked(true);
+	}else{
+		InvX->setChecked(false);
+	}
+	
+	if(d[i]->getInvY()){
+		InvY->setChecked(true);
+	}else{
+		InvY->setChecked(false);
+	}
+	AngleOffset->setValue(d[i]->getAngleOffset());
 }
 
 void Mouse::saveState(){
@@ -172,7 +228,6 @@ void Mouse::saveState(){
 	string b3 = button3->selectedLabel();
 
 	b3 = b3.erase(b3.find('&'),b3.find('&')+1);
-	cout<<b3<<endl;	
 	if(!b3.compare("Yes")){
 		d[i]->setEmulate3(1);
 	}else{
@@ -180,7 +235,27 @@ void Mouse::saveState(){
 	}
 	d[i]->setEmulate3Timeout(timeout->value());
 
-
+	string w = wheel->selectedLabel();
+	w = w.erase(w.find('&'),w.find('&'));
+	
+	if(!w.compare("Yes")){
+		d[i]->setEmulateWheel(1);
+	}else{
+		d[i]->setEmulateWheel(0);
+	}
+	d[i]->setEmulateWheelTimeout(wheeltimeout->value());
+	if(InvX->isChecked()){
+		cout<<"In here";
+		d[i]->setInvX(1);
+	}else{
+		d[i]->setInvX(0);
+	}
+	if(InvY->isChecked()){
+		d[i]->setInvY(1);
+	}else{
+		d[i]->setInvY(0);
+	}
+	d[i]->setAngleOffset(AngleOffset->value());
 }
 void Mouse::getProductVendor(){
 	string pv = line.substr(line.find_first_of('/')+1,line.find_last_of('/'));

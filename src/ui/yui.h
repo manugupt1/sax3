@@ -196,6 +196,7 @@ namespace UI{
 		int value();
 		void setDisabled();
 		void setEnabled();
+		void setValue(int);
 	};
 
 //YCHECKBOX
@@ -206,6 +207,7 @@ namespace UI{
 		yCheckBox(yHLayout*,string,bool);
 		yCheckBox(yVLayout*,string,bool);
 		bool isChecked();
+		void setChecked(bool);
 	};
 }
 #endif

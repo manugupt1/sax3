@@ -374,6 +374,10 @@ namespace UI{
 	int yIntField::value(){
 		return field->value();
 	}
+	void yIntField::setValue(int value){
+		field->setValue(value);
+	}
+
 	void yIntField::setDisabled(){
 		return field->setDisabled();
 	}
@@ -383,15 +387,21 @@ namespace UI{
 
 	yCheckBox::yCheckBox(yDialog * parent,string text,bool checked){
 		cb = YUI::widgetFactory()->createCheckBox(parent->getElement(),text,checked);
+		cb->setNotify(true);
 	}
 	yCheckBox::yCheckBox(yHLayout * parent,string text,bool checked){
 		cb = YUI::widgetFactory()->createCheckBox(parent->getElement(),text,checked);
+		cb->setNotify(true);
 	}
 	yCheckBox::yCheckBox(yVLayout * parent,string text,bool checked){
 		cb = YUI::widgetFactory()->createCheckBox(parent->getElement(),text,checked);
+		cb->setNotify(true);
 	}
 	bool yCheckBox::isChecked(){
 		return cb->isChecked();
+	}
+	void yCheckBox::setChecked(bool v=true){
+		cb->setChecked(v);
 	}
 
 }
