@@ -81,6 +81,7 @@ class Mouse{
 	bool saveConf();
 	bool respondToEvent();
 	Mouse();
+	~Mouse();
 };
 
 void Mouse::Details::setAngleOffset(int v){
@@ -329,6 +330,27 @@ void Mouse::initUI(){
 	okButton = factory->createPushButton(buttonLayout,"Save");
 	cancelButton = factory->createPushButton(buttonLayout,"Close");
 }
+Mouse::~Mouse(){
+	delete cancelButton;
+	delete okButton;
+	delete buttonLayout;
+	delete AngleOffset;
+	delete InvY;
+	delete InvX;
+	delete wheeltimeout;
+	delete wheel;
+	delete enableWheelLabel;
+	delete enableWheelLayout;
+	delete wheelLabel;
+	delete button3;
+	delete enableButton3Label;
+	delete enableButton3Layout;
+	delete button3Label;
+	delete mouseList;
+	delete hl1;
+	delete vl1;
+	delete dialog;
+}
 
 void Mouse::fillUpMouseList(){
 	for(int i=0;i<d.size();i++){
@@ -489,5 +511,6 @@ int main(){
 	m->autodetect();
 	m->initUI();
 	m->respondToEvent();
+	delete m;
 	return 0;
 }

@@ -81,6 +81,7 @@ class keyboard{
 	bool simpleWriteConf();
 	bool expertWriteConf();
 	void loadConf();
+	~keyboard();
 };
 
 keyboard::keyboard(){
@@ -185,6 +186,34 @@ void keyboard::drawExpertMode(){
 	saveButton = factory->createPushButton(buttonLayout,_("&Ok"));
 	cancelButton = factory->createPushButton(buttonLayout,_("&Cancel"));
 	loadExpertConf();
+}
+
+keyboard::~keyboard(){
+	delete cancelButton;
+	delete saveButton;
+	delete activateMode;
+	delete buttonLayout;
+	delete deleteGroup;
+	delete groupTable;
+	delete groupLayout;
+	delete addGroup;
+	delete groupOptions;
+	delete groupCategory;
+	delete addGroupLayout;
+	delete label1;
+	delete modelSelect;
+	delete deleteLayoutVariant;
+	delete downLayout;
+	delete upLayout;
+	delete upDown1;
+	delete layoutTable;
+	delete layoutLayout;
+	delete addLayoutVariant;
+	delete variantSelect;
+	delete layoutSelect;
+	delete upperLayout;
+	delete mainLayout;
+	delete dialog;
 }
 
 bool keyboard::respondToEvent(){

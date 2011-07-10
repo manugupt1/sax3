@@ -167,6 +167,7 @@ namespace UI{
 		void deleteSelected();
 		YTable * getElement();
 		void swap(int);
+		~yTable();
 	};
 
 //YRADIOBUTTONGROUP
@@ -184,6 +185,7 @@ namespace UI{
 		void addButton(std::string);
 		bool isButton(int,YWidget*);
 		void setValue(int,int);
+		~yRadioButtonGroup();
 	};
 
 //YINTFIELD 
@@ -197,6 +199,7 @@ namespace UI{
 		void setDisabled();
 		void setEnabled();
 		void setValue(int);
+		~yIntField();
 	};
 
 //YCHECKBOX
@@ -208,6 +211,7 @@ namespace UI{
 		yCheckBox(yVLayout*,string,bool);
 		bool isChecked();
 		void setChecked(bool);
+		~yCheckBox();
 	};
 }
 #endif

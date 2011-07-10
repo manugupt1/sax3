@@ -272,7 +272,7 @@ namespace UI{
 			}
 			++ii;++it;++ir;
 		}
-//Pos > 0 signifies move down, pos < 0 signifies up
+	//Pos > 0 signifies move down, pos < 0 signifies up
 		if(pos>0){
 			if(it==table->itemsEnd()) {return;}
 			while(it!=table->itemsEnd() && pos!=0){
@@ -326,6 +326,10 @@ namespace UI{
 	std::vector< std::pair<string,string> > yTable::getItems(){
 		return i;
 	}
+
+	yTable::~yTable(){
+		delete table;
+	}
 	//YTABLE FUNCTION ENDS
 	
 	//YRADIOBUTTONGROUP FUNCTION STARTS
@@ -361,6 +365,11 @@ namespace UI{
 	void yRadioButtonGroup::setValue(int index,int value){
 		buttonList[index]->setValue(value);
 	}
+	yRadioButtonGroup::~yRadioButtonGroup(){
+		delete layout2;
+		delete layout1;
+		delete group;
+	}
 
 	yIntField::yIntField(yDialog* parent,string text,int min,int max,int value){
 		field = YUI::widgetFactory()->createIntField(parent->getElement(),text,min,max,value);
@@ -384,6 +393,9 @@ namespace UI{
 	void yIntField::setEnabled(){
 		return field->setEnabled();
 	}
+	yIntField::~yIntField(){
+		delete field;
+	}
 
 	yCheckBox::yCheckBox(yDialog * parent,string text,bool checked){
 		cb = YUI::widgetFactory()->createCheckBox(parent->getElement(),text,checked);
@@ -402,6 +414,9 @@ namespace UI{
 	}
 	void yCheckBox::setChecked(bool v=true){
 		cb->setChecked(v);
+	}
+	yCheckBox::~yCheckBox(){
+		delete cb;
 	}
 
 }

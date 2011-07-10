@@ -5,8 +5,10 @@
 #include "ui.h"
 
 namespace UI{
+	class YUIFactory;
 	class UIFactory {
 		public:
+
 			virtual Dialog * createDialog(int,int) = 0;
 
 			virtual HLayout * createHLayout(HLayout *)=0;
@@ -54,6 +56,8 @@ namespace UI{
 			virtual  CheckBox * createCheckBox(VLayout *,std::string,bool)=0;
 			virtual  CheckBox * createCheckBox(Dialog *,std::string,bool)=0;
 	};	
+	
 }
+
 
 #endif
