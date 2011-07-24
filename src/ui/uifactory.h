@@ -55,6 +55,7 @@ namespace UI{
 			virtual  CheckBox * createCheckBox(HLayout *,std::string,bool)=0;
 			virtual  CheckBox * createCheckBox(VLayout *,std::string,bool)=0;
 			virtual  CheckBox * createCheckBox(Dialog *,std::string,bool)=0;
+
 	};	
 	
 }

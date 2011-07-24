@@ -85,6 +85,7 @@ let int = /[0-9]+/
  *************************************************************************)
 
 
+
 (* View: entry_int
  * This matches an entry which takes a single integer for an argument
  *)
@@ -119,12 +120,12 @@ let entry_str (canon:string) (re:regexp) =
         [ indent . del re canon . label canon
           . sep_spc . quoted_string_val . eol ]
 
-(* tiew: entry_generic
+(* View: entry_generic
  * An entry without a specific handler. Store everything after the keyword,
  * cropping whitespace at both ends.
  *)
 let entry_generic  = [ indent . key generic_entry_re
-                       . sep_spc . quoted_string_val. eol ]
+                       . sep_spc . store to_eol . eol ]
 
 (* View: option *)
 let option = [ indent . del /[oO]ption/ "Option" . label "Option" . sep_spc
@@ -161,6 +162,15 @@ let default_depth = entry_int "DefaultDepth" /[dD]efault[dD]epth/
 
 (* View: device *)
 let device = entry_str "Device" /[dD]evice/
+
+(* View: MatchProduct *)
+let match_product = entry_str "MatchProduct" /[mM]atchProduct/
+
+(* View: MatchVendor *)
+let match_vendor = entry_str "MatchVendor" /[mM]atchVendor/
+
+(* View: MatchIsPointer *)
+let match_is_pointer = entry_str "MatchIsPointer" /[mM]atchIsPointer/
 
 (************************************************************************
  * Group:                          DISPLAY SUBSECTION
@@ -261,9 +271,9 @@ let section_entry = option |
                     identifier |
                     videoram |
                     default_depth |
-                    device |
+                    device | match_product | match_vendor | match_is_pointer |
                     entry_generic |
-                    empty | comment
+                    empty | comment 
 
 (************************************************************************
  * View: section
@@ -291,7 +301,7 @@ let lns = ( empty | comment | section )*
 
 (* Variable: filter *)
 let filter = (incl "/etc/X11/xorg.conf") .
-  (incl "/etc/X11/xorg.conf.d/*.conf") . (incl "/etc/xorg.conf") .
+  (incl "/etc/X11/xorg.conf.d/*.conf") .
   Util.stdexcl
 
 let xfm = transform lns filter
