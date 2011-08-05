@@ -415,7 +415,7 @@ bool Mouse::saveConf(){
 	if(cnt)
 		line.assign(match[j]);
 	else
-		line.assign("/files/etc/X11/xorg.conf.d/99-saxkeyboard.conf/InputClass");
+		line.assign("/files/etc/X11/xorg.conf.d/99-saxmouse.conf/InputClass");
 
 
 	subPath.assign("InputClass");

@@ -2,6 +2,7 @@
 #include<dirent.h>
 #include<stdlib.h>
 #include<string>
+#include<string.h>
 #include<fstream>
 #include<vector>
 extern "C"{
@@ -22,24 +23,50 @@ class Monitors{
 	UI::yDialog * dialog;
 	UI::yVLayout * vL1;
 	UI::yHLayout * hL1;
-	UI::yPushButton * ok,*cancel;
+	UI::yPushButton * ok,*cancel,*Advanced;
 	UI::yComboBox * driverCombo,*resolutionCombo,*depthCombo;
 	UI::yIntField * horizontalLow,*horizontalHigh;
 	UI::yIntField * verticalLow,*verticalHigh;
+	UI::yCheckBox * disableDPMS,*enableAdvance;
 	void fillUpDriverCombo();
 	void fillUpResolutionCombo();
 	void fillUpDepthCombo();
 	void separateResolution(string&);
+	void saveConf();
+	string calculateCVT();
+	bool writeConf(string &line,bool newNode,string parameter,bool isLastParameter,string extraParam,string value);
 	public:
 	Monitors();
 	void detectDrivers();
 	void detectResolution();
 	void initUI();
+	bool respondToEvent();
 };
 
+string Monitors::calculateCVT(){
+	string cvt = "cvt ";
+	string resolution = resolutionCombo->value();
+	string x = resolution.substr(0,resolution.find('x'));
+	string y = resolution.substr(resolution.find('x')+1,resolution.size());
+	cvt.append(x);
+	cvt.push_back(' ');
+	cvt.append(y);
+	cvt.append(" > /tmp/cvt.tmp");
+	system(cvt.c_str());
+	ifstream file("/tmp/cvt.tmp");
+	if(file.is_open()){
+		if(file.good()){
+			getline(file,cvt);
+			getline(file,cvt);
+		}
+	}
+	cvt = cvt.substr(cvt.find(' ')+1,string::npos);
+	cout<<cvt;
+	return cvt;
+}
 void Monitors::fillUpDepthCombo(){
-	depthCombo->addItem("16");
 	depthCombo->addItem("24");
+	depthCombo->addItem("16");
 }
 
 void Monitors::fillUpResolutionCombo(){
@@ -143,9 +170,82 @@ void Monitors::initUI(){
 	fillUpResolutionCombo();
 	depthCombo = factory->createComboBox(hL1,"Depth");
 	fillUpDepthCombo();
+	enableAdvance = factory->createCheckBox(hL1,"Enable Advanced Settings",false);
+	Advanced = factory->createPushButton(hL1,"Advanced Settings");
 	ok = factory->createPushButton(hL1,"Ok");
 	cancel = factory->createPushButton(hL1,"Cancel");
-	dialog->wait();
+}
+
+bool Monitors::respondToEvent(){
+	while(1){
+		dialog->wait();
+		if(dialog->eventWidget()==enableAdvance->getElement()){
+			if(!enableAdvance->isChecked()){
+				Advanced->setEnabled(false);
+			}else
+				Advanced->setEnabled(true);
+		
+		}
+		if(dialog->eventWidget()==ok->getElement()){
+			saveConf();
+			break;
+		}
+		if(dialog->eventWidget()==cancel->getElement()){
+			break;
+		}
+	};
+}
+
+void Monitors::saveConf(){
+	char **match;int i=0,j=0,pos=0;string line,subPath,pathParam;
+        int error;
+
+        int cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d/*/Monitor/*",&match);
+
+        for(i=0;i<cnt-1;i++){
+                if(strcmp(match[i],match[i+1])<0)
+                        j = i;
+        }
+
+        if(cnt)
+                line.assign(match[j]);
+        else
+                line.assign("/files/etc/X11/xorg.conf.d/99-saxmonitors.conf/Monitor");
+
+        subPath.assign("Monitor");
+        pos = line.find(subPath);
+        line.erase(pos+subPath.length(),line.size());
+	
+	writeConf(line,false,"Identifier",false,"","SaX3-monitor") ? cout<<"no error\n" : cout<<"error\n";
+
+	string cvt = calculateCVT();
+	
+	writeConf(line,true,"Modeline",false,"",cvt) ? cout<<"no error\n":cout<<"error\n";
+	aug_save(aug);
+}
+
+
+bool Monitors::writeConf(string &line,bool newNode,string parameter,bool isLastParameter,string extraParam,string value){
+        string pathParam;int error;
+        pathParam.assign(line);
+        if(newNode==true){
+                pathParam.append("[last()+1]/");
+        }else{
+                pathParam.append("[last()]/");
+        }
+        pathParam.append(parameter);
+        if(isLastParameter){
+                pathParam.append("[last()+1]");
+        }else{
+                pathParam.append("[last()]");
+        }
+        pathParam.append(extraParam);
+        cout<<pathParam<<endl;
+        error = aug_set(aug,pathParam.c_str(),value.c_str());
+
+        if(error==-1)
+                return false;
+        return true;
 }
 
 
@@ -154,6 +254,6 @@ int main(){
 	m->detectDrivers();
 	m->detectResolution();
 	m->initUI();
-	
+	m->respondToEvent();	
 }
 	

@@ -120,6 +120,9 @@ namespace UI{
 	yPushButton::~yPushButton(){
 		delete button;
 	}
+	void yPushButton::setEnabled(bool val){
+		button->setEnabled(val);
+	}
 
 
 	//YPUSHBUTTION FUNCTIONS END
@@ -418,5 +421,7 @@ namespace UI{
 	yCheckBox::~yCheckBox(){
 		delete cb;
 	}
-
+	YCheckBox* yCheckBox::getElement(){
+		return cb;
+	}
 }

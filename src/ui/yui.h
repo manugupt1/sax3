@@ -106,6 +106,7 @@ namespace UI{
 		yPushButton(yHLayout *,std::string text);
 		yPushButton(yVLayout *,std::string text);
 		YPushButton * getElement();
+		void setEnabled(bool);
 		string value();
 		~yPushButton();
 	};
@@ -211,6 +212,7 @@ namespace UI{
 		yCheckBox(yVLayout*,string,bool);
 		bool isChecked();
 		void setChecked(bool);
+		YCheckBox* getElement();
 		~yCheckBox();
 	};
 }
