@@ -216,11 +216,72 @@ void Monitors::saveConf(){
         pos = line.find(subPath);
         line.erase(pos+subPath.length(),line.size());
 	
-	writeConf(line,false,"Identifier",false,"","SaX3-monitor") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,true,"Identifier",false,"","SaX3-monitor") ? cout<<"no error\n" : cout<<"error\n";
+
+	if(enableAdvance->isChecked()){
+		cout<<"In Enable Advanced";
+		string horiz,vert;
+		char * temp = new char[10];
+		sprintf(temp,"%d",horizontalLow->value());
+		horiz = temp;
+		horiz.append("-");
+		sprintf(temp,"%d",horizontalHigh->value());
+		horiz.append(temp);
+		writeConf(line,false,"HorizSync",false,"",horiz.c_str());
+
+		sprintf(temp,"%d",verticalLow->value());
+		vert = temp;
+		vert.append("-");
+		sprintf(temp,"%d",horizontalHigh->value());
+		vert.append(temp);
+		writeConf(line,false,"VertRefresh",false,"",vert.c_str());
+	}
 
 	string cvt = calculateCVT();
-	
-	writeConf(line,true,"Modeline",false,"",cvt) ? cout<<"no error\n":cout<<"error\n";
+	writeConf(line,false,"Modeline",false,"",cvt) ? cout<<"no error\n":cout<<"error\n";
+
+        cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d/*/Device/*",&match);
+
+        for(i=0;i<cnt-1;i++){
+	                if(strcmp(match[i],match[i+1])<0)
+			                        j = i;
+		        }
+
+        if(cnt)
+	                line.assign(match[j]);
+        else
+	                line.assign("/files/etc/X11/xorg.conf.d/99-saxdevice.conf/Device");
+
+        subPath.assign("Device");
+        pos = line.find(subPath);
+        line.erase(pos+subPath.length(),line.size());
+        writeConf(line,true,"Identifier",false,"","SaX3-device") ? cout<<"no error\n" : cout<<"error\n";
+	string temp = driverCombo->value();
+	cout<<temp;
+        writeConf(line,false,"Driver",false,"",temp.c_str()) ? cout<<"no error\n" : cout<<"error\n";
+
+        cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d/*/Screen/*",&match);
+
+        for(i=0;i<cnt-1;i++){
+                        if(strcmp(match[i],match[i+1])<0)
+                                                j = i;
+                        }
+
+        if(cnt)
+                        line.assign(match[j]);
+        else
+                        line.assign("/files/etc/X11/xorg.conf.d/99-saxscreen.conf/Screen");
+
+        subPath.assign("Screen");
+        pos = line.find(subPath);
+        line.erase(pos+subPath.length(),line.size());
+
+        writeConf(line,true,"Identifier",false,"","SaX3-screen") ? cout<<"no error\n" : cout<<"error\n";
+        writeConf(line,false,"Device",false,"","SaX3-device") ? cout<<"no error\n" : cout<<"error\n";
+        writeConf(line,false,"Monitor",false,"","SaX3-monitor") ? cout<<"no error\n" : cout<<"error\n";
+        writeConf(line,false,"DefaultDepth",false,"",depthCombo->value().c_str()) ? cout<<"no error\n" : cout<<"error\n";
+        writeConf(line,false,"Display",true,"/Depth",depthCombo->value().c_str()) ? cout<<"no error\n" : cout<<"error\n";
+
 	aug_save(aug);
 }
 
