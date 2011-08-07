@@ -177,11 +177,11 @@ let match_is_pointer = entry_str "MatchIsPointer" /[mM]atchIsPointer/
  *************************************************************************)
 
 
-(* View: display_modes *)
+(* View: display_modes 
 let display_modes = [ indent . del /[mM]odes/ "Modes" . label "Modes"
-                      . [ label "mode" . sep_spc . quoted_string_val ]+
+                      . [ label "mode" . sep_spc . entry_generic ]+
                       . eol ]
-
+*)
 (*************************************************************************
  * View: display_entry
  *   Known values for entries in the Display subsection
@@ -204,7 +204,7 @@ let display_entry = entry_int "Depth"    /[dD]epth/ |
                     entry_rgb "Weight"   /[wW]eight/ |
                     entry_xy  "Virtual"  /[vV]irtual/ |
                     entry_xy  "ViewPort" /[vV]iew[pP]ort/ |
-                    display_modes |
+                    entry_str "Modes" /[mM]odes/  |
                     entry_str "Visual"   /[vV]isual/ |
                     entry_rgb "Black"    /[bB]lack/ |
                     entry_rgb "White"    /[wW]hite/ |

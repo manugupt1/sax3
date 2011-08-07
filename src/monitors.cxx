@@ -21,9 +21,9 @@ class Monitors{
 	
 	UI::YUIFactory * factory;
 	UI::yDialog * dialog;
-	UI::yVLayout * vL1;
-	UI::yHLayout * hL1;
-	UI::yPushButton * ok,*cancel,*Advanced;
+	UI::yVLayout * vL1,*vL2,*vL3,*vL4;
+	UI::yHLayout * hL1,*hL2,*hL3,*hL4;
+	UI::yPushButton * ok,*cancel;
 	UI::yComboBox * driverCombo,*resolutionCombo,*depthCombo;
 	UI::yIntField * horizontalLow,*horizontalHigh;
 	UI::yIntField * verticalLow,*verticalHigh;
@@ -157,23 +157,28 @@ void Monitors::detectDrivers(){
 }
 
 void Monitors::initUI(){
-	dialog = factory->createDialog(200,200);
+	dialog = factory->createDialog(60,12);
 	vL1 = factory->createVLayout(dialog);
-	hL1 = factory->createHLayout(vL1);
-	driverCombo = factory->createComboBox(hL1,"Select the driver");	
+	driverCombo = factory->createComboBox(vL1,"Select the driver");	
 	fillUpDriverCombo();
-	horizontalLow = factory->createIntField(hL1,"Horizontal Refresh Rate(min value)",20,40,30);
-	horizontalHigh = factory->createIntField(hL1,"Horizontal Refresh Rate(max value)",20,40,30);
-	verticalLow = factory->createIntField(hL1,"Vertical Refresh Rate(min value)",20,40,30);
-	verticalHigh = factory->createIntField(hL1,"Vertical Refresh Rate(max value)",20,40,30);
+	vL2 = factory->createVLayout(vL1);
+	hL1 = factory->createHLayout(vL2);
 	resolutionCombo = factory->createComboBox(hL1,"Select resolution");
 	fillUpResolutionCombo();
 	depthCombo = factory->createComboBox(hL1,"Depth");
 	fillUpDepthCombo();
-	enableAdvance = factory->createCheckBox(hL1,"Enable Advanced Settings",false);
-	Advanced = factory->createPushButton(hL1,"Advanced Settings");
-	ok = factory->createPushButton(hL1,"Ok");
-	cancel = factory->createPushButton(hL1,"Cancel");
+	enableAdvance = factory->createCheckBox(vL1,"Enable Advanced Settings",false);
+	
+	hL2 = factory->createHLayout(vL1);
+	horizontalLow = factory->createIntField(hL2,"Horizontal Refresh Rate(min value)",20,40,30);
+	horizontalHigh = factory->createIntField(hL2,"Horizontal Refresh Rate(max value)",20,40,30);
+	hL3 = factory->createHLayout(vL1);
+	verticalLow = factory->createIntField(hL3,"Vertical Refresh Rate(min value)",20,40,30);
+	verticalHigh = factory->createIntField(hL3,"Vertical Refresh Rate(max value)",20,40,30);
+
+	hL4 = factory->createHLayout(vL1);
+	ok = factory->createPushButton(hL4,"Ok");
+	cancel = factory->createPushButton(hL4,"Cancel");
 }
 
 bool Monitors::respondToEvent(){
@@ -181,10 +186,16 @@ bool Monitors::respondToEvent(){
 		dialog->wait();
 		if(dialog->eventWidget()==enableAdvance->getElement()){
 			if(!enableAdvance->isChecked()){
-				Advanced->setEnabled(false);
-			}else
-				Advanced->setEnabled(true);
-		
+				horizontalLow->setDisabled();
+				horizontalHigh->setDisabled();
+				verticalHigh->setDisabled();
+				verticalLow->setDisabled();
+			}else{
+				horizontalLow->setEnabled();
+				horizontalHigh->setEnabled();
+				verticalHigh->setEnabled();
+				verticalLow->setEnabled();
+			}
 		}
 		if(dialog->eventWidget()==ok->getElement()){
 			saveConf();
@@ -281,7 +292,8 @@ void Monitors::saveConf(){
         writeConf(line,false,"Monitor",false,"","SaX3-monitor") ? cout<<"no error\n" : cout<<"error\n";
         writeConf(line,false,"DefaultDepth",false,"",depthCombo->value().c_str()) ? cout<<"no error\n" : cout<<"error\n";
         writeConf(line,false,"Display",true,"/Depth",depthCombo->value().c_str()) ? cout<<"no error\n" : cout<<"error\n";
-
+	string mode = resolutionCombo->value();mode.append("_60.00");
+        writeConf(line,false,"Display",false,"/Modes",mode.c_str()) ? cout<<"no error\n" : cout<<"error\n";
 	aug_save(aug);
 }
 
