@@ -154,13 +154,13 @@ string Mouse::Details::getName(){
 
 void Mouse::Details::setProduct(string p){
 	product = p;
-	for(int i=0;i<4-product.size();i++)
+	for(unsigned i=0;i<4-product.size();i++)
 		product.insert(product.begin(),'0');
 }
 
 void Mouse::Details::setVendor(string v){
 	vendor = v;
-	for(int i=0;i<4-vendor.size();i++){
+	for(unsigned i=0;i<4-vendor.size();i++){
 		vendor.insert(vendor.begin(),'0');
 	}
 }
@@ -180,7 +180,7 @@ Mouse::Details::Details(){
 }
 
 void Mouse::loadState(){
-	int i;
+	unsigned i;
 	for(i=0;i<d.size();i++)
 		if(d[i]->getName()==mouseList->value())
 			break;
@@ -222,7 +222,7 @@ void Mouse::loadState(){
 }
 
 void Mouse::saveState(){
-	int i;
+	unsigned i;
 	for(i=0;i<d.size();i++)
 		if(d[i]->getName()==mouseList->value())
 			break;
@@ -353,8 +353,8 @@ Mouse::~Mouse(){
 }
 
 void Mouse::fillUpMouseList(){
-	for(int i=0;i<d.size();i++){
-		if(d[i]->getName().find("ETPS")==-1 && d[i]->getName().find("ALPS")==-1)
+	for(unsigned i=0;i<d.size();i++){
+		if(d[i]->getName().find("ETPS")==string::npos && d[i]->getName().find("ALPS")==string::npos)
 			mouseList->addItem(d[i]->getName());
 	}
 }
@@ -428,7 +428,7 @@ bool Mouse::saveConf(){
 	cout<<Identifier;
 	writeConf(line,true,"Identifier",false,"",Identifier.c_str()) ? cout<<"no error\n" : cout<<"error\n";
 
-	for(i=0;i<d.size();i++){
+	for(unsigned i=0;i<d.size();i++){
 		if(mouseList->value()==d[i]->getName()){
 			break;
 		}
