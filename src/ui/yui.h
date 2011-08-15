@@ -134,6 +134,8 @@ namespace UI{
 		string value();
 		void setValue(string&);
 		void deleteAllItems();
+		void setDisabled();
+		void setEnabled();
 		~yComboBox();
 
 	};	

@@ -1,15 +1,16 @@
-#include<iostream>
+
 #include<dirent.h>
 #include<stdlib.h>
 #include<string>
 #include<string.h>
+#include<stdio.h>
 #include<fstream>
 #include<vector>
 extern "C"{
 #include<augeas.h>
 }
 
-#include<ui/yuifactory.h>
+#include"ui/yuifactory.h"
 
 using namespace std;
 
@@ -22,12 +23,13 @@ class Monitors{
 	UI::YUIFactory * factory;
 	UI::yDialog * dialog;
 	UI::yVLayout * vL1,*vL2,*vL3,*vL4;
-	UI::yHLayout * hL1,*hL2,*hL3,*hL4;
+	UI::yHLayout * hL1,*hL2,*hL3,*hL4,*hL5;
 	UI::yPushButton * ok,*cancel;
 	UI::yComboBox * driverCombo,*resolutionCombo,*depthCombo;
 	UI::yIntField * horizontalLow,*horizontalHigh;
 	UI::yIntField * verticalLow,*verticalHigh;
-	UI::yCheckBox * disableDPMS,*enableAdvance;
+	UI::yCheckBox * disableDPMS,*enableAdvance,*customCVT;
+	UI::yIntField * xAxis,*yAxis,*refreshRate;
 	void fillUpDriverCombo();
 	void fillUpResolutionCombo();
 	void fillUpDepthCombo();
@@ -45,12 +47,29 @@ class Monitors{
 
 string Monitors::calculateCVT(){
 	string cvt = "cvt ";
+	if(!customCVT->isChecked()){
 	string resolution = resolutionCombo->value();
 	string x = resolution.substr(0,resolution.find('x'));
 	string y = resolution.substr(resolution.find('x')+1,resolution.size());
 	cvt.append(x);
 	cvt.push_back(' ');
 	cvt.append(y);
+
+	}else{
+		char * x = new char[10];
+		sprintf(x,"%d",xAxis->value());
+		cvt.append(x);	
+		cvt.push_back(' ');		
+		char * y = new char[10];
+		sprintf(y,"%d",yAxis->value());
+		cvt.append(y);
+		cvt.push_back(' ');\
+		char * ref = new char[10];
+		sprintf(ref,"%d",refreshRate->value());
+		cvt.append(ref);
+		cvt.push_back(' ');
+
+	}
 	cvt.append(" > /tmp/cvt.tmp");
 	system(cvt.c_str());
 	ifstream file("/tmp/cvt.tmp");
@@ -171,11 +190,23 @@ void Monitors::initUI(){
 	
 	hL2 = factory->createHLayout(vL1);
 	horizontalLow = factory->createIntField(hL2,"Horizontal Refresh Rate(min value)",20,40,30);
+	horizontalLow->setDisabled();
 	horizontalHigh = factory->createIntField(hL2,"Horizontal Refresh Rate(max value)",20,40,30);
+	horizontalHigh->setDisabled();
 	hL3 = factory->createHLayout(vL1);
 	verticalLow = factory->createIntField(hL3,"Vertical Refresh Rate(min value)",20,40,30);
+	verticalLow->setDisabled();
 	verticalHigh = factory->createIntField(hL3,"Vertical Refresh Rate(max value)",20,40,30);
-
+	verticalHigh->setDisabled();
+	
+	customCVT = factory->createCheckBox(vL1,"I want my own CVT",false);
+	hL5 = factory->createHLayout(vL1);
+	xAxis = factory->createIntField(hL5,"X Axis",400,1280,4000);
+	xAxis->setDisabled();
+	yAxis = factory->createIntField(hL5,"Y Axis",400,1280,3000);
+	yAxis->setDisabled();
+	refreshRate = factory->createIntField(hL5,"Refresh Rate",20,60,200);
+	refreshRate->setDisabled();
 	hL4 = factory->createHLayout(vL1);
 	ok = factory->createPushButton(hL4,"Ok");
 	cancel = factory->createPushButton(hL4,"Cancel");
@@ -197,6 +228,17 @@ bool Monitors::respondToEvent(){
 				verticalLow->setEnabled();
 			}
 		}
+		if(dialog->eventWidget()==customCVT->getElement()){
+			if(!customCVT->isChecked()){
+				xAxis->setDisabled();
+				yAxis->setDisabled();
+				refreshRate->setDisabled();
+			}else{
+				xAxis->setEnabled();
+				yAxis->setEnabled();
+				refreshRate->setEnabled();
+			}
+		}
 		if(dialog->eventWidget()==ok->getElement()){
 			saveConf();
 			break;
@@ -205,6 +247,7 @@ bool Monitors::respondToEvent(){
 			break;
 		}
 	};
+	return false;
 }
 
 void Monitors::saveConf(){
@@ -247,8 +290,9 @@ void Monitors::saveConf(){
 		vert.append(temp);
 		writeConf(line,false,"VertRefresh",false,"",vert.c_str());
 	}
-
+	
 	string cvt = calculateCVT();
+	
 	writeConf(line,false,"Modeline",false,"",cvt) ? cout<<"no error\n":cout<<"error\n";
 
         cnt = aug_match(aug,"/files/etc/X11/xorg.conf.d/*/Device/*",&match);
@@ -327,6 +371,8 @@ int main(){
 	m->detectDrivers();
 	m->detectResolution();
 	m->initUI();
-	m->respondToEvent();	
+	m->respondToEvent();
+	delete m;
+	return 0;
 }
 	

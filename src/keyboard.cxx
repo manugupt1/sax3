@@ -121,6 +121,9 @@ keyboard::keyboard(){
 	aug=NULL;root=NULL;flag=0;loadpath=NULL;
 	aug = aug_init(root,loadpath,flag);
 	colNo=0;
+	if(aug==NULL){
+		cout<<"Cannot be opened";
+	}
 
 }
 

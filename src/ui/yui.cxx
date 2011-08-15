@@ -174,6 +174,12 @@ namespace UI{
 	yComboBox::~yComboBox(){
 		delete comboBox;
 	}
+	void yComboBox::setDisabled(){
+		comboBox->setEnabled(false);
+	}
+	void yComboBox::setEnabled(){
+		comboBox->setEnabled(true);
+	}
 
 
 	//YCOMBOBOX FUNCION ENDS

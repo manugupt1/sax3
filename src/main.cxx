@@ -59,6 +59,7 @@ class Init{
 		err = aug_load(aug);
 		
 		if(dp!=NULL){
+			cout<<"DP IF";
 			while(ep = readdir(dp)){
 				if(strcmp(ep->d_name,".") && strcmp(ep->d_name,"..")){
 				
