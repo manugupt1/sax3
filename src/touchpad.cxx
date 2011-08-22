@@ -102,6 +102,7 @@ void touchpad::respondToEvent(){
 		if(okButton->getElement()==dialog->eventWidget()){
 			if(TapButton1Click->value().compare(TapButton2Click->value()) && TapButton1Click->value().compare(TapButton3Click->value()) && TapButton1Click->value().compare(TapButton3Click->value()) && TapButton2Click->value().compare(TapButton3Click->value())){
 				saveConf();
+				break;
 			}else continue;
 		}
 		if(CircularScroll->isChecked())
@@ -146,44 +147,44 @@ bool touchpad::saveConf(){
 	writeConf(line,false,"MatchIsTouchpad",false,"","on") ? cout<<"no error\n" : cout<<"error\n";
 
 	
-	writeConf(line,false,"Option",false,"","TapButton1") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",true,"","TapButton1") ? cout<<"no error\n" : cout<<"error\n";
 	if(TapButton1->isChecked()){
 		writeConf(line,false,"Option",false,"/value","1") ? cout<<"no error\n" : cout<<"error\n";
 	}else{
-		writeConf(line,false,"Option",false,"/value","0") ? cout<<"no error\n" : cout<<"error\n";
+		writeConf(line,false,"Option",false,"/value",TapButton1Click->value().c_str()) ? cout<<"no error\n" : cout<<"error\n";
 	}
 	
-	writeConf(line,false,"Option",false,"","TapButton2") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",true,"","TapButton2") ? cout<<"no error\n" : cout<<"error\n";
 	if(TapButton1->isChecked()){
-		writeConf(line,false,"Option",false,"/value","1") ? cout<<"no error\n" : cout<<"error\n";
+		writeConf(line,false,"Option",false,"/value","2") ? cout<<"no error\n" : cout<<"error\n";
 	}else{
-		writeConf(line,false,"Option",false,"/value","0") ? cout<<"no error\n" : cout<<"error\n";
-	}
-
-	
-	writeConf(line,false,"Option",false,"","TapButton3") ? cout<<"no error\n" : cout<<"error\n";
-	if(TapButton1->isChecked()){
-		writeConf(line,false,"Option",false,"/value","1") ? cout<<"no error\n" : cout<<"error\n";
-	}else{
-		writeConf(line,false,"Option",false,"/value","0") ? cout<<"no error\n" : cout<<"error\n";
+		writeConf(line,false,"Option",false,"/value",TapButton2Click->value().c_str()) ? cout<<"no error\n" : cout<<"error\n";
 	}
 
 	
-	writeConf(line,false,"Option",false,"","VertEdgeScroll") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",true,"","TapButton3") ? cout<<"no error\n" : cout<<"error\n";
+	if(TapButton1->isChecked()){
+		writeConf(line,false,"Option",false,"/value","3") ? cout<<"no error\n" : cout<<"error\n";
+	}else{
+		writeConf(line,false,"Option",false,"/value",TapButton3Click->value().c_str()) ? cout<<"no error\n" : cout<<"error\n";
+	}
+
+	
+	writeConf(line,false,"Option",true,"","VertEdgeScroll") ? cout<<"no error\n" : cout<<"error\n";
 	if(VerticalEdgeScroll->isChecked()){
 		writeConf(line,false,"Option",false,"/value","on") ? cout<<"no error\n" : cout<<"error\n";
 	}else{
 		writeConf(line,false,"Option",false,"/value","off") ? cout<<"no error\n" : cout<<"error\n";
 	}
 
-	writeConf(line,false,"Option",false,"","HorizEdgeScroll") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",true,"","HorizEdgeScroll") ? cout<<"no error\n" : cout<<"error\n";
 	if(VerticalEdgeScroll->isChecked()){
 		writeConf(line,false,"Option",false,"/value","on") ? cout<<"no error\n" : cout<<"error\n";
 	}else{
 		writeConf(line,false,"Option",false,"/value","off") ? cout<<"no error\n" : cout<<"error\n";
 	}
 
-	writeConf(line,false,"Option",false,"","VertTwoFingerScroll") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",true,"","VertTwoFingerScroll") ? cout<<"no error\n" : cout<<"error\n";
 	if(VerticalTwoFingerScroll->isChecked()){
 		writeConf(line,false,"Option",false,"/value","on") ? cout<<"no error\n" : cout<<"error\n";
 	}else{
@@ -191,14 +192,14 @@ bool touchpad::saveConf(){
 	}
 
 
-	writeConf(line,false,"Option",false,"","HorizTwoFingerScroll") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",true,"","HorizTwoFingerScroll") ? cout<<"no error\n" : cout<<"error\n";
 	if(HorizontalTwoFingerScroll->isChecked()){
 		writeConf(line,false,"Option",false,"/value","on") ? cout<<"no error\n" : cout<<"error\n";
 	}else{
 		writeConf(line,false,"Option",false,"/value","off") ? cout<<"no error\n" : cout<<"error\n";
 	}
 
-	writeConf(line,false,"Option",false,"","CircularScrolling") ? cout<<"no error\n" : cout<<"error\n";
+	writeConf(line,false,"Option",true,"","CircularScrolling") ? cout<<"no error\n" : cout<<"error\n";
 	if(CircularScroll->isChecked()){
 		writeConf(line,false,"Option",false,"/value","on") ? cout<<"no error\n" : cout<<"error\n";
 		writeConf(line,false,"Option",false,"","CircScrollTrigger") ? cout<<"no error\n" : cout<<"error\n";
