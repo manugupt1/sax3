@@ -21,9 +21,9 @@ class touchpad{
 	UI::YUIFactory * factory;
 	UI::yDialog * dialog;
 	UI::yVLayout * vL1;
-	UI::yHLayout * hL1;
+	UI::yHLayout * hL1,*thL1,*thL2,*thL3;
 	UI::yCheckBox * TapButton1,*TapButton2,*TapButton3,*VerticalEdgeScroll,*HorizontalEdgeScroll,*VerticalTwoFingerScroll,*HorizontalTwoFingerScroll,*CircularScroll;
-	UI::yComboBox * CircularLocation;
+	UI::yComboBox * CircularLocation,*TapButton1Click,*TapButton2Click,*TapButton3Click;
 	UI::yPushButton * cancelButton,*okButton;
 
 	bool saveConf();
@@ -49,16 +49,36 @@ touchpad::touchpad(){
 void touchpad::initUI(){
 	dialog = factory->createDialog(20,20);
 	vL1 = factory->createVLayout(dialog);
-	TapButton1 = factory->createCheckBox(vL1,"Emulate Mouse Button with a single click",false);
-	TapButton2 = factory->createCheckBox(vL1,"Emulate Mouse Button with a double click",false);
-	TapButton3 = factory->createCheckBox(vL1,"Emulate Mouse Button with a triple click",false);
+	thL1 = factory->createHLayout(vL1);
+	TapButton1 = factory->createCheckBox(thL1,"Emulate Mouse Button 1",false);
+	TapButton1Click = factory->createComboBox(thL1,"No Of Clicks");
+	TapButton1Click->setDisabled();
+	TapButton1Click->addItem("1");
+	TapButton1Click->addItem("2");
+	TapButton1Click->addItem("3");
+	
+	thL2 = factory->createHLayout(vL1);
+	TapButton2 = factory->createCheckBox(thL2,"Emulate Mouse Button 2",false);
+	TapButton2Click = factory->createComboBox(thL2,"No Of Clicks");
+	TapButton2Click->setDisabled();
+	TapButton2Click->addItem("2");
+	TapButton2Click->addItem("1");
+	TapButton2Click->addItem("3");
+
+	thL3 = factory->createHLayout(vL1);
+	TapButton3 = factory->createCheckBox(thL3,"Emulate Mouse Button 3",false);
+	TapButton3Click = factory->createComboBox(thL3,"No Of Clicks");
+	TapButton3Click->setDisabled();
+	TapButton3Click->addItem("3");
+	TapButton3Click->addItem("2");
+	TapButton3Click->addItem("1");
+
 	VerticalEdgeScroll = factory->createCheckBox(vL1,"Enable Vertical Edge Scrolling",true);
 	HorizontalEdgeScroll = factory->createCheckBox(vL1,"Enable horizontal Edge Scrolling",true);
 	VerticalTwoFingerScroll = factory->createCheckBox(vL1,"Enable 2 finger Vertical Scroll",true);
 	HorizontalTwoFingerScroll = factory->createCheckBox(vL1,"Enable 2 finger Horizontal Scroll",true);
 	CircularScroll = factory->createCheckBox(vL1,"Enable Circular Scrolling",false);
-	CircularLocation = factory->createComboBox(vL1,"Region of touchpad to start circular scrolling");
-	CircularLocation->addItem("All Edges");
+	CircularLocation = factory->createComboBox(vL1,"Circular Scrolling Location");
 	CircularLocation->addItem("Top Edges");
 	CircularLocation->addItem("Top Right Corner");
 	CircularLocation->addItem("Right Edge ");
@@ -80,12 +100,28 @@ void touchpad::respondToEvent(){
 			break;
 		}
 		if(okButton->getElement()==dialog->eventWidget()){
-			saveConf();
+			if(TapButton1Click->value().compare(TapButton2Click->value()) && TapButton1Click->value().compare(TapButton3Click->value()) && TapButton1Click->value().compare(TapButton3Click->value()) && TapButton2Click->value().compare(TapButton3Click->value())){
+				saveConf();
+			}else continue;
 		}
 		if(CircularScroll->isChecked())
 			CircularLocation->setEnabled();
 		else
 			CircularLocation->setDisabled();
+
+		if(TapButton1->isChecked()){
+			TapButton1Click->setEnabled();
+
+		}else TapButton1Click->setDisabled();
+
+		if(TapButton2->isChecked()){
+			TapButton2Click->setEnabled();
+		}else TapButton2Click->setDisabled();
+
+		if(TapButton3->isChecked()){
+			TapButton3Click->setEnabled();
+		}else TapButton3Click->setDisabled();
+
 	};
 }
 
