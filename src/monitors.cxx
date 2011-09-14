@@ -100,7 +100,7 @@ void Monitors::separateResolution(string &temp){
 
 void Monitors::detectResolution(){
 	string temp;int flag=0;
-	ifstream file("/tmp/sax3-xrandr.tmp");
+	ifstream file("/tmp/sax-xrandr.tmp");
 	cout<<"IN DETECT RESOLUTION---->";
 	if(file.is_open()){
 		cout<<"File opened";
@@ -135,13 +135,13 @@ Monitors::Monitors(){
 
 void Monitors::detectDrivers(){
 	system("rm /tmp/sax*");
-	system(" xinit `which xrandr` -- :9 -logfile `mktemp --tmpdir sax3.XXXXX` >  /tmp/sax3-xrandr.tmp");
+	system(" xinit `which xrandr` -- :9 -logfile `mktemp --tmpdir sax3.XXXXX` >  /tmp/sax-xrandr.tmp");
 	string temp;
 	struct dirent * ep;
 	DIR * dp;
 	dp = opendir("/tmp/");
 	if(dp!=NULL){
-		cerr<<"Directory Opened"<<endl;
+//		cerr<<"Directory Opened"<<endl;
 		while(ep=readdir(dp)){
 			temp = ep->d_name;	
 			if(temp.find("sax3")!=-1 && temp.find(".old")==-1)

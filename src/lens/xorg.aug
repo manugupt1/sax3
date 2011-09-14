@@ -175,6 +175,9 @@ let match_is_pointer = entry_str "MatchIsPointer" /[mM]atchIsPointer/
 (* View: MatchIsTouchpad *)
 let match_is_touchpad = entry_str "MatchIsTouchpad" /[mM]atchIsTouchpad/
 
+(* View: Monitor *)
+let monitor  = entry_str "Monitor" /[mM]onitor/
+
 (************************************************************************
  * Group:                          DISPLAY SUBSECTION
  *************************************************************************)
@@ -274,7 +277,7 @@ let section_entry = option |
                     identifier |
                     videoram |
                     default_depth |
-                    device | match_product | match_vendor | match_is_pointer | match_is_touchpad |
+                    device | match_product | match_vendor | match_is_pointer | match_is_touchpad | monitor |
                     entry_generic |
                     empty | comment 
 

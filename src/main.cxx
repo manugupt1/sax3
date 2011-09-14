@@ -95,7 +95,7 @@ class Init{
 				string temp = button[i]->value();
 				temp.erase(temp.find('&'),temp.find('&'));
 				cout<<execs[i]<<endl;
-				err = execlp(execs[i].c_str(),"");
+				err = execlp(execs[i].c_str(),NULL);//NULL,NULL);
 				break;
 			}
 		}
