@@ -141,7 +141,6 @@ void Monitors::detectDrivers(){
 	DIR * dp;
 	dp = opendir("/tmp/");
 	if(dp!=NULL){
-//		cerr<<"Directory Opened"<<endl;
 		while(ep=readdir(dp)){
 			temp = ep->d_name;	
 			if(temp.find("sax3")!=-1 && temp.find(".old")==-1)
@@ -152,29 +151,30 @@ void Monitors::detectDrivers(){
 	cout<<temp;
 	ifstream file(temp.c_str());
 	string temp1;
-	int pos;
+	int pos,pos1;
 	if(file.is_open()){
 		while(file.good()){
 			getline(file,temp1);
-			pos = temp1.find("Matched ");
-			if(pos!=-1)
-				break;
+			pos = temp1.find("/usr/lib64/xorg/modules/drivers/");
+			pos1 = temp1.find("/usr/lib/xorg/modules/drivers/");
+			string matched;
+			if(pos!=-1 || pos1!=-1){
+				cout<<endl<<"Found atleast one";
+				if(pos!=-1)
+					matched = "/usr/lib64/xorg/modules/drivers/";
+				if(pos1!=-1)
+					matched = "/usr/lib/xorg/modules/drivers/";
+				int next_pos = pos + matched.size();
+				temp1.erase(0,next_pos);
+				next_pos = temp1.find('_');
+				temp1.erase(next_pos,string::npos);
+				cout<<"\t"<<temp1<<endl;
+				driverList.push_back(temp1);
+			}
 		}
+
 	}
-	
-	while(pos!=-1){
-		cout<<temp1<<endl;
-		pos = temp1.find("Matched ");
-		if(pos!=-1){
-			string matched = "Matched ";
-			int next_pos = pos+matched.size();
-			temp1.erase(0,next_pos);
-			next_pos = temp1.find(' ');
-			temp1.erase(next_pos,string::npos);
-			driverList.push_back(temp1);
-		}
-		getline(file,temp1);
-	};
+	driverList.pop_back();
 }
 
 void Monitors::initUI(){
@@ -191,14 +191,14 @@ void Monitors::initUI(){
 	enableAdvance = factory->createCheckBox(vL1,"Enable Advanced Settings",false);
 	
 	hL2 = factory->createHLayout(vL1);
-	horizontalLow = factory->createIntField(hL2,"Horizontal Refresh Rate(min value)",20,40,30);
+	horizontalLow = factory->createIntField(hL2,"Horizontal Refresh Rate(min value)",20,60,30);
 	horizontalLow->setDisabled();
-	horizontalHigh = factory->createIntField(hL2,"Horizontal Refresh Rate(max value)",20,40,30);
+	horizontalHigh = factory->createIntField(hL2,"Horizontal Refresh Rate(max value)",20,60,30);
 	horizontalHigh->setDisabled();
 	hL3 = factory->createHLayout(vL1);
-	verticalLow = factory->createIntField(hL3,"Vertical Refresh Rate(min value)",20,40,30);
+	verticalLow = factory->createIntField(hL3,"Vertical Refresh Rate(min value)",20,60,30);
 	verticalLow->setDisabled();
-	verticalHigh = factory->createIntField(hL3,"Vertical Refresh Rate(max value)",20,40,30);
+	verticalHigh = factory->createIntField(hL3,"Vertical Refresh Rate(max value)",20,60,30);
 	verticalHigh->setDisabled();
 	
 	customCVT = factory->createCheckBox(vL1,"I want my own CVT",false);

@@ -1,3 +1,5 @@
 #FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/*.desktop")
 #INSTALL(FILES ${files} DESTINATION /usr/share/sax3/modules.d)
 install(FILES touchpad.desktop keyboard.desktop mouse.desktop monitor.desktop DESTINATION /usr/share/sax3/modules.d)
+install(FILES sax3.desktop DESTINATION /usr/share/applications)
+install(FILES sax3.png DESTINATION /usr/share/icons/hicolor/32x32/apps/)

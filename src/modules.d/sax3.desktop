@@ -1,0 +1,20 @@
+[Desktop Entry]
+Comment[lt]=SUSE pagerintas X konfigūravimo įrankis V3
+Comment=SUSE Advanced X Configuration V3
+Exec=/usr/bin/xdg-su -c "/usr/sbin/sax3"
+GenericName[lt]=SaX3 įrankis
+GenericName=SaX3
+Icon=sax3
+MimeType=
+Name[lt]=SAX3
+Name=SAX3
+Categories=System;Settings;Utility;
+StartupNotify=true
+Terminal=false
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+#X-KDE-SubstituteUID=false
+#X-KDE-Username=
+X-SuSE-translate=true
+X-Desktop-File-Install-Version=0.18

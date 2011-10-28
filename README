@@ -1,6 +1,12 @@
 SaX3 - SUSE Advanced X Configuration V3
 Authors - Manu Gupta, Michal Hrusecky
 
+
+SaX3 is an utility to configure XOrg when X autodetection fails. SaX3 is able to
+handle various peripherals supported by X. Currently, it supports keyboard, mouse, monitor and touchpad.
+
+Source code : http://github.com/manugupt1/sax3
+
 ----------------------------------------
 
 Artwork Contributions
@@ -10,3 +16,6 @@ Monitor.png  - kuba        - http://www.openclipart.org/detail/89275/computer-ic
 Mouse.png    - Ehecatl1138 - http://www.openclipart.org/detail/80743/black-mouse-by-ehecatl1138
 Touchpad.png - kuba        - http://www.openclipart.org/detail/97501/touchpad-icon-by-kuba
 
+------------------------------------------
+
+Code Contributions : Varsha Saha
