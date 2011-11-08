@@ -191,14 +191,14 @@ void Monitors::initUI(){
 	enableAdvance = factory->createCheckBox(vL1,"Enable Advanced Settings",false);
 	
 	hL2 = factory->createHLayout(vL1);
-	horizontalLow = factory->createIntField(hL2,"Horizontal Refresh Rate(min value)",20,60,30);
+	horizontalLow = factory->createIntField(hL2,"Horizontal Refresh Rate(min value)",30,100,50);
 	horizontalLow->setDisabled();
-	horizontalHigh = factory->createIntField(hL2,"Horizontal Refresh Rate(max value)",20,60,30);
+	horizontalHigh = factory->createIntField(hL2,"Horizontal Refresh Rate(max value)",30,100,50);
 	horizontalHigh->setDisabled();
 	hL3 = factory->createHLayout(vL1);
-	verticalLow = factory->createIntField(hL3,"Vertical Refresh Rate(min value)",20,60,30);
+	verticalLow = factory->createIntField(hL3,"Vertical Refresh Rate(min value)",50,120,70);
 	verticalLow->setDisabled();
-	verticalHigh = factory->createIntField(hL3,"Vertical Refresh Rate(max value)",20,60,30);
+	verticalHigh = factory->createIntField(hL3,"Vertical Refresh Rate(max value)",50,120,70);
 	verticalHigh->setDisabled();
 	
 	customCVT = factory->createCheckBox(vL1,"I want my own CVT",false);

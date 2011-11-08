@@ -1,5 +1,5 @@
-#ifndef _UIF_H_
-#define _UIF_H_
+#ifndef UIF_H_
+#define UIF_H_
 
 #include<iostream>
 #include "ui.h"

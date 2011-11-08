@@ -1,5 +1,5 @@
-#ifndef _YUI_H_
-#define _YUI_H_
+#ifndef YUI_H_
+#define YUI_H_
 
 #include "ui.h"
 

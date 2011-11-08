@@ -1,5 +1,5 @@
-#ifndef _YUIF_H_
-#define _YUIF_H_
+#ifndef YUIF_H_
+#define YUIF_H_
 
 #include "uifactory.h"
 #include "yui.h"
