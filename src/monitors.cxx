@@ -174,7 +174,7 @@ void Monitors::detectDrivers(){
 		}
 
 	}
-	driverList.pop_back();
+//	driverList.pop_back();
 }
 
 void Monitors::initUI(){
