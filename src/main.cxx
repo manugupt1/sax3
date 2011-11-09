@@ -57,16 +57,17 @@ class Init{
 		aug = aug_init(root,loadpath,flag);
 		aug_set(aug,"/augeas/load/Desktop/incl[last()+1]","/usr/share/sax3/modules.d/*");
 		err = aug_load(aug);
-		
+		cout<<"------------------------------------------------------------------<<<"<<err<<">>>";
 		if(dp!=NULL){
 			cout<<"DP IF";
 			while(ep = readdir(dp)){
 				if(strcmp(ep->d_name,".") && strcmp(ep->d_name,"..")){
-				
+					cout<<"__________________________________________________________"<<err<<endl;
 					UI::yHLayout * hLayout = factory->createHLayout(mainLayout);
 					getEntry = new char[300];
 					makeEntry("/files/usr/share/sax3/modules.d/",ep->d_name,"/*/Icon");
 					err = aug_get(aug,getEntry,&value);
+					cout<<getEntry;
 					if(err==1)
 					image.push_back(factory->createImage(hLayout,_(value)));
 					delete getEntry;
@@ -83,6 +84,8 @@ class Init{
 					err = aug_get(aug,getEntry,&value);
 					if(err==1)
 					execs.push_back(value);
+					
+//					cout<<value<<endl;
 					delete getEntry;
 				}
 			}
